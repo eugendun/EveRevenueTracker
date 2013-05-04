@@ -1,0 +1,50 @@
+﻿@using MvcFileUploader.HtmlHelper
+@using MvcFileUploader.Models
+@{
+    ViewBag.Title = "Demo";    
+
+    var showingInline = Model != null && Model == true;
+    
+    //option for inline view only
+    var ui = "jquery".Equals(Request.Params["ui"]) ? UploadUI.JQueryUI : UploadUI.Bootstrap;
+    var toggleUi = ui == UploadUI.Bootstrap ? "jquery" : "bootstrap";
+    
+    //setting layout based on ui    
+    Layout = "~/Views/Shared/" + (ui == UploadUI.Bootstrap ? "_MvcFileUploaderLayout.cshtml" : "_MvcFileUploaderLayout_jui.cshtml");
+}
+
+@if(!showingInline)
+{
+    <div class="well">
+        <legend>Upload Dialog</legend> 
+        @Html.MvcUploadButton("Upload Image Button", "#dlgFileUpload", Url.Action("UploadFile"), null, @"/(\.|\/)(jpe?g|png)$/i", 5000000, new {entityId=345}, new {@class="btn"})
+    </div>
+
+
+    <div class="well">
+        <legend>Upload Dialog with return url on closing</legend>        
+        @Html.MvcUploadButton("Upload Image Button", "#dlgFileUpload", Url.Action("UploadFile"), Request.Url.PathAndQuery, @"/(\.|\/)(jpe?g|png)$/i", 5000000, new {@class="btn"})
+    </div>
+
+    <!-- file upload modal dialog -->
+    <div class="modal hide" id="dlgFileUpload" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-body"></div>
+    </div> 
+}
+
+
+@if(showingInline)
+{
+    <div class="well">
+        <legend>Upload Inline</legend> 
+        @Html.Partial("_MvcFileupload", new FileUploadView() { FileTypes = @"/(\.|\/)(jpe?g|png)$/i", MaxFileSizeInBytes = 5000000, UploadUrl = Url.Action("UploadFile"), UI = ui})
+    </div>       
+    
+    <p>
+    @Html.ActionLink("Show "+toggleUi+" ui", "Demo", new {inline=true, ui=toggleUi}, new {@class="btn btn-info"})
+    </p>
+}
+
+
+@Html.ActionLink(showingInline?"Show modal dialog demo":"Show inline demo", "Demo", new {inline=!showingInline}, new {@class="btn btn-info"})
+

@@ -1,0 +1,12 @@
+﻿@{
+    var title = "Model Viewer";
+    ViewBag.Title = title;
+}
+
+@section scripts{
+    <script src="~/Scripts/three/three.js"></script>
+    <script src="~/Scripts/modelViewer/modelViewer.js"></script>
+}
+
+<h2>@title</h2>
+<canvas id="modelViewerWebGLCanvas" width="900" height="500"></canvas>
