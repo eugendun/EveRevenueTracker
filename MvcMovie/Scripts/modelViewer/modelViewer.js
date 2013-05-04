@@ -49,8 +49,6 @@ function threeStart() {
             return;
         }
 
-        var camera = new THREE.
-
         var newMousePosition = new THREE.Vector2(event.clientX, event.clientY);
         var mouseMoveVector = THREE.Vector2.prototype.subVectors(newMousePosition, lastMousePosition);
 
