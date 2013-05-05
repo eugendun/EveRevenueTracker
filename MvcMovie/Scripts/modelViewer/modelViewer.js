@@ -1,57 +1,67 @@
 ﻿/// <reference path="../three/three.js" />
 /// <reference path="../controls/TrackballControls.js" />
 
-var $canvas = $("#modelViewerWebGLCanvas");
-var params = { canvas: $canvas.get(0) };
+startTheGame();
 
-var width = $canvas.width(),
-    height = $canvas.height();
+function startTheGame() {
+    var $canvas = $("#modelViewerWebGLCanvas");
+    var renderer, camera, control;
+    var scene = new THREE.Scene();
 
-var view_angle = 45,
-    aspect = width / height,
-    near = 0.1,
-    far = 10000;
+    initRenderer();
+    initCameraControl();
+    initLight();
+    loadGeometry();
+    render();
 
-var renderer = new THREE.WebGLRenderer(params);
-var camera = new THREE.PerspectiveCamera(view_angle, aspect, near, far);
-camera.position.z = 5;
-renderer.setClearColor('black');
+    function initRenderer() {
+        var params = { canvas: $canvas.get(0) };
+        renderer = new THREE.WebGLRenderer(params);
+        renderer.setClearColor('white');
+        renderer.setSize($canvas.width(), $canvas.height());
+    }
 
+    function initCameraControl() {
+        var view_angle = 45,
+            aspect = $canvas.width() / $canvas.height(),
+            near = 0.1,
+            far = 10000;
 
-var scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(view_angle, aspect, near, far);
+        camera.position.z = 5;
 
-var controls = new THREE.TrackballControls(camera, $canvas.get(0));
-controls.rotateSpeed = 2.0;
-controls.zoomSpeed = 1.2;
-controls.panSpeed = 0.8;
+        control = new THREE.TrackballControls(camera, $canvas.get(0));
+        control.rotateSpeed = 2.0;
+        control.zoomSpeed = 1.2;
+        control.panSpeed = 0.8;
 
-controls.noZoom = false;
-controls.noPan = false;
+        control.noZoom = false;
+        control.noPan = false;
 
-controls.staticMoving = true;
-controls.dynamicDampingFactor = 0.3;
+        control.staticMoving = true;
+        control.dynamicDampingFactor = 0.3;
+    }
 
-renderer.setSize(width, height);
+    function initLight() {
+        var pointLight = new THREE.PointLight(0xFFFFFF);
+        pointLight.position.set(10, 50, 130);
+        scene.add(pointLight);
 
-var pointLight = new THREE.PointLight(0xFFFFFF);
-pointLight.position.set(10, 50, 130);
-scene.add(pointLight);
+        var ambientLight = new THREE.AmbientLight(0x0B0B0B);
+        scene.add(ambientLight);
+    }
 
-var ambientLight = new THREE.AmbientLight(0x0A0A0A);
-scene.add(ambientLight);
+    function loadGeometry() {
+        var geometry = new THREE.CubeGeometry(2, 2, 2);
+        geometry.dynamic = true;
+        var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+    }
 
-//var diffuseLight = new THREE.Lig
-
-var geometry = new THREE.CubeGeometry(2, 2, 2);
-geometry.dynamic = true;
-var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-var cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-render();
-
-function render() {
-    requestAnimationFrame(render);
-    controls.update();
-    renderer.render(scene, camera);
+    function render() {
+        requestAnimationFrame(render);
+        control.update();
+        renderer.render(scene, camera);
+    }
 }
