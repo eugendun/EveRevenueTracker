@@ -1,13 +1,19 @@
 ﻿@{
-    var title = "Model Viewer";
-    ViewBag.Title = title;
+    ViewBag.Title = "Chat";
 }
 
-@section scripts{
-    <script src="~/Scripts/three/three.js"></script>
-    <script src="~/Scripts/controls/TrackballControls.js"></script>
-    <script src="~/Scripts/modelViewer/modelViewer.js"></script>
+<h2>Chat</h2>
 
+<div class="container">
+    <input type="text" id="message" />
+    <input type="button" id="sendmessage" value="Send" />
+    <input type="hidden" id="displayname" />
+    <ul id="discussion">
+    </ul>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
     <script src="~/Scripts/jquery.signalR-1.0.1.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
@@ -17,7 +23,7 @@
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (name, message) {
                 // Add the message to the page. 
-                $('#discussion').append('<li><strong>' + htmlEncode(name)
+                $('#discussion').append('<li><strong>' + htmlEncode(name) 
                     + '</strong>: ' + htmlEncode(message) + '</li>');
             };
             // Get the user name and store it to prepend to messages.
@@ -41,14 +47,3 @@
         }
     </script>
 }
-
-<h2>@title</h2>
-<canvas id="modelViewerWebGLCanvas" width="900" height="500"></canvas>
-
-<div class="container">
-    <input type="text" id="message" />
-    <input type="button" id="sendmessage" value="Send" />
-    <input type="hidden" id="displayname" />
-    <ul id="discussion">
-    </ul>
-</div>
