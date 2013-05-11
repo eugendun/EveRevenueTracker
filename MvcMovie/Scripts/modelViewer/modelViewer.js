@@ -1,9 +1,7 @@
 ﻿/// <reference path="../three/three.js" />
 /// <reference path="../controls/TrackballControls.js" />
 
-startTheGame();
-
-function startTheGame() {
+$(function () {
     var $canvas = $("#modelViewerWebGLCanvas");
     var renderer, camera, control;
     var scene = new THREE.Scene();
@@ -64,4 +62,4 @@ function startTheGame() {
         control.update();
         renderer.render(scene, camera);
     }
-}
+});

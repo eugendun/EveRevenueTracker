@@ -39,6 +39,17 @@
                     $('#message').val('').focus();
                 });
             });
+
+            $.connection.hub.start().done(function () {
+                $('#message').click(function () {
+                    // Call the Send method on the hub. 
+                    chat.server.send($('#displayname').val(), $('#message').val());
+                    // Clear text box and reset focus for next comment. 
+                    $('#message').val('').focus();
+                });
+            });
+
+
         });
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
