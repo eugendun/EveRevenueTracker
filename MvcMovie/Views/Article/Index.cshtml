@@ -1,14 +1,24 @@
 ﻿@model IEnumerable<MvcMovie.Models.Article>
 
+<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: "save"
+    });
+</script>
+
+@using (Html.BeginForm("CreateArticle", "Article", FormMethod.Post))
+{
+    <textarea name="content"></textarea>
+}
+
 @foreach (var item in Model)
 {
-    <div id="articleTitle">
-        @Html.DisplayFor(modelItem => item.Title)
-    </div>
-    <div id="articleContent">
+    <div>
         @Html.DisplayFor(modelItem => item.Content)
     </div>
-    <div id="articleAuthor">
-        @Html.DisplayFor(modelItem => item.author)
+    <div>
+        @Html.DisplayFor(modelItem => item.Author)
     </div>
 }

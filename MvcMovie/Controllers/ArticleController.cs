@@ -16,5 +16,12 @@ namespace MvcMovie.Controllers
             return View(db.Articles.ToList());
         }
 
+        [HttpPost]
+        public string CreateArticle(FormCollection fc)
+        {
+
+
+            return "CreateArticle invoked!";
+        }
     }
 }

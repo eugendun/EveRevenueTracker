@@ -211,6 +211,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Migrations\201305241957166_Initial.cs" />
+    <Compile Include="Migrations\201305241957166_Initial.Designer.cs">
+      <DependentUpon>201305241957166_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201305242112543_RenamedColumns.cs" />
+    <Compile Include="Migrations\201305242112543_RenamedColumns.Designer.cs">
+      <DependentUpon>201305242112543_RenamedColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ArticleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -646,6 +655,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201305241957166_Initial.resx">
+      <DependentUpon>201305241957166_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201305242112543_RenamedColumns.resx">
+      <DependentUpon>201305242112543_RenamedColumns.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
