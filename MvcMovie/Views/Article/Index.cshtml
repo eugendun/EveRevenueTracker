@@ -1,0 +1,14 @@
+﻿@model IEnumerable<MvcMovie.Models.Article>
+
+@foreach (var item in Model)
+{
+    <div id="articleTitle">
+        @Html.DisplayFor(modelItem => item.Title)
+    </div>
+    <div id="articleContent">
+        @Html.DisplayFor(modelItem => item.Content)
+    </div>
+    <div id="articleAuthor">
+        @Html.DisplayFor(modelItem => item.author)
+    </div>
+}

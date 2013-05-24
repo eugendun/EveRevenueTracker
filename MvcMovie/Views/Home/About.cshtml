@@ -1,34 +1,25 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "About me";
 }
 
 <hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
+    <h1>@ViewBag.Title</h1>
     <h2>@ViewBag.Message</h2>
 </hgroup>
 
 <article>
     <p>
-        Use this area to provide additional information.
-    </p>
-
-    <p>
-        Use this area to provide additional information.
-    </p>
-
-    <p>
-        Use this area to provide additional information.
+        Hallo,
+        My name is Eugen Dundukov
     </p>
 </article>
 
 <aside>
-    <h3>Aside Title</h3>
-    <p>
-        Use this area to provide additional information.
-    </p>
-    <ul>
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
-        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>
+    <img src="~/Content/images/Profilfoto.JPG" style="width: 100%; height: auto;" />
+    <div>
+        <p>
+            <span class="label">Email:</span>
+            <span><a href="mailto:eugendun@gmail.com">eugendun@gmail.com</a></span>
+        </p>
+    </div>
 </aside>
