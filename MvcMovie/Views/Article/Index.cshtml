@@ -1,24 +1,81 @@
 ﻿@model IEnumerable<MvcMovie.Models.Article>
 
-<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
-<script type="text/javascript">
-    tinymce.init({
-        selector: "textarea",
-        plugins: "save"
-    });
-</script>
+@Styles.Render("http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css")
 
-@using (Html.BeginForm("CreateArticle", "Article", FormMethod.Post))
-{
-    <textarea name="content"></textarea>
+@section scripts {
+    @* Delete dialog *@
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    @* creation, editition and deletion is available only when user is authenticated *@
+    @if (Request.IsAuthenticated)
+    {
+        // replace the create button by the editor and set focus
+        <script>
+            $("#create-button").click(function () {
+                $(this).replaceWith("<div class='editable' id='newArticle'>Text eingeben...</div>");
+                tinymce.init({
+                    selector: "#newArticle",
+                    inline: true,
+                    plugins: [
+                        "save advlist autolink lists link image charmap print preview anchor"
+                    ],
+                    toolbar: "save insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright"
+                });
+                $('#newArticle').focus().select();
+            });
+        </script>
+        
+        // editor definition for present articles
+        <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+        <script type="text/javascript">
+            tinymce.init({
+                selector: "div.editable",
+                inline: true,
+                plugins: [
+                    "save advlist autolink lists link image charmap print preview anchor"
+                ],
+                toolbar: "save insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright"
+            });
+        </script>
+    }
 }
 
-@foreach (var item in Model)
+@* If current user is authenticated he should be able to create, edit and delete new articles *@
+@if (Request.IsAuthenticated)
 {
+    // creation form , that will be replaced by the editor on click
+    using (Html.BeginForm("Create", "Article", FormMethod.Post))
+    {
+    <button type="button" id="create-button">Neu</button>
+    }
+
+    // each article has its own editor in the form
+    foreach (var item in Model)
+    {
+        using (Html.BeginForm("Edit", "Article", FormMethod.Post))
+        {
+    <div class="editable">
+        @Html.Raw(item.Content)
+    </div>   
+    @Html.Hidden("edit" + item.ID, item.ID)
+        }
+
+        // form for deletion
+        using (Html.BeginForm("Delete", "Article", FormMethod.Post))
+        {
+    @Html.Hidden("delete" + item.ID, item.ID)
+    <button type="submit">Löschen</button>
+        }
+    }
+}
+else // if user is not authenticated all articles are read only
+{
+    // render all articles
+    foreach (var item in Model)
+    {
     <div>
-        @Html.DisplayFor(modelItem => item.Content)
+        @Html.Raw(item.Content)
     </div>
-    <div>
-        @Html.DisplayFor(modelItem => item.Author)
-    </div>
+    }
 }
