@@ -4,14 +4,14 @@
 
 @section scripts {
     @* Delete dialog *@
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
     @* creation, editition and deletion is available only when user is authenticated *@
     @if (Request.IsAuthenticated)
     {
         // replace the create button by the editor and set focus
-        <script>
+        <script type="text/javascript">
             $("#create-button").click(function () {
                 $(this).replaceWith("<div class='editable' id='newArticle'>Text eingeben...</div>");
                 tinymce.init({
@@ -27,7 +27,7 @@
         </script>
         
         // editor definition for present articles
-        <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+        <script type="text/javascript" src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
         <script type="text/javascript">
             tinymce.init({
                 selector: "div.editable",
@@ -55,7 +55,7 @@
     {
         using (Html.BeginForm("Edit", "Article", FormMethod.Post))
         {
-    <div class="editable">
+    <div class="editable" style="background-color: white; border-style: solid; border-width: 1px  1px 6px 1px; border-color: rgba(0, 0, 0, 0.2); padding: 20px; margin: 20px">
         @Html.Raw(item.Content)
     </div>   
     @Html.Hidden("edit" + item.ID, item.ID)
@@ -74,7 +74,7 @@ else // if user is not authenticated all articles are read only
     // render all articles
     foreach (var item in Model)
     {
-    <div>
+    <div style="background-color: white; border-style: solid; border-width: 1px  1px 6px 1px; border-color: rgba(0, 0, 0, 0.2); padding: 20px; margin: 20px">
         @Html.Raw(item.Content)
     </div>
     }

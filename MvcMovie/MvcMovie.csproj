@@ -206,6 +206,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ModelViewerController.cs" />
     <Compile Include="Controllers\MvcUploaderTestController.cs" />
+    <Compile Include="Controllers\SocialGameController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -649,6 +650,8 @@
     <Content Include="Views\ModelViewer\Index.cshtml" />
     <Content Include="Views\Home\Chat.cshtml" />
     <Content Include="Views\Article\Index.cshtml" />
+    <Content Include="Unity\Web.unity3d" />
+    <Content Include="Views\SocialGame\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
