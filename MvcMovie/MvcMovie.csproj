@@ -226,15 +226,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Migrations\201305241957166_Initial.cs" />
-    <Compile Include="Migrations\201305241957166_Initial.Designer.cs">
-      <DependentUpon>201305241957166_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201307111302490_ArticleDBInit.cs" />
+    <Compile Include="Migrations\201307111302490_ArticleDBInit.Designer.cs">
+      <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201305242112543_RenamedColumns.cs" />
-    <Compile Include="Migrations\201305242112543_RenamedColumns.Designer.cs">
-      <DependentUpon>201305242112543_RenamedColumns.cs</DependentUpon>
+    <Compile Include="Migrations\201307111303168_EveApiInit.cs" />
+    <Compile Include="Migrations\201307111303168_EveApiInit.Designer.cs">
+      <DependentUpon>201307111303168_EveApiInit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
+    <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ArticleModel.cs" />
     <Compile Include="Models\EveApiModels.cs" />
@@ -581,11 +582,11 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201305241957166_Initial.resx">
-      <DependentUpon>201305241957166_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201307111302490_ArticleDBInit.resx">
+      <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201305242112543_RenamedColumns.resx">
-      <DependentUpon>201305242112543_RenamedColumns.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201307111303168_EveApiInit.resx">
+      <DependentUpon>201307111303168_EveApiInit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

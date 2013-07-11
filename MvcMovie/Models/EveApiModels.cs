@@ -9,6 +9,16 @@ using System.Web;
 
 namespace MvcMovie.Models
 {
+    public class User
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int userID { get; set; }
+        
+        public int keyID { get; set; }
+        public string vCode { get; set; }
+    }
+
     public class Character
     {
         [Key]
@@ -22,11 +32,16 @@ namespace MvcMovie.Models
         
         [MaxLength(100)]
         public string corparationName { get; set; }
+
+        public int userID { get; set; }
+
+        public virtual User User { get; set; }
     }
 
     public class EveApiContext : DbContext
     {
         public DbSet<Character> Characters { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
