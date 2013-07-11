@@ -18,8 +18,6 @@ namespace MvcMovie.Controllers
         {
             string xmlData = eveApi.getServerStatus();
 
-
-
             //XmlDocument doc = new XmlDocument();
             //doc.LoadXml(xmlData);
 
