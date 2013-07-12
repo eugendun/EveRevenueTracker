@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using WebMatrix.WebData;
 
 namespace MvcMovie
 {
@@ -23,6 +24,8 @@ namespace MvcMovie
             hubConfiguration.EnableDetailedErrors = true;
             hubConfiguration.EnableJavaScriptProxies = true;
             RouteTable.Routes.MapHubs("/signalr", hubConfiguration);
+
+            WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", false);
 
             AreaRegistration.RegisterAllAreas();
 

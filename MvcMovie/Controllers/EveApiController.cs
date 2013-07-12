@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using WebMatrix.WebData;
 
 namespace MvcMovie.Controllers
 {
@@ -16,6 +17,15 @@ namespace MvcMovie.Controllers
 
         public ActionResult Index()
         {
+            if (!Request.IsAuthenticated)
+            {
+                ContentResult res = new ContentResult();
+                res.Content = "Not authenticated!";
+                return res;
+            }
+
+            //WebSecurity.CurrentUserId;
+
             string xmlData = eveApi.getServerStatus();
 
             //XmlDocument doc = new XmlDocument();
@@ -27,11 +37,11 @@ namespace MvcMovie.Controllers
 
             //}
 
-            ContentResult res = new ContentResult();
-            res.Content = xmlData;
+            ContentResult resData = new ContentResult();
+            resData.Content = xmlData;
 
             //return View();
-            return res;
+            return resData;
         }
     }
 }
