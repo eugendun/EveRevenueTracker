@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvcMovie.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,37 +12,64 @@ namespace MvcMovie.Controllers
     public class EveApiController : Controller
     {
         EveApi eveApi = new EveApi();
+        private EveApiContext db = new EveApiContext();
 
         //
         // GET: /EveApi/
 
         public ActionResult Index()
         {
-            if (!Request.IsAuthenticated)
+            if (!WebSecurity.IsAuthenticated)
             {
-                ContentResult res = new ContentResult();
-                res.Content = "Not authenticated!";
-                return res;
+                throw new Exception("User is not authenticated!");
+            }
+            User user = db.Users.Find(WebSecurity.CurrentUserId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Create");
             }
 
-            //WebSecurity.CurrentUserId;
+            return View(user);
+        }
 
-            string xmlData = eveApi.getServerStatus();
+        public ActionResult Create()
+        {
+            return View();
+        }
 
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(xmlData);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Users.Add(user);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(User);
+        }
 
-            //foreach (XmlNode row in doc.SelectNodes("//row"))
-            //{
-            //    string name = row.Attributes["name"].Value;
+        public ActionResult ErrorList()
+        {
+            string errorListXml = eveApi.getErrorList();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(errorListXml);
+            foreach (XmlNode row in doc.SelectNodes("//row"))
+            {
+                int errorCode = Convert.ToInt32(row.Attributes["errorCode"].Value);
+                string errorText = row.Attributes["errorText"].Value;
+                Error error = db.Errors.Find(errorCode);
+                if (error != null)
+                    error.errorText = errorText;
+                else
+                    db.Errors.Add(new Error { errorCode = errorCode, errorText = errorText });
+                db.SaveChanges();
 
-            //}
+            }
 
-            ContentResult resData = new ContentResult();
-            resData.Content = xmlData;
-
-            //return View();
-            return resData;
+            return RedirectToAction("Index");
         }
     }
 }

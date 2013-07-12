@@ -47,6 +47,12 @@ namespace MvcMovie.Controllers
             return getDataFromUrl(url);
         }
 
+        public string getErrorList()
+        {
+            string url = "https://api.eveonline.com/eve/ErrorList.xml.aspx";
+            return getDataFromUrl(url);
+        }
+
         private string getDataFromUrl(string url)
         {
             try

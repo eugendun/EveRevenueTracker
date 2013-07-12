@@ -1,0 +1,39 @@
+﻿@model MvcMovie.Models.User
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create EVE API Key</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Eve - API Key</legend>
+
+        @Html.Hidden("userID", @WebSecurity.CurrentUserId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.keyID)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.keyID)
+            @Html.ValidationMessageFor(model => model.userID)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.vCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.vCode)
+            @Html.ValidationMessageFor(model => model.vCode)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+
+    </fieldset>
+}

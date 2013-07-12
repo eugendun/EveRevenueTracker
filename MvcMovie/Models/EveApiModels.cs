@@ -38,10 +38,20 @@ namespace MvcMovie.Models
         public virtual User User { get; set; }
     }
 
+    public class Error
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int errorCode { get; set; }
+
+        public string errorText { get; set; }
+    }
+
     public class EveApiContext : DbContext
     {
         public DbSet<Character> Characters { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Error> Errors { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
