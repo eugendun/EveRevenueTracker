@@ -51,6 +51,69 @@ namespace MvcMovie.Controllers
             return View(User);
         }
 
+        public ActionResult Characters()
+        {
+            if (!WebSecurity.IsAuthenticated)
+            {
+                throw new Exception("User is not authenticated!");
+            }
+
+            var userId = WebSecurity.CurrentUserId;
+
+
+            var characters = from m in db.Characters
+                             where m.userID == userId
+                             select m;
+
+            return View(characters);
+        }
+
+        public ActionResult UpdateCharacters()
+        {
+            if (!WebSecurity.IsAuthenticated)
+            {
+                throw new Exception("User is not authenticated!");
+            }
+
+            User user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user == null)
+                return RedirectToAction("Create");
+
+            string charactersXmlData = eveApi.getCharacters(user.keyID.ToString(), user.vCode);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(charactersXmlData);
+            foreach (XmlNode row in doc.SelectNodes("//row"))
+            {
+                int characterID = Convert.ToInt32(row.Attributes["characterID"].Value);
+                string characterName = row.Attributes["name"].Value;
+                int corporationID = Convert.ToInt32(row.Attributes["corporationID"].Value);
+                string corporationName = row.Attributes["corporationName"].Value;
+
+                Character character = db.Characters.Find(characterID);
+                if (character != null)
+                {
+                    character.characterName = characterName;
+                    character.corparationID = corporationID;
+                    character.corparationName = corporationName;
+                }
+                else
+                {
+                    db.Characters.Add(new Character
+                    {
+                        characterID = characterID,
+                        characterName = characterName,
+                        corparationID = corporationID,
+                        corparationName = corporationName,
+                        userID = user.userID
+                    });
+
+                }
+            }
+            db.SaveChanges();
+
+            return RedirectToAction("Characters");
+        }
+
         public ActionResult ErrorList()
         {
             string errorListXml = eveApi.getErrorList();

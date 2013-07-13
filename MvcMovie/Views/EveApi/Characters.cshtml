@@ -1,0 +1,13 @@
+﻿@model IEnumerable<MvcMovie.Models.Character>
+
+@{
+    ViewBag.Title = "Characters";
+    var grid = new WebGrid(Model);
+}
+
+<h2>Characters</h2>
+<div id="grid">
+    @grid.GetHtml()
+</div>
+
+@Html.ActionLink("Update", "UpdateCharacters")

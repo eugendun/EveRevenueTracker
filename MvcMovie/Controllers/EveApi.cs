@@ -12,17 +12,16 @@ namespace MvcMovie.Controllers
         public string getServerStatus()
         {
             string url = "https://api.eveonline.com/server/ServerStatus.xml.aspx";
-            return getDataFromUrl(url);
+            return getData(url);
         }
 
-        public string getCharacters()
+        public string getCharacters(string keyID, string vCode)
         {
             string url = "https://api.eveonline.com/account/Characters.xml.aspx";
-            List<string> parameters = new List<string>();
-            parameters.Add("keyID=999390");
-            parameters.Add("vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy");
-            url = attachParamsToUrl(url, parameters);
-            return getDataFromUrl(url);
+            return getData(url, new List<string> { 
+                "keyID=" + keyID,
+                "vCode=" + vCode
+            });
         }
 
         public string getWalletTransactions()
@@ -32,8 +31,7 @@ namespace MvcMovie.Controllers
             parameters.Add("keyID=999390");
             parameters.Add("vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy");
             parameters.Add("characterID=...");
-            url = attachParamsToUrl(url, parameters);
-            return getDataFromUrl(url);
+            return getData(url, parameters);
         }
 
         public string getWalletJournal()
@@ -43,18 +41,27 @@ namespace MvcMovie.Controllers
             parameters.Add("keyID=999390");
             parameters.Add("vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy");
             parameters.Add("characterID=...");
-            url = attachParamsToUrl(url, parameters);
-            return getDataFromUrl(url);
+            return getData(url, new List<string> { "keyID=999390", "vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy", "characterID=..." });
         }
 
         public string getErrorList()
         {
             string url = "https://api.eveonline.com/eve/ErrorList.xml.aspx";
-            return getDataFromUrl(url);
+            return getData(url);
         }
 
-        private string getDataFromUrl(string url)
+        public string getData(string url, List<string> parameters = null)
         {
+            if (parameters != null && parameters.Count > 0)
+            {
+                url += "?";
+                url += parameters[0];
+                for (int i = 1; i < parameters.Count; i++)
+                {
+                    url += "&" + parameters[i];
+                }
+            }
+
             try
             {
                 WebClient client = new WebClient();
@@ -64,21 +71,10 @@ namespace MvcMovie.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("EVE-API Failure: \n" + e.Message);
+                throw new Exception("EVE-API Failure: \n" 
+                    + "Message: " + e.Message
+                    + "Request url: " + url);
             }
-        }
-
-        private string attachParamsToUrl(string url, List<string> parameters)
-        {
-            url += "?";
-            if (parameters.Count > 0)
-                url += parameters[0];
-            for (int i = 1; i < parameters.Count; i++)
-            {
-                url += "&" + parameters[i];
-            }
-
-            return url;
         }
     }
 }
