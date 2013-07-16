@@ -573,10 +573,7 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon.eot" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
     <Content Include="Views\EveApi\Index.cshtml" />
-    <Content Include="Views\Character\Index.cshtml" />
     <Content Include="Views\Character\Details.cshtml" />
-    <Content Include="Views\Character\Create.cshtml" />
-    <Content Include="Views\Character\Edit.cshtml" />
     <Content Include="Views\Character\Delete.cshtml" />
     <Content Include="Views\EveApi\Create.cshtml" />
     <Content Include="Views\EveApi\Characters.cshtml" />

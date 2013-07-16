@@ -58,7 +58,7 @@ namespace MvcMovie.Controllers
                 throw new Exception("User is not authenticated!");
             }
 
-            var userId = WebSecurity.CurrentUserId;
+            var userId = WebSecurity.GetUserId(User.Identity.Name);
 
 
             var characters = from m in db.Characters
@@ -66,6 +66,14 @@ namespace MvcMovie.Controllers
                              select m;
 
             return View(characters);
+        }
+
+        [HttpGet]
+        public ActionResult CacheCharacterId(string characterid)
+        {
+            System.Web.HttpContext.Current.Cache.Insert("SelectedCharacterId", characterid);
+
+            return RedirectToAction("Details", "Character", new { id = Convert.ToInt32(characterid)});
         }
 
         public ActionResult UpdateCharacters()

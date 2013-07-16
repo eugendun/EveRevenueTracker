@@ -25,8 +25,6 @@ namespace MvcMovie
             hubConfiguration.EnableJavaScriptProxies = true;
             RouteTable.Routes.MapHubs("/signalr", hubConfiguration);
 
-            WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", false);
-
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
