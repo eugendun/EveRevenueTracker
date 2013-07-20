@@ -1,0 +1,26 @@
+﻿@model MvcMovie.Models.User
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Your Eve - API key</h2>
+
+<fieldset>
+    <legend>EVE API Key</legend>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.keyID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.keyID)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.vCode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.vCode)
+    </div>
+
+</fieldset>

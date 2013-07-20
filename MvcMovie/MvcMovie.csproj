@@ -238,10 +238,19 @@
     <Compile Include="Migrations\201307122145370_EveApiErrorTableAdded.Designer.cs">
       <DependentUpon>201307122145370_EveApiErrorTableAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201307172053251_EveApiWalletTablesAdded.cs" />
+    <Compile Include="Migrations\201307172053251_EveApiWalletTablesAdded.Designer.cs">
+      <DependentUpon>201307172053251_EveApiWalletTablesAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201307201131378_EveApiIntToLong.cs" />
+    <Compile Include="Migrations\201307201131378_EveApiIntToLong.Designer.cs">
+      <DependentUpon>201307201131378_EveApiIntToLong.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
     <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ArticleModel.cs" />
+    <Compile Include="Models\DataTimeFormat.cs" />
     <Compile Include="Models\EveApiModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -572,11 +581,12 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon.ttf" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon.eot" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
-    <Content Include="Views\EveApi\Index.cshtml" />
+    <Content Include="Views\EveApi\IndexApiKey.cshtml" />
     <Content Include="Views\Character\Details.cshtml" />
     <Content Include="Views\Character\Delete.cshtml" />
     <Content Include="Views\EveApi\Create.cshtml" />
-    <Content Include="Views\EveApi\Characters.cshtml" />
+    <Content Include="Views\EveApi\Index.cshtml" />
+    <Content Include="Views\EveApi\SelectCharacter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -593,6 +603,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201307122145370_EveApiErrorTableAdded.resx">
       <DependentUpon>201307122145370_EveApiErrorTableAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307172053251_EveApiWalletTablesAdded.resx">
+      <DependentUpon>201307172053251_EveApiWalletTablesAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307201131378_EveApiIntToLong.resx">
+      <DependentUpon>201307201131378_EveApiIntToLong.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

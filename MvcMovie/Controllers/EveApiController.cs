@@ -16,8 +16,7 @@ namespace MvcMovie.Controllers
 
         //
         // GET: /EveApi/
-
-        public ActionResult Index()
+        public ActionResult IndexApiKey()
         {
             if (!WebSecurity.IsAuthenticated)
             {
@@ -46,12 +45,12 @@ namespace MvcMovie.Controllers
             {
                 db.Users.Add(user);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexApiKey");
             }
             return View(User);
         }
 
-        public ActionResult Characters()
+        public ActionResult Index()
         {
             if (!WebSecurity.IsAuthenticated)
             {
@@ -73,7 +72,7 @@ namespace MvcMovie.Controllers
         {
             System.Web.HttpContext.Current.Cache.Insert("SelectedCharacterId", characterid);
 
-            return RedirectToAction("Details", "Character", new { id = Convert.ToInt32(characterid)});
+            return RedirectToAction("Details", "Character", new { id = Convert.ToInt32(characterid) });
         }
 
         public ActionResult UpdateCharacters()
@@ -114,12 +113,90 @@ namespace MvcMovie.Controllers
                         corparationName = corporationName,
                         userID = user.userID
                     });
-
                 }
             }
             db.SaveChanges();
 
-            return RedirectToAction("Characters");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult UpdateWalletJournal(string characterID)
+        {
+            if (!WebSecurity.IsAuthenticated)
+            {
+                throw new Exception("User is not authenticated!");
+            }
+
+            User user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user == null)
+                return RedirectToAction("Create");
+
+            Character character = db.Characters.Find(Convert.ToInt32(characterID));
+            if (character == null)
+                throw new Exception("Character not found in the database!");
+
+            string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(eveResponseXmlData);
+            foreach (XmlNode row in doc.SelectNodes("//row"))
+            {
+                long refID = Convert.ToInt64(row.Attributes["refID"].Value);
+
+                DateTime date = Convert.ToDateTime(row.Attributes["date"].Value);
+                long refTypeID = Convert.ToInt64(row.Attributes["refTypeID"].Value);
+                string ownerName1 = row.Attributes["ownerName1"].Value;
+                long ownerID1 = Convert.ToInt64(row.Attributes["ownerID1"].Value);
+                string ownerName2 = row.Attributes["ownerName2"].Value;
+                long ownerID2 = Convert.ToInt64(row.Attributes["ownerID2"].Value);
+                string argName1 = row.Attributes["argName1"].Value;
+                long argID1 = Convert.ToInt64(row.Attributes["argID1"].Value);
+                decimal amount = Convert.ToDecimal(row.Attributes["amount"].Value);
+                decimal balance = Convert.ToDecimal(row.Attributes["balance"].Value);
+                string reason = row.Attributes["reason"].Value;
+                long taxReceiverID = Convert.ToInt64(row.Attributes["taxReceiverID"].Value);
+                decimal taxAmount = Convert.ToDecimal(row.Attributes["taxAmount"].Value);
+
+                
+
+                WalletJournalEntry entry = db.WalletJournal.Find(refID);
+                if (entry == null)
+                {
+                    entry = new WalletJournalEntry
+                    {
+                        refID = refID,
+                        date = date,
+                        refTypeID = refTypeID,
+                        ownerName1 = ownerName1,
+                        ownerID1 = ownerID1,
+                        ownerName2 = ownerName2,
+                        ownerID2 = ownerID2,
+                        argName1 = argName1,
+                        argID1 = argID1,
+                        amount = amount,
+                        balance = balance,
+                        reason = reason,
+                        taxReceiverID = taxReceiverID,
+                        taxAmount = taxAmount,
+                        Character = character
+                    };
+                    db.WalletJournal.Add(entry);
+                }
+            }
+            db.SaveChanges();
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void UpdateWalletTransactions(string characterID)
+        {
+            if (!WebSecurity.IsAuthenticated)
+            {
+                throw new Exception("User is not authenitcated!");
+            }
         }
 
         public ActionResult ErrorList()
@@ -140,7 +217,7 @@ namespace MvcMovie.Controllers
 
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexApiKey");
         }
     }
 }

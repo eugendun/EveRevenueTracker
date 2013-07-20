@@ -24,24 +24,24 @@ namespace MvcMovie.Controllers
             });
         }
 
-        public string getWalletTransactions()
+        public string getWalletTransactions(string keyID, string vCode, string characterID)
         {
             string url = "https://api.eveonline.com/char/WalletTransactions.xml.aspx";
-            List<string> parameters = new List<string>();
-            parameters.Add("keyID=999390");
-            parameters.Add("vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy");
-            parameters.Add("characterID=...");
-            return getData(url, parameters);
+            return getData(url, new List<string> { 
+                "keyID="+keyID,
+                "vCode="+vCode,
+                "characterID="+characterID
+            });
         }
 
-        public string getWalletJournal()
+        public string getWalletJournal(string keyID, string vCode, string characterID)
         {
             string url = "https://api.eveonline.com/char/WalletJournal.xml.aspx";
-            List<string> parameters = new List<string>();
-            parameters.Add("keyID=999390");
-            parameters.Add("vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy");
-            parameters.Add("characterID=...");
-            return getData(url, new List<string> { "keyID=999390", "vCode=ox1bvi5104jSN5vEtYO3GxkhDtmYfKm2LufHah7jp4kYgrs41t8FIzhoEKcqstiy", "characterID=..." });
+            return getData(url, new List<string> { 
+                "keyID="+keyID,
+                "vCode="+vCode, 
+                "characterID="+characterID
+            });
         }
 
         public string getErrorList()
@@ -71,7 +71,7 @@ namespace MvcMovie.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("EVE-API Failure: \n" 
+                throw new Exception("EVE-API Failure: \n"
                     + "Message: " + e.Message
                     + "Request url: " + url);
             }
