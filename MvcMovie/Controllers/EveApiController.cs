@@ -1,6 +1,7 @@
 ﻿using MvcMovie.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -144,47 +145,41 @@ namespace MvcMovie.Controllers
             {
                 long refID = Convert.ToInt64(row.Attributes["refID"].Value);
 
-                DateTime date = Convert.ToDateTime(row.Attributes["date"].Value);
-                long refTypeID = Convert.ToInt64(row.Attributes["refTypeID"].Value);
-                string ownerName1 = row.Attributes["ownerName1"].Value;
-                long ownerID1 = Convert.ToInt64(row.Attributes["ownerID1"].Value);
-                string ownerName2 = row.Attributes["ownerName2"].Value;
-                long ownerID2 = Convert.ToInt64(row.Attributes["ownerID2"].Value);
-                string argName1 = row.Attributes["argName1"].Value;
-                long argID1 = Convert.ToInt64(row.Attributes["argID1"].Value);
-                decimal amount = Convert.ToDecimal(row.Attributes["amount"].Value);
-                decimal balance = Convert.ToDecimal(row.Attributes["balance"].Value);
-                string reason = row.Attributes["reason"].Value;
-                long taxReceiverID = Convert.ToInt64(row.Attributes["taxReceiverID"].Value);
-                decimal taxAmount = Convert.ToDecimal(row.Attributes["taxAmount"].Value);
-
-                
-
                 WalletJournalEntry entry = db.WalletJournal.Find(refID);
                 if (entry == null)
                 {
-                    entry = new WalletJournalEntry
+                    entry = new WalletJournalEntry();
+                    entry.Character = character;
+                    entry.refID = refID;
+                    entry.date = Convert.ToDateTime(row.Attributes["date"].Value);
+                    entry.refTypeID = XmlConvert.ToInt64(row.Attributes["refTypeID"].Value);
+                    entry.ownerName1 = row.Attributes["ownerName1"].Value;
+                    entry.ownerID1 = XmlConvert.ToInt64(row.Attributes["ownerID1"].Value);
+                    entry.ownerName2 = row.Attributes["ownerName2"].Value;
+                    entry.ownerID2 = XmlConvert.ToInt64(row.Attributes["ownerID2"].Value);
+                    entry.argName1 = row.Attributes["argName1"].Value;
+                    entry.argID1 = XmlConvert.ToInt64(row.Attributes["argID1"].Value);
+                    entry.amount = XmlConvert.ToDecimal(row.Attributes["amount"].Value);
+                    entry.balance = XmlConvert.ToDecimal(row.Attributes["balance"].Value);
+                    entry.reason = row.Attributes["reason"].Value;
+
+                    long taxReceiverID;
+                    if (long.TryParse(row.Attributes["taxReceiverID"].Value, out taxReceiverID))
                     {
-                        refID = refID,
-                        date = date,
-                        refTypeID = refTypeID,
-                        ownerName1 = ownerName1,
-                        ownerID1 = ownerID1,
-                        ownerName2 = ownerName2,
-                        ownerID2 = ownerID2,
-                        argName1 = argName1,
-                        argID1 = argID1,
-                        amount = amount,
-                        balance = balance,
-                        reason = reason,
-                        taxReceiverID = taxReceiverID,
-                        taxAmount = taxAmount,
-                        Character = character
-                    };
+                        entry.taxReceiverID = taxReceiverID;
+                    }
+
+                    decimal taxAmount;
+                    if (decimal.TryParse(row.Attributes["taxAmount"].Value, out taxAmount))
+                    {
+                        entry.taxAmount = taxAmount;
+                    }
+
                     db.WalletJournal.Add(entry);
+                    db.SaveChanges();
                 }
             }
-            db.SaveChanges();
+            //db.SaveChanges();
 
             return View("Index");
         }

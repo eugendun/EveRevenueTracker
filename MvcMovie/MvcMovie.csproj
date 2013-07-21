@@ -230,22 +230,6 @@
     <Compile Include="Migrations\201307111302490_ArticleDBInit.Designer.cs">
       <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201307111303168_EveApiInit.cs" />
-    <Compile Include="Migrations\201307111303168_EveApiInit.Designer.cs">
-      <DependentUpon>201307111303168_EveApiInit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201307122145370_EveApiErrorTableAdded.cs" />
-    <Compile Include="Migrations\201307122145370_EveApiErrorTableAdded.Designer.cs">
-      <DependentUpon>201307122145370_EveApiErrorTableAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201307172053251_EveApiWalletTablesAdded.cs" />
-    <Compile Include="Migrations\201307172053251_EveApiWalletTablesAdded.Designer.cs">
-      <DependentUpon>201307172053251_EveApiWalletTablesAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201307201131378_EveApiIntToLong.cs" />
-    <Compile Include="Migrations\201307201131378_EveApiIntToLong.Designer.cs">
-      <DependentUpon>201307201131378_EveApiIntToLong.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
     <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -597,18 +581,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201307111302490_ArticleDBInit.resx">
       <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201307111303168_EveApiInit.resx">
-      <DependentUpon>201307111303168_EveApiInit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201307122145370_EveApiErrorTableAdded.resx">
-      <DependentUpon>201307122145370_EveApiErrorTableAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201307172053251_EveApiWalletTablesAdded.resx">
-      <DependentUpon>201307172053251_EveApiWalletTablesAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201307201131378_EveApiIntToLong.resx">
-      <DependentUpon>201307201131378_EveApiIntToLong.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

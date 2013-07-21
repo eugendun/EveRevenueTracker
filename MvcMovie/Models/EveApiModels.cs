@@ -61,12 +61,13 @@ namespace MvcMovie.Models
         public decimal amount { get; set; }
         public decimal balance { get; set; }
         public string reason { get; set; }
-        public long taxReceiverID { get; set; }
-        public decimal taxAmount { get; set; }
+
+        public long? taxReceiverID { get; set; }
+        public decimal? taxAmount { get; set; }
         public long characterID { get; set; }
 
         public virtual Character Character { get; set; }
-        public virtual RefType RefType { get; set; }
+        //public virtual RefType RefType { get; set; }
     }
 
     public class WalletTransactionEntry
