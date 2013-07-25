@@ -230,6 +230,10 @@
     <Compile Include="Migrations\201307111302490_ArticleDBInit.Designer.cs">
       <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201307211933585_EveApiInit.cs" />
+    <Compile Include="Migrations\201307211933585_EveApiInit.Designer.cs">
+      <DependentUpon>201307211933585_EveApiInit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
     <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -509,7 +513,9 @@
     <Content Include="Scripts\tinymce\themes\modern\theme.min.js" />
     <Content Include="Scripts\tinymce\tinymce.js" />
     <Content Include="Scripts\tinymce\tinymce.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -581,6 +587,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201307111302490_ArticleDBInit.resx">
       <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307211933585_EveApiInit.resx">
+      <DependentUpon>201307211933585_EveApiInit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

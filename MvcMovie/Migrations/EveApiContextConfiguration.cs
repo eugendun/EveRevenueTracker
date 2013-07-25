@@ -25,8 +25,6 @@ namespace MvcMovie.Migrations
             };
             users.ForEach(u => context.Users.AddOrUpdate(u));
             context.SaveChanges();
-
-            context.Database.ExecuteSqlCommand("ALTER TABLE WalletTransactionEntry ADD CONSTRAINT uc_journal UNIQUE(journalTransactionID)");
         }
     }
 }

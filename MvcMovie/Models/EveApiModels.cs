@@ -25,12 +25,8 @@ namespace MvcMovie.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long characterID { get; set; }
 
-        [MaxLength(50)]
         public string characterName { get; set; }
-
-        [MaxLength(100)]
         public string corparationName { get; set; }
-
         public long corparationID { get; set; }
         public long userID { get; set; }
 
@@ -40,6 +36,7 @@ namespace MvcMovie.Models
     public class RefType
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long refTypeID { get; set; }
 
         public string refRypeName { get; set; }
@@ -48,6 +45,7 @@ namespace MvcMovie.Models
     public class WalletJournalEntry
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long refID { get; set; }
 
         public DateTime date { get; set; }
@@ -73,6 +71,7 @@ namespace MvcMovie.Models
     public class WalletTransactionEntry
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long transactionID { get; set; }
 
         // TODO
@@ -88,11 +87,11 @@ namespace MvcMovie.Models
         public string stationName { get; set; }
         public string transactionType { get; set; }
         public string transactionFor { get; set; }
-        public long journalTransactionID { get; set; }
+        public long? journalTransactionID { get; set; }
         public long characterID { get; set; }
 
         public virtual Character Character { get; set; }
-        public virtual WalletJournalEntry WalletJournalEntry { get; set; }
+        //public virtual WalletJournalEntry WalletJournalEntry { get; set; }
     }
 
     public class Error
@@ -116,10 +115,10 @@ namespace MvcMovie.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Entity<WalletTransactionEntry>()
-                .HasRequired(p => p.WalletJournalEntry)
-                .WithMany()
-                .HasForeignKey(u => u.journalTransactionID).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<WalletTransactionEntry>()
+            //    .HasRequired(p => p.WalletJournalEntry)
+            //    .WithMany()
+            //    .HasForeignKey(u => u.journalTransactionID).WillCascadeOnDelete(false);
         }
     }
 }

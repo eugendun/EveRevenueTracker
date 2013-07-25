@@ -24,23 +24,27 @@ namespace MvcMovie.Controllers
             });
         }
 
-        public string getWalletTransactions(string keyID, string vCode, string characterID)
+        public string getWalletTransactions(string keyID, string vCode, string characterID, string fromID = "", string rowCount = "")
         {
             string url = "https://api.eveonline.com/char/WalletTransactions.xml.aspx";
             return getData(url, new List<string> { 
                 "keyID="+keyID,
                 "vCode="+vCode,
-                "characterID="+characterID
+                "characterID="+characterID,
+                "fromID="+fromID,
+                "rowCount="+rowCount
             });
         }
 
-        public string getWalletJournal(string keyID, string vCode, string characterID)
+        public string getWalletJournal(string keyID, string vCode, string characterID, string fromID = "", string rowCount = "")
         {
             string url = "https://api.eveonline.com/char/WalletJournal.xml.aspx";
             return getData(url, new List<string> { 
                 "keyID="+keyID,
                 "vCode="+vCode, 
-                "characterID="+characterID
+                "characterID="+characterID,
+                "fromID="+fromID,
+                "rowCount="+rowCount
             });
         }
 
