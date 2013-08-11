@@ -1,4 +1,5 @@
-﻿using MvcMovie.Models;
+﻿using MvcMovie.Filters;
+using MvcMovie.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,10 +9,13 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using System.Xml.Linq;
 using WebMatrix.WebData;
 
 namespace MvcMovie.Controllers
 {
+    [Authorize]
+    [InitializeSimpleMembership]
     public class EveApiController : Controller
     {
         EveApi eveApi = new EveApi();
@@ -19,20 +23,20 @@ namespace MvcMovie.Controllers
 
         public ActionResult Index()
         {
-            if (!WebSecurity.IsAuthenticated)
-                return RedirectToAction("Login", "Account");
+            return View();
+        }
 
+        public ActionResult SelectCharacter()
+        {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
-
             if (user == null)
                 return RedirectToAction("Create");
-
 
             var characters = from m in db.Characters
                              where m.userID == user.userID
                              select m;
 
-            return View(characters);
+            return PartialView(characters);
         }
 
         public ActionResult Create()
@@ -56,16 +60,13 @@ namespace MvcMovie.Controllers
         [HttpPost]
         public ActionResult GetTransactions(string characterid)
         {
-            if (!WebSecurity.IsAuthenticated)
-                throw new Exception("User is not authenticated!");
-
             long charid = XmlConvert.ToInt64(characterid);
 
             var userId = WebSecurity.GetUserId(User.Identity.Name);
 
             var transactions = (from t in db.WalletTransactions
                                 where t.characterID == charid
-                                orderby t.price descending
+                                orderby t.transactionDateTime descending
                                 select new { t.price, t.typeName }).Take(10);
             string content = "[['typeName', 'Price']";
 
@@ -80,6 +81,19 @@ namespace MvcMovie.Controllers
             return JavaScript(content);
         }
 
+        [HttpPost]
+        public ActionResult GetBalance(string characterid)
+        {
+            // TODO
+            User user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user == null)
+                throw new Exception("User not found in the database!");
+
+            long charId = XmlConvert.ToInt64(characterid);
+
+            return JavaScript("");
+        }
+
         [HttpGet]
         public void CacheCharacterId(string characterid, string charactername)
         {
@@ -89,9 +103,6 @@ namespace MvcMovie.Controllers
 
         public ActionResult UpdateCharacters()
         {
-            if (!WebSecurity.IsAuthenticated)
-                throw new Exception("User is not authenticated!");
-
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 return RedirectToAction("Create");
@@ -132,14 +143,11 @@ namespace MvcMovie.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult UpdateWalletJournal(string characterID)
+        public void UpdateWalletJournal(string characterID)
         {
-            if (!WebSecurity.IsAuthenticated)
-                throw new Exception("User is not authenticated!");
-
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
-                return RedirectToAction("Create");
+                throw new Exception("User not found in the database!");
 
             Character character = db.Characters.Find(Convert.ToInt64(characterID));
             if (character == null)
@@ -173,8 +181,6 @@ namespace MvcMovie.Controllers
                     break;
                 minRefID = newMinRefID;
             }
-
-            return RedirectToAction("Index");
         }
 
         private void ProcessResponseWalletJournal(Character character, string eveResponseXmlData)
@@ -219,26 +225,61 @@ namespace MvcMovie.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult UpdateWalletTransactions(string characterID)
+        public void UpdateWalletTransactions(string characterID)
         {
-            if (!WebSecurity.IsAuthenticated)
-                throw new Exception("User is not authenitcated!");
-
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
-                return RedirectToAction("Create");
+                throw new Exception("User not found in the database!");
 
             Character character = db.Characters.Find(Convert.ToInt64(characterID));
             if (character == null)
                 throw new Exception("Character not found in the database!");
 
-            string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID);
-            ProcessResponseWalletTransactions(character, eveResponseXmlData);
+            string fromID = "";                                                     // begin from today on
+            string rowCount = "200";                                                // default row count
+            DateTime untilDate = DateTime.Today.Subtract(TimeSpan.FromDays(60));    // compute a date one month ago
+            bool repeat = true;
+            while (repeat)
+            {
+                string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
 
-            return RedirectToAction("Index");
+                XDocument doc = XDocument.Parse(eveResponseXmlData);
+                if (doc.Descendants("row").Count() == 0)
+                {
+                    break;
+                }
+
+                long minIdFromResponse = (from t in doc.Descendants("row")
+                                          select Convert.ToInt64(t.Attribute("transactionID").Value)).Min();
+                long maxIdFromDb = (from t in db.WalletTransactions
+                                    where t.characterID == character.characterID
+                                    select t.transactionID).Max();
+
+                SaveWalletTransactions(character, eveResponseXmlData);
+
+                if (minIdFromResponse > maxIdFromDb)
+                {
+                    fromID = Convert.ToString((from t in doc.Descendants("row")
+                                               select Convert.ToInt64(t.Attribute("transactionID").Value)).Min());
+                    continue;
+                }
+
+                DateTime minDateFromDb = (from t in db.WalletTransactions
+                                          where t.characterID == character.characterID
+                                          select t.transactionDateTime).Min();
+
+                repeat = minDateFromDb > untilDate;
+
+                if (repeat)
+                {
+                    fromID = Convert.ToString((from t in db.WalletTransactions
+                                               where t.characterID == character.characterID
+                                               select t.transactionID).Min());
+                }
+            }
         }
 
-        private void ProcessResponseWalletTransactions(Character character, string eveResponseXmlData)
+        private void SaveWalletTransactions(Character character, string eveResponseXmlData)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(eveResponseXmlData);
@@ -272,6 +313,36 @@ namespace MvcMovie.Controllers
                 }
             }
             db.SaveChanges();
+        }
+
+        [HttpPost]
+        public ActionResult GetStats(string characterId)
+        {
+            User user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user == null)
+                RedirectToAction("Create");
+
+            Character character = db.Characters.Find(Convert.ToInt64(characterId));
+            if (character == null)
+                throw new Exception("Character not found in the database!");
+
+            var transactions = from t in db.WalletTransactions
+                               where t.characterID == character.characterID
+                               select t;
+
+            var journalEntries = from j in db.WalletJournal
+                                 where j.characterID == character.characterID
+                                 select j;
+
+
+            ViewBag.amountOfTransactions = transactions.Count();
+            ViewBag.oldestTransaction = transactions.Min(t => t.transactionDateTime);
+            ViewBag.lastTransaction = transactions.Max(t => t.transactionDateTime);
+            ViewBag.amountOfJournalEntries = journalEntries.Count();
+            ViewBag.oldestJournalEntry = journalEntries.Min(j => j.date);
+            ViewBag.lastJournalEntry = journalEntries.Max(j => j.date);
+
+            return PartialView("Stats");
         }
 
         public ActionResult ErrorList()

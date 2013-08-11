@@ -1,14 +1,5 @@
-﻿@model IEnumerable<MvcMovie.Models.Character>
-
-@{
+﻿@{
     ViewBag.Title = "Characters";
-    string selCharId = "";
-    string curCharName = "";
-    if (HttpContext.Current.Cache[WebSecurity.CurrentUserId.ToString() + "characterid"] != null)
-    {
-        selCharId = HttpContext.Current.Cache[WebSecurity.CurrentUserId.ToString() + "characterid"] as string;
-        curCharName = HttpContext.Current.Cache[WebSecurity.CurrentUserId.ToString() + "charactername"] as string;
-    }
 }
 
 @section Scripts{
@@ -16,120 +7,82 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="~/Scripts/eveapi/CharacterManager.js"></script>
+    <script src="~/Scripts/eveapi/eveapi-0.1.js"></script>
     <script type="text/javascript">
-        google.load('visualization', '1.0', { 'packages': ['corechart'] });
+        $(document).ready(function () {
+            var TransactionChart = null,
+                characterManager = null;
 
-        //google.setOnLoadCallback(drawRightChart);
-
-        function drawRightChart(data) {
-            var dt = new google.visualization.arrayToDataTable(data);
-
-            var options = {
-                'title': 'Transactions',
-                'legend': { 'position': 'top', 'alignment': 'start' }
+            function drawRightChart(data) {
+                if (TransactionChart == null) {
+                    TransactionChart = EveApiChart.WalletChart(document.getElementById('right_overview'), data);
+                } else {
+                    TransactionChart.addData(data);
+                }
             };
 
-            var chart = new google.visualization.BarChart(document.getElementById('right_overview'));
-            chart.draw(dt, options);
-        }
+            function getDataFromEveServer() {
+                var charId = $("#character_id").val();
+                //$.post("/EveApi/UpdateWalletJournal", { characterID: charId });
+                $.post("/EveApi/UpdateWalletTransactions", { characterID: charId });
+            };
 
-        function getDataFromEveServer() {
-            var charId = $("#character_id").val();
-            $.post("/EveApi/UpdateWalletJournal", { characterID: charId });
-            $.post("/EveApi/UpdateWalletTransactions", { characterID: charId });
-        }
-
-        function updateCharts() {
-            var charId = $("#character_id").val();
-            if (charId != "") {
+            // Get new transcations from the database.
+            function updateCharts(charId) {
                 $.post("/EveApi/GetTransactions", "characterid=" + charId, function (data) {
-                    var arrayData = eval(data);
-                    drawRightChart(arrayData);
+                    drawRightChart(data);
                 });
-            }
-        }
+            };
 
-        $("#selectable").selectable({
-            selected: function (event, ui) {
-                // it is importend to have only one selected character
-                $(ui.selected).siblings().removeClass("ui-selected");
+            // Get statistics
+            function updateStats(charId) {
+                $('#Balance').load("EveApi/GetStats", { characterId: charId });
+            };
 
-                var selected = $(ui.selected).children();
-                var charId = selected[0].value;
-                var charName = selected[1].value;
+            function updateBalance(charId) {
+                $('#Balance2').load("EveApi/GetBalance", { characterId: charId });
+            };
 
-                // set html field
-                $("#character_id").val(charId);
-                $("#character_name").val(charName);
-                $("#display_character_name").text("Current Character: " + charName);
+            $("#character_display").load("EveApi/SelectCharacter", function () {
+                characterManager = new CharacterManager();
+                characterManager.addSelectionCallback(updateStats);
+                characterManager.addSelectionCallback(updateCharts);
+                characterManager.addSelectionCallback(updateBalance);
+            });
 
-                // cache selected character data
-                $.get("/EveApi/CacheCharacterId", { "characterid": charId, "charactername": charName });
+            // update tables link
+            $("#update_tables").click(function () {
+                if (characterManager != null && characterManager.getCharacterId() != null) {
+                    var progressbar = $("#progressbar");
+                    var that = $(this);
+                    that.css("display", "none");
+                    progressbar.css("display", "block");
 
-                $("#select_character").dialog("close");
-
-                updateCharts();
-            }
-        });
-
-        $(function () {
-            $("#select_character").dialog({
-                autoOpen: false,
-                dialogClass: "no-close",
-                modal: true,
-                show: {
-                    effect: "blind",
-                    duration: 1000
-                },
-                hide: {
-                    effect: "blind",
-                    duration: 1000
+                    $.post("/EveApi/UpdateWalletTransactions", { characterID: characterManager.getCharacterId() })
+                        .complete(function () {
+                            updateStats(characterManager.getCharacterId());
+                            updateCharts(characterManager.getCharacterId());
+                            progressbar.css("display", "none");
+                            that.css("display", "block");
+                        });
                 }
             });
-
-            $("#open_character_dialog").click(function () {
-                $("#select_character").dialog("open");
-            });
-
         });
-
-        $(document).ready(function () {
-            if ($("#character_id").val() == "") {
-                $("#select_character").dialog("open");
-            }
-            updateCharts();
-        });
-
-        $("#update_tables").click(function () {
-            //updateCharts();
-            getDataFromEveServer();
-        });
-
     </script>
 }
 
 @Styles.Render("~/Content/CharactersWebGrid.css", "http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css")
 
-<div style="width: 200px; padding-bottom: 20px; border: solid 1px red;">
-    @Html.Hidden("character_id", selCharId)
-    @Html.Hidden("character_name", curCharName)
-    <div id="display_character_name">Current Character: @curCharName</div>
-    <a href="#" id="open_character_dialog" style="float: right;">Select Character</a>
-</div>
+<div id="character_display"></div>
 
 <div style="width: 960px;">
     <div id="left_overview" style="width: 550px; margin-right: 10px; float: left;">
-        <div id="Balance" style="width: 550px; height: 300px; border: solid 1px blue; margin-bottom: 10px; margin-top: 10px;">
-            Placeholder for the balance chart
-        </div>
-        <div id="Balance2" style="width: 550px; height: 300px; border: solid 1px blue; margin-bottom: 10px; margin-top: 10px">
-            Placeholder for the balance chart 2
-        </div>
+        <div id="Balance" style="width: 550px; height: 300px; border: solid 1px blue; margin-bottom: 10px; margin-top: 10px;"></div>
+        <div id="Balance2" style="width: 550px; height: 300px; border: solid 1px blue; margin-bottom: 10px; margin-top: 10px"></div>
     </div>
     <div id="right_overview" style="width: 366px; margin-left: 10px; float: left">
-        <div id="Transactions" style="width: 366px; height: 610px; border: solid 1px green; margin-bottom: 10px; margin-top: 10px">
-            Placeholder for Transaction summary
-        </div>
+        <div id="Transactions" style="width: 366px; height: 610px; border: solid 1px green; margin-bottom: 10px; margin-top: 10px"></div>
     </div>
     <div style="clear: left"></div>
 </div>
@@ -137,20 +90,6 @@
 <div id="update_tables" class="a">
     Update Tables
 </div>
-
-@* Character select dialog *@
-<div id="select_character" title="Select Character" style="display: none; 1">
-    <div id="selectable">
-        @foreach (var m in Model)
-        {
-            <div class="ui-widget-content">
-                @Html.Hidden("charid", m.characterID)
-                @Html.Hidden("charname", m.characterName)
-                @m.characterName
-            </div>
-        }
-    </div>
-    <div>
-        @Html.ActionLink("Update", "UpdateCharacters")
-    </div>
+<div id="progressbar" style="display: none;">
+    Loading...
 </div>

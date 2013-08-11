@@ -337,6 +337,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\controls\TrackballControls.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
+    <Content Include="Scripts\eveapi\eveapi-0.1.js" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
@@ -364,6 +365,7 @@
     <Content Include="Scripts\mvcfileupload\vendor\bootstrap.min.js" />
     <Content Include="Scripts\mvcfileupload\vendor\jquery-1.9.1.min.js" />
     <Content Include="Scripts\mvcfileupload\vendor\jquery-ui-1.10.2.js" />
+    <Content Include="Scripts\eveapi\CharacterManager.js" />
     <Content Include="Scripts\three\three.js" />
     <Content Include="Scripts\three\three.min.js" />
     <Content Include="Scripts\tinymce\jquery.tinymce.min.js" />
@@ -577,6 +579,7 @@
     <Content Include="Views\EveApi\Create.cshtml" />
     <Content Include="Views\EveApi\Index.cshtml" />
     <Content Include="Views\EveApi\SelectCharacter.cshtml" />
+    <Content Include="Views\EveApi\Stats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
