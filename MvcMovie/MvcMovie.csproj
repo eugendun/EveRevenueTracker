@@ -370,6 +370,8 @@
     <Content Include="Scripts\mvcfileupload\vendor\jquery-1.9.1.min.js" />
     <Content Include="Scripts\mvcfileupload\vendor\jquery-ui-1.10.2.js" />
     <Content Include="Scripts\mvcfileupload\vendor\jquery.ui.widget.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
     <Content Include="Scripts\three\three.js" />
     <Content Include="Scripts\three\three.min.js" />
     <Content Include="Scripts\tinymce\jquery.tinymce.min.js" />
