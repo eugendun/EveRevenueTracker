@@ -1,9 +1,10 @@
 ﻿/// <reference path="https://www.google.com/jsapi" />
+/// <reference path="../require.js" />
 
-google.load('visualization', '1.0', { 'packages': ['corechart'] });
+define('EveApiCharts', ['google'], function () {
+    var EveApiCharts = function () { };
 
-EveApiChart = {
-    WalletChart: function (container, data) {
+    EveApiCharts.prototype.WalletChart = function (container, data) {
         var _container = container,
             _chart = new google.visualization.BarChart(container),
             _data = new google.visualization.arrayToDataTable(eval(data)),
@@ -25,4 +26,6 @@ EveApiChart = {
             }
         };
     }
-};
+
+    return new EveApiCharts();
+});

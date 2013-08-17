@@ -2,71 +2,34 @@
     ViewBag.Title = "Characters";
 }
 
+@section requirejs{
+    <script data-main="Scripts/eveapi/main" src="Scripts/require.js"></script>    
+}
+
 @section Scripts{
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script src="~/Scripts/eveapi/CharacterManager.js"></script>
-    <script src="~/Scripts/eveapi/eveapi-0.1.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            var TransactionChart = null,
-                characterManager = null;
-
-            function drawRightChart(data) {
-                if (TransactionChart == null) {
-                    TransactionChart = EveApiChart.WalletChart(document.getElementById('right_overview'), data);
-                } else {
-                    TransactionChart.addData(data);
-                }
-            };
-
-            function getDataFromEveServer() {
-                var charId = $("#character_id").val();
-                //$.post("/EveApi/UpdateWalletJournal", { characterID: charId });
-                $.post("/EveApi/UpdateWalletTransactions", { characterID: charId });
-            };
-
-            // Get new transcations from the database.
-            function updateCharts(charId) {
-                $.post("/EveApi/GetTransactions", "characterid=" + charId, function (data) {
-                    drawRightChart(data);
-                });
-            };
-
-            // Get statistics
-            function updateStats(charId) {
-                $('#Balance').load("EveApi/GetStats", { characterId: charId });
-            };
-
-            function updateBalance(charId) {
-                $('#Balance2').load("EveApi/GetBalance", { characterId: charId });
-            };
-
-            $("#character_display").load("EveApi/SelectCharacter", function () {
-                characterManager = new CharacterManager();
-                characterManager.addSelectionCallback(updateStats);
-                characterManager.addSelectionCallback(updateCharts);
-                characterManager.addSelectionCallback(updateBalance);
-            });
-
+        require.config({
+            paths: {
+                jquery: '../jquery-2.0.3'
+            }
+        });
+        require(['main', 'jquery'], function () {
             // update tables link
             $("#update_tables").click(function () {
-                if (characterManager != null && characterManager.getCharacterId() != null) {
-                    var progressbar = $("#progressbar");
-                    var that = $(this);
-                    that.css("display", "none");
-                    progressbar.css("display", "block");
+                //if (characterManager != null && characterManager.getCharacterId() != null) {
+                //    var progressbar = $("#progressbar");
+                //    var that = $(this);
+                //    that.css("display", "none");
+                //    progressbar.css("display", "block");
 
-                    $.post("/EveApi/UpdateWalletTransactions", { characterID: characterManager.getCharacterId() })
-                        .complete(function () {
-                            updateStats(characterManager.getCharacterId());
-                            updateCharts(characterManager.getCharacterId());
-                            progressbar.css("display", "none");
-                            that.css("display", "block");
-                        });
-                }
+                //    $.post("/EveApi/UpdateWalletTransactions", { characterID: characterManager.getCharacterId() })
+                //        .complete(function () {
+                //            updateStats(characterManager.getCharacterId());
+                //            updateCharts(characterManager.getCharacterId());
+                //            progressbar.css("display", "none");
+                //            that.css("display", "block");
+                //        });
+                //}
             });
         });
     </script>

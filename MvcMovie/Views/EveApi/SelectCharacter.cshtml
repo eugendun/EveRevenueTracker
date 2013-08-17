@@ -10,8 +10,6 @@
     }
 }
 
-@*@Scripts.Render("~/Scripts/eveapi/CharacterManager.js")*@
-
 <div style="width: 200px; padding-bottom: 20px; border: solid 1px red;">
     @Html.Hidden("character_id", selCharId)
     @Html.Hidden("character_name", curCharName)
@@ -35,3 +33,51 @@
         @Html.ActionLink("Update", "UpdateCharacters")
     </div>
 </div>
+
+<script type="text/javascript">
+    require(['main'], function () {
+        //character selection - dialog
+        $("#selectable").selectable({
+            selected: function (event, ui) {
+                // it is importend to have only one selected character
+                $(ui.selected).siblings().removeClass("ui-selected");
+
+                var selected = $(ui.selected).children();
+                CharacterManager.set(selected[0].value, selected[1].value);
+
+                $("#character_id").val(CharacterManager.getId());
+                $("#character_name").val(CharacterManager.getName());
+                $("#display_character_name").text("Current Character: " + CharacterManager.getName());
+
+                // cache selected character data
+                $.get("/EveApi/CacheCharacterId", { characterid: CharacterManager.getId(), charactername: CharacterManager.getName() });
+
+                $("#select_character").dialog("close");
+            }
+        });
+
+        $("#select_character").dialog({
+            autoOpen: false,
+            dialogClass: "no-close",
+            modal: true,
+            show: {
+                effect: "blind",
+                duration: 1000
+            },
+            hide: {
+                effect: "blind",
+                duration: 1000
+            }
+        });
+
+        $("#open_character_dialog").click(function () {
+            $("#select_character").dialog("open");
+        });
+
+        if ($("#character_id").val() == "") {
+            $("#select_character").dialog("open");
+        } else {
+            CharacterManager.set($("#character_id").val(), $("#character_name").val());
+        }
+    });
+</script>

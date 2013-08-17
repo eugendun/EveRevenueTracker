@@ -1,0 +1,57 @@
+﻿/// <reference path="../require.js" />
+/// <reference path="CharacterManager.js" />
+/// <reference path="EveApiCharts.js" />
+
+require.config({
+    paths: {
+        jquery: '../jquery-2.0.3',
+        jqueryui: '../jquery-ui-1.10.3'
+    }
+});
+
+require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], function () {
+    // load modules
+    EveApiCharts = require('EveApiCharts');
+    CharacterManager = require('CharacterManager');
+
+    // prepare the page
+    $(document).ready(function () {
+        var WalletChart = null;
+
+        function drawRightChart(data) {
+            if (WalletChart == null) {
+                WalletChart = EveApiCharts.WalletChart(document.getElementById('right_overview'), data);
+            } else {
+                WalletChart.addData(data);
+            }
+        };
+
+        // Get new transcations from the database.
+        function updateCharts(charId) {
+            $.post("/EveApi/GetTransactions", "characterid=" + charId, function (data) {
+                drawRightChart(data);
+            });
+        };
+
+        function updateBalance(charId) {
+            $('#Balance2').load("EveApi/GetBalance", { characterId: charId });
+        };
+
+        // Get statistics
+        function updateStats(charId) {
+            $('#Balance').load("EveApi/GetStats", { characterId: charId });
+        };
+
+        $('#character_display').load('EveApi/SelectCharacter', function () {
+            CharacterManager.attach(updateStats);
+            CharacterManager.attach(updateCharts);
+            //CharacterManager.attach(updateBalance);
+        });
+
+        function getDataFromEveServer() {
+            var charId = $("#character_id").val();
+            //$.post("/EveApi/UpdateWalletJournal", { characterID: charId });
+            $.post("/EveApi/UpdateWalletTransactions", { characterID: charId });
+        };
+    });
+});
