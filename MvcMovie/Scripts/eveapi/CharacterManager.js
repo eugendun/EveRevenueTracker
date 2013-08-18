@@ -1,5 +1,4 @@
 ﻿/// <reference path="../require.js" />
-/// <reference path="domReady.js" />
 
 require.config({
     paths: {
@@ -7,8 +6,7 @@ require.config({
     }
 });
 
-define('CharacterManager', ['jquery', 'domReady'], function ($) {
-    var domReady = require('domReady');
+define('CharacterManager', ['jquery'], function ($) {
     var CharacterManager = function () {
         var _characterId = null,
             _characterName = null,

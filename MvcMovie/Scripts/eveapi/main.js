@@ -39,7 +39,7 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
 
         // Get statistics
         function updateStats(charId) {
-            $('#Balance').load("EveApi/GetStats", { characterId: charId });
+            $('#eve_stats').load("EveApi/GetStats", { characterId: charId });
         };
 
         $('#character_display').load('EveApi/SelectCharacter', function () {
@@ -53,5 +53,23 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
             //$.post("/EveApi/UpdateWalletJournal", { characterID: charId });
             $.post("/EveApi/UpdateWalletTransactions", { characterID: charId });
         };
+
+        // update tables link
+        $("#update_tables").click(function () {
+            //if (characterManager != null && characterManager.getCharacterId() != null) {
+            //    var progressbar = $("#progressbar");
+            //    var that = $(this);
+            //    that.css("display", "none");
+            //    progressbar.css("display", "block");
+
+            //    $.post("/EveApi/UpdateWalletTransactions", { characterID: characterManager.getCharacterId() })
+            //        .complete(function () {
+            //            updateStats(characterManager.getCharacterId());
+            //            updateCharts(characterManager.getCharacterId());
+            //            progressbar.css("display", "none");
+            //            that.css("display", "block");
+            //        });
+            //}
+        });
     });
 });
