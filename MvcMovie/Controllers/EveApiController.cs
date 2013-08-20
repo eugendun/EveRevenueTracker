@@ -3,6 +3,7 @@ using MvcMovie.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Objects;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,7 +75,7 @@ namespace MvcMovie.Controllers
             nfi.NumberDecimalSeparator = ".";
             foreach (var t in transactions)
             {
-                content += string.Format(",['{0}', {1} ]", t.typeName, t.price.ToString(nfi));
+                content += string.Format(",['{0}', {1}]", t.typeName, t.price.ToString(nfi));
             }
             content += "]";
 
@@ -91,7 +92,49 @@ namespace MvcMovie.Controllers
 
             long charId = XmlConvert.ToInt64(characterid);
 
-            return JavaScript("");
+            var balanceEntries = from j in db.WalletJournal
+                                 where j.characterID == charId
+                                 group j by new { date = EntityFunctions.TruncateTime(j.date) } into g
+                                 orderby g.Key.date ascending
+                                 select new { g.Key.date, balance = g.Average(entry => entry.balance) };
+
+            var buyEntries = from j in db.WalletJournal
+                             where j.characterID == charId
+                             where j.amount < 0
+                             group j by new { date = EntityFunctions.TruncateTime(j.date) } into g
+                             orderby g.Key.date ascending
+                             select new { g.Key.date, buys = g.Sum(entry => entry.amount) };
+
+            var sellEntries = from j in db.WalletJournal
+                              where j.characterID == charId
+                              where j.amount > 0
+                              group j by new { date = EntityFunctions.TruncateTime(j.date) } into g
+                              orderby g.Key.date ascending
+                              select new { g.Key.date, sells = g.Sum(entry => entry.amount) };
+
+            var joinedEntries = from e in balanceEntries
+                                join b in buyEntries on e.date equals b.date into buys
+                                from eb in buys
+                                join s in sellEntries on eb.date equals s.date into sells
+                                from ebs in sells
+                                select new { e.date, e.balance, eb.buys, ebs.sells};
+
+            string rows = string.Empty;
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            foreach (var entry in joinedEntries)
+            {
+                string dateString = entry.date.HasValue ? entry.date.ToString() : string.Empty;
+                rows += string.Format("{0}['{1}', {2}, {3}, {4}]",
+                    rows == string.Empty ? string.Empty : ", ",     // first row should not contains ','
+                    DateTime.Parse(dateString).ToString("s"),       // parse datestring to iso standard
+                    entry.balance.ToString(nfi),                    // number decimals seperated by '.'
+                    entry.buys.ToString(nfi),
+                    entry.sells.ToString(nfi));
+            }
+            rows = string.Format("[{0}]", rows);
+
+            return JavaScript(rows);
         }
 
         [HttpGet]

@@ -6,4 +6,4 @@
     }
 });
 
-define('google', ['async!http://maps.google.com/maps/api/js?sensor=false', 'goog!visualization,1,packages:[corechart]'], function () { });
+define('google', ['async!http://maps.google.com/maps/api/js?sensor=false', 'goog!visualization,1,packages:[corechart]', 'goog!visualization,1,packages:[controls]'], function () { });

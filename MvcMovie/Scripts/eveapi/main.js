@@ -16,25 +16,21 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
 
     // prepare the page
     $(document).ready(function () {
-        var WalletChart = null;
-
-        function drawRightChart(data) {
-            if (WalletChart == null) {
-                WalletChart = EveApiCharts.WalletChart(document.getElementById('right_overview'), data);
-            } else {
-                WalletChart.addData(data);
-            }
-        };
+        var WalletChart = null,
+            BalanceChart = null;
 
         // Get new transcations from the database.
         function updateCharts(charId) {
             $.post("/EveApi/GetTransactions", "characterid=" + charId, function (data) {
-                drawRightChart(data);
+                WalletChart = EveApiCharts.WalletChart(document.getElementById('right_overview'), data);
             });
         };
 
         function updateBalance(charId) {
-            $('#Balance2').load("EveApi/GetBalance", { characterId: charId });
+            $.post("EveApi/GetBalance", "characterId=" + charId, function (data) {
+                data = eval(data);
+                BalanceChart = EveApiCharts.BalanceDashboard(document.getElementById('Balance'), data);
+            });
         };
 
         // Get statistics
@@ -45,7 +41,7 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
         $('#character_display').load('EveApi/SelectCharacter', function () {
             CharacterManager.attach(updateStats);
             CharacterManager.attach(updateCharts);
-            //CharacterManager.attach(updateBalance);
+            CharacterManager.attach(updateBalance);
         });
 
         function getDataFromEveServer() {
