@@ -335,6 +335,7 @@
     <Content Include="Content\uploads\readme.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\backgroundEveScreensgot0.png" />
     <Content Include="Scripts\controls\TrackballControls.js" />
     <Content Include="Scripts\eveapi\domReady.js" />
     <Content Include="Scripts\eveapi\google.js" />

@@ -19,13 +19,13 @@
         </div>
     </div>
     <div id="right_overview" style="width: 366px; margin-left: 10px; float: left">
-        <div id="Transactions" style="width: 366px; height: 610px; border: solid 1px green; margin-bottom: 10px; margin-top: 10px"></div>
+        <div id="Transactions" style="width: 366px; height: 600px; border: solid 1px green; margin-bottom: 10px; margin-top: 10px"></div>
     </div>
     <div style="clear: left"></div>
     <div id="eve_stats"></div>
 </div>
 
-<div id="update_tables" class="a" style="width: 200px; margin: 2px; background-color: #e27575">
+<div id="update_tables" class="a" style="width: 200px; margin: 2px;">
     Update Tables
 </div>
 <div id="progressbar" style="display: none;">
@@ -40,10 +40,10 @@
     });
     require(['jquery'], function () {
         $('#update_tables').mouseover(function (event) {
-            $(this).css('background-color', '#f5d943');
+            //$(this).css('background-color', '#f5d943');
         });
         $('#update_tables').mouseout(function (event) {
-            $(this).css('background-color', '#e27575');
+            //$(this).css('background-color', '#e27575');
         });
     });
 </script>
