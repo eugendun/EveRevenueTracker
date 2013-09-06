@@ -17,19 +17,26 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
     // prepare the page
     $(document).ready(function () {
         var WalletChart = null,
-            BalanceChart = null;
+            BalanceChart = null,
+            RevenueChart = null,
+            chartsContainerElement = document.getElementById('charts_container');
 
         // Get new transcations from the database.
         function updateCharts(charId) {
             $.post("/EveApi/GetTransactions", "characterid=" + charId, function (data) {
-                WalletChart = EveApiCharts.WalletChart(document.getElementById('right_overview'), data);
+                WalletChart = EveApiCharts.WalletChart(chartsContainerElement, eval(data));
             });
         };
 
         function updateBalance(charId) {
             $.post("EveApi/GetBalance", "characterId=" + charId, function (data) {
-                data = eval(data);
-                BalanceChart = EveApiCharts.BalanceDashboard(document.getElementById('Balance'), data);
+                BalanceChart = EveApiCharts.BalanceDashboard(chartsContainerElement, eval(data));
+            });
+        };
+
+        function updateTest(charId) {
+            $.post("EveApi/GetRevenue", "characterId=" + charId, function (data) {
+                RevenueChart = EveApiCharts.RevenueChart(chartsContainerElement, eval(data));
             });
         };
 
@@ -42,6 +49,7 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
             CharacterManager.attach(updateStats);
             CharacterManager.attach(updateCharts);
             CharacterManager.attach(updateBalance);
+            CharacterManager.attach(updateTest);
         });
 
         function getDataFromEveServer() {

@@ -1,106 +1,115 @@
-﻿/// <reference path="https://www.google.com/jsapi" />
-/// <reference path="../require.js" />
+﻿/// <reference path="../require.js" />
+/// <reference path="../jsapi.js" />
 
-define('EveApiCharts', ['google'], function () {
-    var EveApiCharts = function () { };
+require.config({
+    paths: {
+        'eutils': '../utils/eutils'
+    }
+});
 
-    EveApiCharts.prototype.WalletChart = function (container, data) {
-        var _container = container,
-            _chart = new google.visualization.BarChart(container),
-            _data = new google.visualization.arrayToDataTable(eval(data)),
-            _options = {
-                'title': 'Transactions',
-                'legend': { 'position': 'top', 'alignment': 'start' }
-            },
-            _formatter = new google.visualization.TableNumberFormat({
-                decimalSymbol: '.',
-                groupingSymbol: ',',
-                suffix: ' ISK'
-            });
+define('EveApiCharts', ['eutils', 'google'], function () {
+    /* Class Chart */
+    function Chart(chartId, chartsContainer) {
+        // chart container
+        var _chart = document.createElement('div');
+        _chart.id = chartId;
+        _chart.className = 'chart';
 
-        _formatter.format(_data, 1)
-        _chart.draw(_data, _options);
+        // append the chart container to the charts container
+        chartsContainer.appendChild(_chart);
 
-        return {
-            getChart: function () {
-                return _chart;
-            },
-
-            addRows: function (data) {
-                _dt.addRows(data);
-                _chart.draw(_dt, _options);
-            }
-        };
-    };
-
-    EveApiCharts.prototype.BalanceChart = function (container, data) {
-        var _container = container,
-            _chart = new google.visualization.LineChart(container),
-            _data = new google.visualization.DataTable(),
-            _options = {
-                'title': 'Balance',
-                'legend': { 'position': 'top', 'alignment': 'start' }
-            },
-            _formatter = new google.visualization.TableNumberFormat({
-                decimalSymbol: '.',
-                groupingSymbol: ',',
-                suffix: ' ISK'
-            });
-
-        _data.addColumn('date', 'Date');
-        _data.addColumn('number', 'Balance');
-        _data.addRows(data);
-
-        _formatter.format(_data, 1)
-        _chart.draw(_data, _options);
-
-        return {
-            getChart: function () {
-                return _chart;
-            },
-
-            addRows: function (data) {
-                _dt.addRows(data);
-                _chart.draw(_dt, _options);
-            }
-        };
-    };
-
-    EveApiCharts.prototype.BalanceDashboard = function (container, data) {
-        var _dashboard,
-            _data,
-            _formatter,
-            _control,
-            _chart;
-
-        _data = new google.visualization.DataTable();
-
-        _data.addColumn('date', 'Date');
-        _data.addColumn('number', 'Balance');
-        _data.addColumn('number', 'Buys');
-        _data.addColumn('number', 'Sells');
-
-        data.forEach(function (row) {
-            _data.addRow([new Date(row[0]), row[1], row[2], row[3]]);
-        });
-
-        _formatter = new google.visualization.TableNumberFormat({
+        // table formatter to show ISK values like in ingame
+        var _iskFormatter = new google.visualization.TableNumberFormat({
             decimalSymbol: '.',
             groupingSymbol: ',',
             suffix: ' ISK'
         });
 
-        _formatter.format(_data, 1);
-        _formatter.format(_data, 2);
-        _formatter.format(_data, 3);
+
+        // public methods
+        // get chart container
+        this.getChartContainer = function () {
+            return _chart;
+        };
+
+        // get ISK formatter
+        this.getIskFormatter = function () {
+            return _iskFormatter;
+        };
+    };
+
+    function WalletChart(chartsContainer, data) {
+        WalletChart.superclass.constructor.call(this, 'WalletChart', chartsContainer);
+
+        var _chart = new google.visualization.BarChart(this.getChartContainer()),
+            _data = new google.visualization.arrayToDataTable(data),
+            _options = {
+                'title': 'Transactions',
+                'legend': { 'position': 'top', 'alignment': 'start' }
+            };
+
+        this.getIskFormatter().format(_data, 1);
+        _chart.draw(_data, _options);
+    };
+    extend(WalletChart, Chart);
+
+    function BalanceChart(chartsContainer, data) {
+        BalanceChart.superclass.constructor.call(this, 'BalanceChart', chartsContainer);
+
+        var _chart = new google.visualization.LineChart(this.getChartContainer()),
+            _data = new google.visualization.DataTable(),
+            _options = {
+                'title': 'Balance',
+                'legend': { 'position': 'top', 'alignment': 'start' }
+            };
+
+        _data.addColumn('date', 'Date');
+        _data.addColumn('number', 'Balance');
+        _data.addRows(data);
+
+        this.getIskFormatter().format(_data, 1);
+        _chart.draw(_data, _options);
+    };
+    extend(BalanceChart, Chart);
+
+    function BalanceDashboard(chartsContainer, data) {
+        BalanceDashboard.superclass.constructor.call(this, 'BalanceDashboard', chartsContainer);
+
+        // setup the html structure
+        var _chartContainer = document.createElement('div'),
+            _rangeFilterContainer = document.createElement('div');
+        _chartContainer.id = 'BalanceChart';
+        _rangeFilterContainer.id = 'BalanceRangeFilter';
+        this.getChartContainer().appendChild(_chartContainer);
+        this.getChartContainer().appendChild(_rangeFilterContainer);
+
+        // setup the table
+        var _data = new google.visualization.DataTable();
+        _data.addColumn('date', 'Date');
+        _data.addColumn('number', 'Balance');
+        _data.addColumn('number', 'Buy');
+        _data.addColumn('number', 'Sell');
+        _data.addColumn('number', 'Revenue');
+
+        // fill the table with data, the first column has to be converted to Date and the
+        // last column is the sum of sell and buy values
+        data.forEach(function (row) {
+            _data.addRow([new Date(row[0]), row[1], row[2], row[3], row[2] + row[3]]);
+        });
+
+        // format the table columns with the isk formatter
+        this.getIskFormatter().format(_data, 1);
+        this.getIskFormatter().format(_data, 2);
+        this.getIskFormatter().format(_data, 3);
+        this.getIskFormatter().format(_data, 4);
 
         // set the intial range to a week (7 days)
         var _endRangeDate = new Date(data[data.length - 1][0]),
             _startRangeDate = new Date(_endRangeDate.getTime() - 86400000 * 7);
 
-        _control = new google.visualization.ControlWrapper({
+        var _control = new google.visualization.ControlWrapper({
             'controlType': 'ChartRangeFilter',
-            'containerId': 'balance_range_filter',
+            'containerId': _rangeFilterContainer.id,
             'options': {
                 // Filter by the date axis.
                 'filterColumnIndex': 0,
@@ -119,10 +128,11 @@ define('EveApiCharts', ['google'], function () {
             'state': { 'range': { 'start': _startRangeDate, 'end': _endRangeDate } }
         });
 
-        _chart = new google.visualization.ChartWrapper({
+        var _chart = new google.visualization.ChartWrapper({
             'chartType': 'LineChart',
-            'containerId': 'balance_chart',
+            'containerId': _chartContainer.id,
             'options': {
+                'title': 'Balance',
                 'chartArea': { 'height': '80%', 'width': '60%' },
                 'hAxis': { 'slantedText': false }
             },
@@ -132,26 +142,48 @@ define('EveApiCharts', ['google'], function () {
                         return dataTable.getFormattedValue(rowIndex, 0);
                     },
                     'type': 'string'
-                }, 1, 2, 3]
+                }, 1, 2, 3, 4]
             }
         });
 
-        _dashboard = new google.visualization.Dashboard(container),
+        var _dashboard = new google.visualization.Dashboard(this.getChartContainer());
         _dashboard.bind(_control, _chart);
         _dashboard.draw(_data);
-
-        return {
-            getChart: function () {
-                return _chart;
-            },
-
-            addRows: function (data) {
-                _dt.addRows(data);
-                _chart.draw(_dt, _options);
-            }
-        };
     };
+    extend(BalanceDashboard, Chart);
 
+    function RevenueChart(chartsContainer, data) {
+        RevenueChart.superclass.constructor.call(this, 'RevenueChart', chartsContainer);
 
+        var _chart = new google.visualization.ColumnChart(this.getChartContainer()),
+            _data = new google.visualization.DataTable(),
+            _options = {
+                'title': 'Revenue'
+            };
+
+        _data.addColumn('string', 'Type');
+        _data.addColumn('number', 'Revenue');
+        _data.addRows(data);
+
+        this.getIskFormatter().format(_data, 1);
+        _chart.draw(_data, _options);
+    };
+    extend(RevenueChart, Chart);
+
+    var EveApiCharts = function () { };
+    EveApiCharts.prototype = {
+        WalletChart: function (chartsContainer, data) {
+            return new WalletChart(chartsContainer, data);
+        },
+        BalanceChart: function (chartsContainer, data) {
+            return new BalanceChart(chartsContainer, data);
+        },
+        BalanceDashboard: function (chartsContainer, data) {
+            return new BalanceDashboard(chartsContainer, data);
+        },
+        RevenueChart: function (chartsContainer, data) {
+            return new RevenueChart(chartsContainer, data);
+        }
+    };
     return new EveApiCharts();
 });

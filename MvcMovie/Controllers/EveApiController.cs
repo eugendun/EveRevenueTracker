@@ -62,7 +62,6 @@ namespace MvcMovie.Controllers
         public ActionResult GetTransactions(string characterid)
         {
             long charid = XmlConvert.ToInt64(characterid);
-
             var userId = WebSecurity.GetUserId(User.Identity.Name);
 
             var transactions = (from t in db.WalletTransactions
@@ -83,9 +82,45 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetRevenue(string characterId)
+        {
+            long charId = XmlConvert.ToInt64(characterId);
+            var userId = WebSecurity.GetUserId(User.Identity.Name);
+
+
+            var sellTransactions = from t in db.WalletTransactions
+                                   where t.characterID == charId
+                                   where t.transactionType == "sell"
+                                   group t by new { t.typeName, t.transactionType } into g
+                                   select new { g.Key.typeName, price = g.Average(entry => entry.price), number = g.Count() };
+
+            var buyTransactions = from t in db.WalletTransactions
+                                  where t.characterID == charId
+                                  where t.transactionType == "buy"
+                                  group t by new { t.typeName, t.transactionType } into g
+                                  select new { g.Key.typeName, price = g.Average(entry => entry.price), number = g.Count() };
+
+            var revenue = from s in sellTransactions
+                          join b in buyTransactions on s.typeName equals b.typeName
+                          select new { s.typeName, revenue = s.price - b.price };
+
+            string rows = string.Empty;
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            foreach (var row in revenue)
+            {
+                rows += string.Format("{0}[\"{1}\", {2}]",
+                    rows == string.Empty ? string.Empty : ", ",
+                    row.typeName, row.revenue.ToString(nfi));
+            }
+            rows = string.Format("[{0}]", rows);
+
+            return Content(rows);
+        }
+
+        [HttpPost]
         public ActionResult GetBalance(string characterid)
         {
-            // TODO
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 throw new Exception("User not found in the database!");
@@ -117,7 +152,7 @@ namespace MvcMovie.Controllers
                                 from eb in buys
                                 join s in sellEntries on eb.date equals s.date into sells
                                 from ebs in sells
-                                select new { e.date, e.balance, eb.buys, ebs.sells};
+                                select new { e.date, e.balance, eb.buys, ebs.sells };
 
             string rows = string.Empty;
             NumberFormatInfo nfi = new NumberFormatInfo();
