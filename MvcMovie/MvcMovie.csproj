@@ -337,6 +337,11 @@
     <Content Include="Global.asax" />
     <Content Include="Images\backgroundEveScreensgot0.png" />
     <Content Include="Scripts\controls\TrackballControls.js" />
+    <Content Include="Scripts\eveapi\charts\BalanceChart.js" />
+    <Content Include="Scripts\eveapi\charts\BalanceDashboard.js" />
+    <Content Include="Scripts\eveapi\charts\Chart.js" />
+    <Content Include="Scripts\eveapi\charts\RevenueChart.js" />
+    <Content Include="Scripts\eveapi\charts\WalletChart.js" />
     <Content Include="Scripts\eveapi\domReady.js" />
     <Content Include="Scripts\eveapi\google.js" />
     <Content Include="Scripts\eveapi\main.js" />

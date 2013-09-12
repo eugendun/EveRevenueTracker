@@ -82,11 +82,32 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetTransactionStations(string characterId)
+        {
+            long charId = XmlConvert.ToInt64(characterId);
+
+            // select all station
+            // later there should be a the difference between sell stations and buy stations
+            // consider transaction for last n days
+            var stations = (from s in db.WalletTransactions
+                            where s.characterID == charId
+                            select new { station = s.stationName }).Distinct();
+
+            string rows = string.Empty;
+            foreach (var row in rows)
+            {
+                rows += rows == string.Empty ? string.Empty : ", ";
+                rows += string.Format("[{0}]", row);
+            }
+            rows = string.Format("[{0}]", rows);
+
+            return Content(rows);
+        }
+
+        [HttpPost]
         public ActionResult GetRevenue(string characterId)
         {
             long charId = XmlConvert.ToInt64(characterId);
-            var userId = WebSecurity.GetUserId(User.Identity.Name);
-
 
             var sellTransactions = from t in db.WalletTransactions
                                    where t.characterID == charId
