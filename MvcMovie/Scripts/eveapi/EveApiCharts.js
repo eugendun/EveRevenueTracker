@@ -1,20 +1,12 @@
 ﻿/// <reference path="../require.js" />
 
-require.config({
-    paths: {
-        'eutils': '../utils/eutils',
-        'revenuechart': 'charts/RevenueChart',
-        'walletchart': 'charts/WalletChart',
-        'balancechart': 'charts/BalanceChart',
-        'balancedashboard': 'charts/BalanceDashboard'
-    }
-});
-
-define('EveApiCharts', ['revenuechart', 'walletchart', 'balancechart', 'balancedashboard', 'eutils', 'google'], function () {
-    var RevenueChart = require('revenuechart');
-    var WalletChart = require('walletchart');
-    var BalanceChart = require('balancechart');
-    var BalanceDashboard = require('balancedashboard');
+define(function (require) {
+    require('../utils/eutils');
+    require('./google');
+    var RevenueChart = require('./charts/RevenueChart');
+    var WalletChart = require('./charts/WalletChart');
+    var BalanceChart = require('./charts/BalanceChart');
+    var BalanceDashboard = require('./charts/BalanceDashboard');
 
     var EveApiCharts = function () { };
     EveApiCharts.prototype = {

@@ -6,7 +6,7 @@ require.config({
     }
 });
 
-define('chart', ['eutils'], function () {
+define(['eutils'], function () {
     /* Class Chart */
     function Chart(chartId, chartsContainer) {
         // chart container

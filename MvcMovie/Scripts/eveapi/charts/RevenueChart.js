@@ -1,13 +1,8 @@
 ﻿/// <reference path="../../require.js" />
+/// <reference path="Chart.js" />
 
-require.config({
-    paths: {
-        'chart': 'charts/chart'
-    }
-});
-
-define('revenuechart', ['chart'], function () {
-    var Chart = require('chart');
+define(function (require) {
+    var Chart = require('./Chart');
 
     function RevenueChart(chartsContainer, data) {
         RevenueChart.superclass.constructor.call(this, 'RevenueChart', chartsContainer);
