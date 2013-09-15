@@ -57,7 +57,6 @@ define(function (require) {
 
         this.dashboard = new google.visualization.Dashboard(this.getChartContainer());
         this.dashboard.bind(this.control, this.chart);
-        this.updateDataTable(data);
     };
     extend(BalanceDashboard, Chart);
 
@@ -87,6 +86,13 @@ define(function (require) {
 
         this.control.setState(_state);
         this.dashboard.draw(dataTable);
+    };
+
+    BalanceDashboard.prototype.update = function (characterId) {
+        var that = this;
+        $.post("EveApi/GetBalance", "characterId=" + characterId, function (data) {
+            that.updateDataTable(eval(data));
+        });
     };
 
     return BalanceDashboard;

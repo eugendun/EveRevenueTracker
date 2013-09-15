@@ -12,8 +12,6 @@ define(function (require) {
             'title': 'Transactions',
             'legend': { 'position': 'top', 'alignment': 'start' }
         };
-
-        this.updateDataTable(data);
     };
     extend(WalletChart, Chart);
 
@@ -21,6 +19,13 @@ define(function (require) {
         var dataTable = new google.visualization.arrayToDataTable(data);
         this.getIskFormatter().format(dataTable, 1);
         this.chart.draw(dataTable, this.options);
+    };
+
+    WalletChart.prototype.update = function (characterId) {
+        var that = this;
+        $.post("/EveApi/GetTransactions", "characterid=" + characterId, function (data) {
+            that.updateDataTable(eval(data));
+        });
     };
 
     return WalletChart;

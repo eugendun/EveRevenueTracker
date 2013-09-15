@@ -94,10 +94,10 @@ namespace MvcMovie.Controllers
                             select new { station = s.stationName }).Distinct();
 
             string rows = string.Empty;
-            foreach (var row in rows)
+            foreach (var row in stations)
             {
                 rows += rows == string.Empty ? string.Empty : ", ";
-                rows += string.Format("[{0}]", row);
+                rows += string.Format("['{0}']", row.station);
             }
             rows = string.Format("[{0}]", rows);
 
@@ -105,7 +105,7 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetRevenue(string characterId)
+        public ActionResult GetRevenue(string characterId, string station)
         {
             long charId = XmlConvert.ToInt64(characterId);
 
@@ -252,33 +252,23 @@ namespace MvcMovie.Controllers
             if (character == null)
                 throw new Exception("Character not found in the database!");
 
+            string fromID = "";
+            string rowCount = "200";
 
-            var refIDs = from w in db.WalletJournal
-                         where w.characterID == character.characterID
-                         where w.date >= new DateTime(2013, 4, 1)
-                         select w.refID;
-
-            long minRefID = 0;
-            if (refIDs.Count() != 0)
-                minRefID = refIDs.Min();
-
-            while (true)
+            bool repeat = true;
+            while (repeat)
             {
-                string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID, minRefID > 0 ? minRefID.ToString() : "", "200");
+                string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
+                XDocument doc = XDocument.Parse(eveResponseXmlData);
+
                 ProcessResponseWalletJournal(character, eveResponseXmlData);
 
-                refIDs = from w in db.WalletJournal
-                         where w.characterID == character.characterID
-                         where w.date >= new DateTime(2013, 5, 1)
-                         select w.refID;
-
-                long newMinRefID = 0;
-                if (refIDs.Count() != 0)
-                    newMinRefID = refIDs.Min();
-
-                if (newMinRefID == minRefID)
-                    break;
-                minRefID = newMinRefID;
+                repeat = doc.Descendants("row").Count() == Convert.ToInt32(rowCount);
+                if (repeat)
+                {
+                    fromID = Convert.ToString((from t in doc.Descendants("row")
+                                               select Convert.ToInt64(t.Attribute("refID").Value)).Min());
+                }
             }
         }
 
@@ -293,29 +283,7 @@ namespace MvcMovie.Controllers
                 WalletJournalEntry entry = db.WalletJournal.Find(refID);
                 if (entry == null)
                 {
-                    entry = new WalletJournalEntry();
-                    entry.Character = character;
-                    entry.refID = refID;
-                    entry.date = Convert.ToDateTime(row.Attributes["date"].Value);
-                    entry.refTypeID = XmlConvert.ToInt64(row.Attributes["refTypeID"].Value);
-                    entry.ownerName1 = row.Attributes["ownerName1"].Value;
-                    entry.ownerID1 = XmlConvert.ToInt64(row.Attributes["ownerID1"].Value);
-                    entry.ownerName2 = row.Attributes["ownerName2"].Value;
-                    entry.ownerID2 = XmlConvert.ToInt64(row.Attributes["ownerID2"].Value);
-                    entry.argName1 = row.Attributes["argName1"].Value;
-                    entry.argID1 = XmlConvert.ToInt64(row.Attributes["argID1"].Value);
-                    entry.amount = XmlConvert.ToDecimal(row.Attributes["amount"].Value);
-                    entry.balance = XmlConvert.ToDecimal(row.Attributes["balance"].Value);
-                    entry.reason = row.Attributes["reason"].Value;
-
-                    long taxReceiverID;
-                    if (long.TryParse(row.Attributes["taxReceiverID"].Value, out taxReceiverID))
-                        entry.taxReceiverID = taxReceiverID;
-
-                    decimal taxAmount;
-                    if (decimal.TryParse(row.Attributes["taxAmount"].Value, out taxAmount))
-                        entry.taxAmount = taxAmount;
-
+                    entry = WalletJournalEntry.createFromXmlNode(character, row);
                     db.WalletJournal.Add(entry);
                 }
             }
@@ -334,46 +302,22 @@ namespace MvcMovie.Controllers
             if (character == null)
                 throw new Exception("Character not found in the database!");
 
-            string fromID = "";                                                     // begin from today on
-            string rowCount = "200";                                                // default row count
-            DateTime untilDate = DateTime.Today.Subtract(TimeSpan.FromDays(60));    // compute a date one month ago
+            string fromID = "";         // begin from today on
+            string rowCount = "200";    // default row count
+
             bool repeat = true;
             while (repeat)
             {
                 string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
-
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
-                if (doc.Descendants("row").Count() == 0)
-                {
-                    break;
-                }
-
-                long minIdFromResponse = (from t in doc.Descendants("row")
-                                          select Convert.ToInt64(t.Attribute("transactionID").Value)).Min();
-                long maxIdFromDb = (from t in db.WalletTransactions
-                                    where t.characterID == character.characterID
-                                    select t.transactionID).Max();
 
                 SaveWalletTransactions(character, eveResponseXmlData);
 
-                if (minIdFromResponse > maxIdFromDb)
+                repeat = doc.Descendants("row").Count() == Convert.ToInt32(rowCount);
+                if (repeat)
                 {
                     fromID = Convert.ToString((from t in doc.Descendants("row")
                                                select Convert.ToInt64(t.Attribute("transactionID").Value)).Min());
-                    continue;
-                }
-
-                DateTime minDateFromDb = (from t in db.WalletTransactions
-                                          where t.characterID == character.characterID
-                                          select t.transactionDateTime).Min();
-
-                repeat = minDateFromDb > untilDate;
-
-                if (repeat)
-                {
-                    fromID = Convert.ToString((from t in db.WalletTransactions
-                                               where t.characterID == character.characterID
-                                               select t.transactionID).Min());
                 }
             }
         }
@@ -385,29 +329,10 @@ namespace MvcMovie.Controllers
             foreach (XmlNode row in doc.SelectNodes("//row"))
             {
                 long transactionID = Convert.ToInt64(row.Attributes["transactionID"].Value);
-
                 WalletTransactionEntry entry = db.WalletTransactions.Find(transactionID);
                 if (entry == null)
                 {
-                    entry = new WalletTransactionEntry();
-                    entry.Character = character;
-                    entry.transactionID = transactionID;
-                    entry.transactionDateTime = Convert.ToDateTime(row.Attributes["transactionDateTime"].Value);
-                    entry.quantity = XmlConvert.ToInt64(row.Attributes["quantity"].Value);
-                    entry.typeName = row.Attributes["typeName"].Value;
-                    entry.price = XmlConvert.ToDecimal(row.Attributes["price"].Value);
-                    entry.typeID = XmlConvert.ToInt64(row.Attributes["typeID"].Value);
-                    entry.clientID = XmlConvert.ToInt64(row.Attributes["clientID"].Value);
-                    entry.clientName = row.Attributes["clientName"].Value;
-                    entry.stationID = XmlConvert.ToInt64(row.Attributes["stationID"].Value);
-                    entry.stationName = row.Attributes["stationName"].Value;
-                    entry.transactionType = row.Attributes["transactionType"].Value;
-                    entry.transactionFor = row.Attributes["transactionFor"].Value;
-
-                    long journalTransactionID;
-                    if (long.TryParse(row.Attributes["journalTransactionID"].Value, out journalTransactionID))
-                        entry.journalTransactionID = journalTransactionID;
-
+                    entry = WalletTransactionEntry.createFromXMLNode(character, row);
                     db.WalletTransactions.Add(entry);
                 }
             }

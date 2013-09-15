@@ -20,5 +20,12 @@ define(function (require) {
         BalanceChart.superclass.updateDataTable.call(this, data);
     };
 
+    BalanceChart.prototype.update = function (characterId) {
+        var that = this;
+        $.post("EveApi/GetBalance", "characterId=" + characterId, function (data) {
+            that.updateDataTable(eval(data));
+        });
+    };
+
     return BalanceChart;
 });
