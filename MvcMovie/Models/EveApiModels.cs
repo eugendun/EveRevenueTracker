@@ -7,6 +7,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MvcMovie.Models
 {
@@ -68,31 +69,31 @@ namespace MvcMovie.Models
         public virtual Character Character { get; set; }
         //public virtual RefType RefType { get; set; }
 
-        public static WalletJournalEntry createFromXmlNode(Character character, XmlNode node)
+        public static WalletJournalEntry createFromXmlNode(Character character, XElement node)
         {
-            long refID = XmlConvert.ToInt64(node.Attributes["refID"].Value);
+            long refID = XmlConvert.ToInt64(node.Attribute("refID").Value);
 
             WalletJournalEntry entry = new WalletJournalEntry();
             entry.Character = character;
             entry.refID = refID;
-            entry.date = Convert.ToDateTime(node.Attributes["date"].Value);
-            entry.refTypeID = XmlConvert.ToInt64(node.Attributes["refTypeID"].Value);
-            entry.ownerName1 = node.Attributes["ownerName1"].Value;
-            entry.ownerID1 = XmlConvert.ToInt64(node.Attributes["ownerID1"].Value);
-            entry.ownerName2 = node.Attributes["ownerName2"].Value;
-            entry.ownerID2 = XmlConvert.ToInt64(node.Attributes["ownerID2"].Value);
-            entry.argName1 = node.Attributes["argName1"].Value;
-            entry.argID1 = XmlConvert.ToInt64(node.Attributes["argID1"].Value);
-            entry.amount = XmlConvert.ToDecimal(node.Attributes["amount"].Value);
-            entry.balance = XmlConvert.ToDecimal(node.Attributes["balance"].Value);
-            entry.reason = node.Attributes["reason"].Value;
+            entry.date = Convert.ToDateTime(node.Attribute("date").Value);
+            entry.refTypeID = XmlConvert.ToInt64(node.Attribute("refTypeID").Value);
+            entry.ownerName1 = node.Attribute("ownerName1").Value;
+            entry.ownerID1 = XmlConvert.ToInt64(node.Attribute("ownerID1").Value);
+            entry.ownerName2 = node.Attribute("ownerName2").Value;
+            entry.ownerID2 = XmlConvert.ToInt64(node.Attribute("ownerID2").Value);
+            entry.argName1 = node.Attribute("argName1").Value;
+            entry.argID1 = XmlConvert.ToInt64(node.Attribute("argID1").Value);
+            entry.amount = XmlConvert.ToDecimal(node.Attribute("amount").Value);
+            entry.balance = XmlConvert.ToDecimal(node.Attribute("balance").Value);
+            entry.reason = node.Attribute("reason").Value;
 
             long taxReceiverID;
-            if (long.TryParse(node.Attributes["taxReceiverID"].Value, out taxReceiverID))
+            if (long.TryParse(node.Attribute("taxReceiverID").Value, out taxReceiverID))
                 entry.taxReceiverID = taxReceiverID;
 
             decimal taxAmount;
-            if (decimal.TryParse(node.Attributes["taxAmount"].Value, out taxAmount))
+            if (decimal.TryParse(node.Attribute("taxAmount").Value, out taxAmount))
                 entry.taxAmount = taxAmount;
             return entry;
         }
@@ -123,27 +124,27 @@ namespace MvcMovie.Models
         public virtual Character Character { get; set; }
         //public virtual WalletJournalEntry WalletJournalEntry { get; set; }
 
-        public static WalletTransactionEntry createFromXMLNode(Character character, XmlNode node)
+        public static WalletTransactionEntry createFromXMLNode(Character character, XElement node)
         {
-            long transactionID = Convert.ToInt64(node.Attributes["transactionID"].Value);
+            long transactionID = Convert.ToInt64(node.Attribute("transactionID").Value);
 
             WalletTransactionEntry entry = new WalletTransactionEntry();
             entry.Character = character;
             entry.transactionID = transactionID;
-            entry.transactionDateTime = Convert.ToDateTime(node.Attributes["transactionDateTime"].Value);
-            entry.quantity = XmlConvert.ToInt64(node.Attributes["quantity"].Value);
-            entry.typeName = node.Attributes["typeName"].Value;
-            entry.price = XmlConvert.ToDecimal(node.Attributes["price"].Value);
-            entry.typeID = XmlConvert.ToInt64(node.Attributes["typeID"].Value);
-            entry.clientID = XmlConvert.ToInt64(node.Attributes["clientID"].Value);
-            entry.clientName = node.Attributes["clientName"].Value;
-            entry.stationID = XmlConvert.ToInt64(node.Attributes["stationID"].Value);
-            entry.stationName = node.Attributes["stationName"].Value;
-            entry.transactionType = node.Attributes["transactionType"].Value;
-            entry.transactionFor = node.Attributes["transactionFor"].Value;
+            entry.transactionDateTime = Convert.ToDateTime(node.Attribute("transactionDateTime").Value);
+            entry.quantity = XmlConvert.ToInt64(node.Attribute("quantity").Value);
+            entry.typeName = node.Attribute("typeName").Value;
+            entry.price = XmlConvert.ToDecimal(node.Attribute("price").Value);
+            entry.typeID = XmlConvert.ToInt64(node.Attribute("typeID").Value);
+            entry.clientID = XmlConvert.ToInt64(node.Attribute("clientID").Value);
+            entry.clientName = node.Attribute("clientName").Value;
+            entry.stationID = XmlConvert.ToInt64(node.Attribute("stationID").Value);
+            entry.stationName = node.Attribute("stationName").Value;
+            entry.transactionType = node.Attribute("transactionType").Value;
+            entry.transactionFor = node.Attribute("transactionFor").Value;
 
             long journalTransactionID;
-            if (long.TryParse(node.Attributes["journalTransactionID"].Value, out journalTransactionID))
+            if (long.TryParse(node.Attribute("journalTransactionID").Value, out journalTransactionID))
                 entry.journalTransactionID = journalTransactionID;
             return entry;
         }

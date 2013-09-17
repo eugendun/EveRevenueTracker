@@ -105,30 +105,43 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetRevenue(string characterId, string station)
+        public ActionResult GetRevenue(string characterId, string station, string number, string days)
         {
             long charId = XmlConvert.ToInt64(characterId);
 
-            var sellTransactions = from t in db.WalletTransactions
-                                   where t.characterID == charId
+            DateTime untilDate = (from t in db.WalletTransactions
+                                  where t.characterID == charId
+                                  select t.transactionDateTime).Max().Subtract(TimeSpan.FromDays(Convert.ToInt32(days)));
+
+            var transactions = from t in db.WalletTransactions
+                               where t.characterID == charId
+                               where t.transactionDateTime > untilDate
+                               where (string.IsNullOrEmpty(station) || station == t.stationName)
+                               select t;
+
+            var sellTransactions = from t in transactions
                                    where t.transactionType == "sell"
                                    group t by new { t.typeName, t.transactionType } into g
                                    select new { g.Key.typeName, price = g.Average(entry => entry.price), number = g.Count() };
 
             var buyTransactions = from t in db.WalletTransactions
-                                  where t.characterID == charId
                                   where t.transactionType == "buy"
                                   group t by new { t.typeName, t.transactionType } into g
                                   select new { g.Key.typeName, price = g.Average(entry => entry.price), number = g.Count() };
 
-            var revenue = from s in sellTransactions
-                          join b in buyTransactions on s.typeName equals b.typeName
-                          select new { s.typeName, revenue = s.price - b.price };
+            var revenue = from r in
+                              (from s in sellTransactions
+                               join b in buyTransactions on s.typeName equals b.typeName
+                               select new { s.typeName, revenue = s.price - b.price })
+                          orderby r.revenue descending
+                          select r;
+
+            revenue.OrderBy(r => r.revenue);
 
             string rows = string.Empty;
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            foreach (var row in revenue)
+            foreach (var row in revenue.Take(Convert.ToInt32(string.IsNullOrEmpty(number) ? "20" : number)))
             {
                 rows += string.Format("{0}[\"{1}\", {2}]",
                     rows == string.Empty ? string.Empty : ", ",
@@ -207,14 +220,13 @@ namespace MvcMovie.Controllers
                 return RedirectToAction("Create");
 
             string charactersXmlData = eveApi.getCharacters(user.keyID.ToString(), user.vCode);
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(charactersXmlData);
-            foreach (XmlNode row in doc.SelectNodes("//row"))
+            XDocument doc = XDocument.Parse(charactersXmlData);
+            foreach (XElement row in doc.Descendants("row"))
             {
-                long characterID = Convert.ToInt64(row.Attributes["characterID"].Value);
-                string characterName = row.Attributes["name"].Value;
-                long corporationID = Convert.ToInt64(row.Attributes["corporationID"].Value);
-                string corporationName = row.Attributes["corporationName"].Value;
+                long characterID = Convert.ToInt64(row.Attribute("characterID").Value);
+                string characterName = row.Attribute("name").Value;
+                long corporationID = Convert.ToInt64(row.Attribute("corporationID").Value);
+                string corporationName = row.Attribute("corporationName").Value;
 
                 Character character = db.Characters.Find(characterID);
                 if (character != null)
@@ -261,7 +273,7 @@ namespace MvcMovie.Controllers
                 string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
 
-                ProcessResponseWalletJournal(character, eveResponseXmlData);
+                ProcessResponseWalletJournal(character, doc);
 
                 repeat = doc.Descendants("row").Count() == Convert.ToInt32(rowCount);
                 if (repeat)
@@ -272,13 +284,11 @@ namespace MvcMovie.Controllers
             }
         }
 
-        private void ProcessResponseWalletJournal(Character character, string eveResponseXmlData)
+        private void ProcessResponseWalletJournal(Character character, XDocument response)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(eveResponseXmlData);
-            foreach (XmlNode row in doc.SelectNodes("//row"))
+            foreach (XElement row in response.Descendants("row"))
             {
-                long refID = XmlConvert.ToInt64(row.Attributes["refID"].Value);
+                long refID = XmlConvert.ToInt64(row.Attribute("refID").Value);
 
                 WalletJournalEntry entry = db.WalletJournal.Find(refID);
                 if (entry == null)
@@ -311,7 +321,7 @@ namespace MvcMovie.Controllers
                 string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
 
-                SaveWalletTransactions(character, eveResponseXmlData);
+                ProcessResponseWalletTransactions(character, doc);
 
                 repeat = doc.Descendants("row").Count() == Convert.ToInt32(rowCount);
                 if (repeat)
@@ -322,13 +332,11 @@ namespace MvcMovie.Controllers
             }
         }
 
-        private void SaveWalletTransactions(Character character, string eveResponseXmlData)
+        private void ProcessResponseWalletTransactions(Character character, XDocument response)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(eveResponseXmlData);
-            foreach (XmlNode row in doc.SelectNodes("//row"))
+            foreach (XElement row in response.Descendants("row"))
             {
-                long transactionID = Convert.ToInt64(row.Attributes["transactionID"].Value);
+                long transactionID = Convert.ToInt64(row.Attribute("transactionID").Value);
                 WalletTransactionEntry entry = db.WalletTransactions.Find(transactionID);
                 if (entry == null)
                 {
@@ -372,12 +380,11 @@ namespace MvcMovie.Controllers
         public ActionResult ErrorList()
         {
             string errorListXml = eveApi.getErrorList();
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(errorListXml);
-            foreach (XmlNode row in doc.SelectNodes("//row"))
+            XDocument doc = XDocument.Parse(errorListXml);
+            foreach (XElement row in doc.Descendants("row"))
             {
-                int errorCode = Convert.ToInt32(row.Attributes["errorCode"].Value);
-                string errorText = row.Attributes["errorText"].Value;
+                int errorCode = Convert.ToInt32(row.Attribute("errorCode").Value);
+                string errorText = row.Attribute("errorText").Value;
                 Error error = db.Errors.Find(errorCode);
                 if (error != null)
                     error.errorText = errorText;
