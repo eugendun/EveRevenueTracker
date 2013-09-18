@@ -29,7 +29,13 @@ define(function (require) {
     };
 
     RevenueChart.prototype.update = function (characterId) {
-        this.characterId = characterId;
+        if (characterId) {
+            this.characterId = characterId;
+        }
+
+        if (this.characterId == '') {
+            throw new Error('Empty character id!');
+        }
 
         var that = this;
         $.post("EveApi/GetRevenue", {
@@ -41,114 +47,89 @@ define(function (require) {
             that.updateDataTable(eval(data));
         });
 
-        $.post('EveApi/GetTransactionStations', 'characterId=' + characterId, function (data) {
-            that.createSelect('RevenueChart-Station-Select', eval(data));
+        $.post('EveApi/GetTransactionStations', 'characterId=' + this.characterId, function (stations) {
+            that.stationSelect(eval(stations));
         });
 
-        this.createNumberSelect('RevenueChart-Number-Select');
-        this.createLastDaysSelect('RevenueChart-LastDays-Select');
+        this.lastDaysSelect();
+        this.quantitySelect();
     };
 
-    RevenueChart.prototype.createSelect = function (id, data) {
-        var selectElement = document.getElementById(id);
-        if (selectElement) {
-            var parent = selectElement.parentElement;
-            parent.removeChild(selectElement);
+    RevenueChart.prototype.stationSelect = function (stations) {
+        var id = this.chartContainer.id + '-stationSelect',
+            element = document.getElementById(id);
+        if (!element) {
+            // add a default selection - no station 
+            stations.unshift('Select station...');
+            var options = { values: stations, defaultValue: 'Select station...' },
+                that = this;
+
+            element = createSelect(id, options);
+            $(element).change(function () {
+                var value = $('#' + this.id + ' :selected').val();
+                that.stationName = value == 'Select station...' ? '' : value;
+                that.update();
+            });
+
+            $(this.controlContainer).append(element);
         }
-        selectElement = document.createElement('select');
-        selectElement.id = id;
-        this.controlContainer.appendChild(selectElement);
-
-        var firstOption = document.createElement('option');
-        firstOption.label = '-- Station --';
-        firstOption.value = '';
-        firstOption.selected = true;
-        selectElement.appendChild(firstOption);
-
-        for (var i = 0; i < data.length; i++) {
-            var optionElement = document.createElement('option');
-            optionElement.text = data[i];
-            optionElement.value = data[i];
-            selectElement.appendChild(optionElement);
-
-            if (data[i] == this.stationName) {
-                optionElement.selected = true;
-            }
-        }
-
-        var that = this;
-        $(selectElement).change(function () {
-            var value = $('#' + this.id + ' :selected').val();
-            that.stationName = value;
-            if (that.characterId != '') {
-                that.update(that.characterId);
-            }
-        });
     };
 
-    RevenueChart.prototype.createNumberSelect = function (id) {
-        var selectElement = document.getElementById(id);
-        if (selectElement) {
-            var parent = selectElement.parentElement;
-            parent.removeChild(selectElement);
+    RevenueChart.prototype.quantitySelect = function () {
+        var id = this.chartContainer.id + '-quantitySelect',
+            element = document.getElementById(id);
+        if (!element) {
+            var options = { values: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120], defaultValue: 20 },
+                that = this;
+
+            element = createSelect(id, options);
+            $(element).change(function () {
+                var value = $('#' + this.id + ' :selected').val();
+                that.number = value;
+                that.update();
+            });
+
+            $(this.controlContainer).append(element);
         }
-
-        selectElement = document.createElement('select');
-        selectElement.id = id;
-        this.controlContainer.appendChild(selectElement);
-
-        for (var i = 1; i <= 12; i++) {
-            var optionElement = document.createElement('option');
-            optionElement.text = i * 10;
-            optionElement.value = i * 10;
-            selectElement.appendChild(optionElement);
-
-            if (this.number == i * 10) {
-                optionElement.selected = true;
-            };
-        }
-
-        var that = this;
-        $(selectElement).change(function () {
-            var value = $('#' + this.id + ' :selected').val();
-            that.number = value;
-            if (that.characterId != '') {
-                that.update(that.characterId);
-            }
-        });
     };
 
-    RevenueChart.prototype.createLastDaysSelect = function (id) {
-        var selectElement = document.getElementById(id);
-        if (selectElement) {
-            var parent = selectElement.parentElement;
-            parent.removeChild(selectElement);
+    RevenueChart.prototype.lastDaysSelect = function () {
+        var id = this.chartContainer.id + '-laystDaysSelect',
+            element = document.getElementById(id);
+        if (!element) {
+            var options = { values: [7, 14, 30, 60], defaultValue: 14 },
+                that = this;
+
+            element = createSelect(id, options);
+            $(element).change(function () {
+                var value = $('#' + this.id + ' :selected').val();
+                that.days = value;
+                that.update();
+            });
+
+            $(this.controlContainer).append(element);
         }
+    };
 
-        selectElement = document.createElement('select');
+    /**
+        options = {values: ..., dafaultValue:...}
+    */
+    function createSelect(id, options) {
+        var selectElement = document.createElement('select')
         selectElement.id = id;
-        this.controlContainer.appendChild(selectElement);
 
-        var that = this;
-        var values = [7, 14, 30, 60];
-        values.forEach(function (element) {
+        options.values.forEach(function (element) {
             var optionElement = document.createElement('option');
             optionElement.text = element;
             optionElement.value = element;
             selectElement.appendChild(optionElement);
 
-            if (that.days == element) {
+            if (options.defaultValue == element) {
                 optionElement.selected = true;
             }
         });
 
-        $(selectElement).change(function () {
-            var value = $('#' + this.id + ' :selected').val();
-            that.days = value;
-            if (that.characterId != '') {
-                that.update(that.characterId);
-            }
-        });
+        return selectElement;
     };
 
     return RevenueChart;
