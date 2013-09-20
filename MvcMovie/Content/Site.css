@@ -144,7 +144,11 @@ footer {
     margin-bottom: 5px;
     margin-top: 5px;
     width: 950px;
-    height: 400px;
+}
+
+.chart-control {
+    background-color: white;
+    padding: 5px;
 }
 
 /* custom scrollbar 
@@ -457,14 +461,22 @@ fieldset {
         }
 
 label {
-    display: block;
+    /*display: block;
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 600;*/
+    float: left;
+    margin-right: 5px;
+    color: #5a5858;
+    width: 50px;
 }
 
     label.checkbox {
         display: inline;
     }
+
+select {
+    width: 100px;
+}
 
 input, textarea {
     border: 1px solid #e2e2e2;

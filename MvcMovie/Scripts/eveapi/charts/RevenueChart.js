@@ -9,8 +9,11 @@ define(function (require) {
 
         this.chartContainer = document.createElement('div');
         this.chartContainer.id = 'RevenueChart';
+
         this.controlContainer = document.createElement('div');
         this.controlContainer.id = 'RevenueControl';
+        this.controlContainer.className = 'chart-control';
+
         this.getChartContainer().appendChild(this.chartContainer);
         this.getChartContainer().appendChild(this.controlContainer);
 
@@ -26,7 +29,50 @@ define(function (require) {
 
     RevenueChart.prototype.updateDataTable = function (data) {
         RevenueChart.superclass.updateDataTable.call(this, data);
+
+        var totalRevenue = 0,
+            totalLoss = 0;
+        data.forEach(function (element) {
+            if (element[1] >= 0) {
+                totalRevenue += element[1];
+            } else {
+                totalLoss += element[1];
+            }
+        });
+
+        this.updateTotalOverview(totalRevenue, totalLoss);
     };
+
+    RevenueChart.prototype.updateTotalOverview = function (amountOfRevenue, amountOfLoss) {
+        var containerId = this.controlContainer.id + '-TotalOverview',
+            revenueId = containerId + '-Revenue',
+            lossId = containerId + '-Loss',
+            totalId = containerId + '-Total',
+            avgProfitPerDayId = containerId + '-AvgProfitPerDay',
+            container = document.getElementById(containerId);
+        if (!container) {
+            var container = $('<div>').attr('id', containerId).appendTo(this.controlContainer),
+                fieldset = $('<fieldset>').appendTo(container);
+            $('<label>').attr('for', revenueId).text('Revenue:').appendTo(fieldset),
+            $('<div>').attr('id', revenueId).css('color', 'green').appendTo(fieldset),
+            $('<label>').attr('for', lossId).text('Loss:').appendTo(fieldset),
+            $('<div>').attr('id', lossId).css('color', 'red').appendTo(fieldset);
+            $('<label>').attr('for', totalId).text('Total:').appendTo(fieldset);
+            $('<div>').attr('id', totalId).appendTo(fieldset);
+            $('<label>').attr('for', avgProfitPerDayId).text('Average profit per day:').appendTo(fieldset);
+            $('<div>').attr('id', avgProfitPerDayId).appendTo(fieldset);
+        }
+
+        $('#' + revenueId).text(this.getIskFormatter().formatValue(amountOfRevenue));
+        $('#' + lossId).text(this.getIskFormatter().formatValue(amountOfLoss));
+
+        var total = amountOfLoss + amountOfRevenue,
+            valueColor = total >= 0 ? 'green' : 'red';
+        $('#' + totalId).css('color', valueColor).text(this.getIskFormatter().formatValue(total));
+
+        var avgProfitPerDay = total / this.days;
+        $('#' + avgProfitPerDayId).css('color', valueColor).text(this.getIskFormatter().formatValue(avgProfitPerDay));
+    }
 
     RevenueChart.prototype.update = function (characterId) {
         if (characterId) {
@@ -60,8 +106,8 @@ define(function (require) {
             element = document.getElementById(id);
         if (!element) {
             // add a default selection - no station 
-            stations.unshift('Select station...');
-            var options = { values: stations, defaultValue: 'Select station...' },
+            stations.unshift('Select...');
+            var options = { values: stations, defaultValue: 'Select...' },
                 that = this;
 
             element = createSelect(id, options);
@@ -71,7 +117,11 @@ define(function (require) {
                 that.update();
             });
 
-            $(this.controlContainer).append(element);
+            var container = $('<div>'),
+                label = $('<label>').text('Station:').attr('for', id);
+            container.append(label).append(element);
+
+            $(this.controlContainer).append(container);
         }
     };
 
@@ -89,7 +139,11 @@ define(function (require) {
                 that.update();
             });
 
-            $(this.controlContainer).append(element);
+            var container = $('<div>'),
+                label = $('<label>').text('Count:').attr('for', id);
+            container.append(label).append(element);
+
+            $(this.controlContainer).append(container);
         }
     };
 
@@ -107,7 +161,11 @@ define(function (require) {
                 that.update();
             });
 
-            $(this.controlContainer).append(element);
+            var container = $('<div>'),
+                label = $('<label>').text('Days:').attr('for', id);
+            container.append(label).append(element);
+
+            $(this.controlContainer).append(container);
         }
     };
 
