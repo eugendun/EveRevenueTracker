@@ -238,6 +238,10 @@
     <Compile Include="Migrations\201307211933585_EveApiInit.Designer.cs">
       <DependentUpon>201307211933585_EveApiInit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309201705582_EveApiMarketOrderModelAdded.cs" />
+    <Compile Include="Migrations\201309201705582_EveApiMarketOrderModelAdded.Designer.cs">
+      <DependentUpon>201309201705582_EveApiMarketOrderModelAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
     <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -613,6 +617,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201307211933585_EveApiInit.resx">
       <DependentUpon>201307211933585_EveApiInit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309201705582_EveApiMarketOrderModelAdded.resx">
+      <DependentUpon>201309201705582_EveApiMarketOrderModelAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -150,6 +150,29 @@ namespace MvcMovie.Models
         }
     }
 
+    public class MarketOrder
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public long orderID { get; set; }
+
+        public long stationID { get; set; }
+        public long volEntered { get; set; }
+        public long volRemaining { get; set; }
+        public long minValume { get; set; }
+        public byte orderState { get; set; }
+        public long typeID { get; set; }
+        public long range { get; set; }
+        public long accountKey { get; set; }
+        public long duration { get; set; }
+        public decimal escrow { get; set; }
+        public decimal price { get; set; }
+        public bool bid { get; set; }
+        public DateTime issued { get; set; }
+
+        public virtual Character character { get; set; }
+    }
+
     public class Error
     {
         [Key]
@@ -167,6 +190,7 @@ namespace MvcMovie.Models
         public DbSet<RefType> RefTypes { get; set; }
         public DbSet<WalletJournalEntry> WalletJournal { get; set; }
         public DbSet<WalletTransactionEntry> WalletTransactions { get; set; }
+        public DbSet<MarketOrder> MarketOrders { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
