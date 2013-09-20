@@ -253,6 +253,40 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
+        public void UpdateMarketOrders(string characterID)
+        {
+            User user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user == null)
+                throw new Exception("User not found in the database!");
+
+            long lCharID = Convert.ToInt64(characterID);
+
+            Character character = (from c in db.Characters
+                                   where c.userID == user.userID
+                                   where c.characterID == lCharID
+                                   select c).First();
+
+            string eveResponseXmlData = eveApi.getMarketOrders(user.keyID.ToString(), user.vCode, characterID);
+            XDocument doc = XDocument.Parse(eveResponseXmlData);
+
+            // delete all market orders in the database as they will be updadet
+            var marketOrders = from m in db.MarketOrders
+                               where m.character.characterID == character.characterID
+                               select m;
+            foreach (MarketOrder entry in marketOrders)
+            {
+                db.MarketOrders.Remove(entry);
+            }
+
+            foreach (XElement row in doc.Descendants("row"))
+            {
+                MarketOrder newEntry = MarketOrder.createFromXMLNode(character, row);
+                db.MarketOrders.Add(newEntry);
+            }
+            db.SaveChanges();
+        }
+
+        [HttpPost]
         //[ValidateAntiForgeryToken]
         public void UpdateWalletJournal(string characterID)
         {

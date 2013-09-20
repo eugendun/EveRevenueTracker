@@ -159,7 +159,7 @@ namespace MvcMovie.Models
         public long stationID { get; set; }
         public long volEntered { get; set; }
         public long volRemaining { get; set; }
-        public long minValume { get; set; }
+        public long minValume { get; set; } // TODO: rename to minVolume!!!
         public byte orderState { get; set; }
         public long typeID { get; set; }
         public long range { get; set; }
@@ -171,6 +171,44 @@ namespace MvcMovie.Models
         public DateTime issued { get; set; }
 
         public virtual Character character { get; set; }
+
+        public static MarketOrder createFromXMLNode(Character character, XElement node)
+        {
+            MarketOrder order = new MarketOrder();
+            order.character = character;
+            order.orderID = XmlConvert.ToInt64(node.Attribute("orderID").Value);
+            order.stationID = XmlConvert.ToInt64(node.Attribute("stationID").Value);
+            order.volEntered = XmlConvert.ToInt64(node.Attribute("volEntered").Value);
+            order.volRemaining = XmlConvert.ToInt64(node.Attribute("volRemaining").Value);
+            order.minValume = XmlConvert.ToInt64(node.Attribute("minVolume").Value);
+            order.orderState = XmlConvert.ToByte(node.Attribute("orderState").Value);
+            order.typeID = XmlConvert.ToInt64(node.Attribute("typeID").Value);
+            order.range = XmlConvert.ToInt64(node.Attribute("range").Value);
+            order.accountKey = XmlConvert.ToInt64(node.Attribute("accountKey").Value);
+            order.duration = XmlConvert.ToInt64(node.Attribute("duration").Value);
+            order.escrow = XmlConvert.ToDecimal(node.Attribute("escrow").Value);
+            order.price = XmlConvert.ToDecimal(node.Attribute("price").Value);
+            order.bid = XmlConvert.ToBoolean(node.Attribute("bid").Value);
+            order.issued = Convert.ToDateTime(node.Attribute("issued").Value);
+            return order;
+        }
+    }
+
+    // TODO: Think about this if it needed, maybe it is better to save type names directly
+    public class Type
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public long typeID { get; set; }
+        public string typeName { get; set; }
+
+        public static Type createFromXMLNode(XElement node)
+        {
+            Type type = new Type();
+            type.typeID = XmlConvert.ToInt64(node.Attribute("typeID").Value);
+            type.typeName = node.Attribute("typeName").Value;
+            return type;
+        }
     }
 
     public class Error

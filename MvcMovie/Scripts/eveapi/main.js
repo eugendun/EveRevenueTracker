@@ -57,6 +57,8 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
                         progressbar.css("display", "none");
                         that.css("display", "block");
                     });
+
+                $.post("/EveApi/UpdateMarketOrders", { characterID: CharacterManager.getId() });
             }
         });
     });

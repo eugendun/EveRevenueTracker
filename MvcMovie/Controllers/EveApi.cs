@@ -15,13 +15,33 @@ namespace MvcMovie.Controllers
             return getData(url);
         }
 
+        public string getType(string id)
+        {
+            string url = "https://api.eveonline.com/eve/TypeName.xml.aspx";
+            return getData(url, new List<string> { "ids=" + id });
+        }
+
+        public string getTypes(List<string> ids)
+        {
+            string url = "https://api.eveonline.com/eve/TypeName.xml.aspx";
+            string idsAsString = string.Empty;
+            foreach (string id in ids)
+            {
+                idsAsString += string.Format("{0}{1}", string.IsNullOrEmpty(idsAsString) ? "" : ",", id);
+            }
+            return getData(url, new List<string> { "ids=" + idsAsString });
+        }
+
         public string getCharacters(string keyID, string vCode)
         {
             string url = "https://api.eveonline.com/account/Characters.xml.aspx";
-            return getData(url, new List<string> { 
-                "keyID=" + keyID,
-                "vCode=" + vCode
-            });
+            return getData(url, new List<string> { "keyID=" + keyID, "vCode=" + vCode });
+        }
+
+        public string getMarketOrders(string keyID, string vCode, string characterID)
+        {
+            string url = "https://api.eveonline.com/char/MarketOrders.xml.aspx";
+            return getData(url, new List<string> { "keyID=" + keyID, "vCode=" + vCode, "characterID=" + characterID });
         }
 
         public string getWalletTransactions(string keyID, string vCode, string characterID, string fromID = "", string rowCount = "")
