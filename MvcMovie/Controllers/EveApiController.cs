@@ -1,6 +1,7 @@
 ﻿using MvcMovie.Filters;
 using MvcMovie.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Objects;
@@ -59,13 +60,13 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetTransactions(string characterid)
+        public ActionResult GetTransactions(long characterID)
         {
-            long charid = XmlConvert.ToInt64(characterid);
+            // TODO: check if the character given by the characterID belongs to the current use!
             var userId = WebSecurity.GetUserId(User.Identity.Name);
 
             var transactions = (from t in db.WalletTransactions
-                                where t.characterID == charid
+                                where t.characterID == characterID
                                 orderby t.transactionDateTime descending
                                 select new { t.price, t.typeName }).Take(10);
             string content = "[['typeName', 'Price']";
@@ -82,15 +83,13 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetTransactionStations(string characterId)
+        public ActionResult GetTransactionStations(long characterID)
         {
-            long charId = XmlConvert.ToInt64(characterId);
-
             // select all station
             // later there should be a the difference between sell stations and buy stations
             // consider transaction for last n days
             var stations = (from s in db.WalletTransactions
-                            where s.characterID == charId
+                            where s.characterID == characterID
                             select new { station = s.stationName }).Distinct();
 
             string rows = string.Empty;
@@ -105,16 +104,14 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetRevenue(string characterId, string station, string number, string days)
+        public ActionResult GetRevenue(long characterID, string station, int number, int days)
         {
-            long charId = XmlConvert.ToInt64(characterId);
-
             DateTime untilDate = (from t in db.WalletTransactions
-                                  where t.characterID == charId
-                                  select t.transactionDateTime).Max().Subtract(TimeSpan.FromDays(Convert.ToInt32(days)));
+                                  where t.characterID == characterID
+                                  select t.transactionDateTime).Max().Subtract(TimeSpan.FromDays(days));
 
             var transactions = from t in db.WalletTransactions
-                               where t.characterID == charId
+                               where t.characterID == characterID
                                where t.transactionDateTime > untilDate
                                where (string.IsNullOrEmpty(station) || station == t.stationName)
                                select t;
@@ -136,12 +133,10 @@ namespace MvcMovie.Controllers
                           orderby r.revenue descending
                           select r;
 
-            revenue.OrderBy(r => r.revenue);
-
             string rows = string.Empty;
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            foreach (var row in revenue.Take(Convert.ToInt32(string.IsNullOrEmpty(number) ? "20" : number)))
+            foreach (var row in revenue.Take(number == 0 ? 20 : number))
             {
                 rows += string.Format("{0}[\"{1}\", {2}]",
                     rows == string.Empty ? string.Empty : ", ",
@@ -152,30 +147,77 @@ namespace MvcMovie.Controllers
             return Content(rows);
         }
 
+        public ActionResult GetProfitableItemsNotInMarketOrder(long characterID, string station)
+        {
+            var transactions = from t in db.WalletTransactions
+                               where t.characterID == characterID
+                               where (string.IsNullOrEmpty(station) || station == t.stationName)
+                               select t;
+
+            var sellTransactions = from t in transactions
+                                   where t.transactionType == "sell"
+                                   group t by new { t.typeName, t.transactionType } into g
+                                   select new { g.Key.typeName, price = g.Average(entry => entry.price) };
+
+            var buyTransactions = from t in transactions
+                                  where t.transactionType == "buy"
+                                  group t by new { t.typeName, t.transactionType } into g
+                                  select new { g.Key.typeName, price = g.Average(entry => entry.price) };
+
+            var profitItems = from r in
+                                  (from s in sellTransactions
+                                   join b in buyTransactions on s.typeName equals b.typeName
+                                   select new { s.typeName, profit = s.price - b.price })
+                              orderby r.profit descending
+                              select r;
+
+            var marketOrders = from o in db.MarketOrders
+                               join i in db.ItemTypes on o.typeID equals i.typeID
+                               select new { o.typeID, i.typeName, o.price, o.bid };
+
+            var profitItemsNotInOrder = from p in profitItems
+                                        where !(from m in marketOrders
+                                                select m.typeName).Contains(p.typeName)
+                                        orderby p.profit descending
+                                        select p;
+
+            string rows = string.Empty;
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+            foreach (var item in profitItemsNotInOrder)
+            {
+                rows += string.Format("{0}[\"{1}\", {2}]",
+                    rows == string.Empty ? string.Empty : ", ",
+                    item.typeName,
+                    item.profit.ToString(nfi));
+            }
+            rows = string.Format("[{0}]", rows);
+
+            return Content(rows);
+        }
+
         [HttpPost]
-        public ActionResult GetBalance(string characterid)
+        public ActionResult GetBalance(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 throw new Exception("User not found in the database!");
 
-            long charId = XmlConvert.ToInt64(characterid);
-
             var balanceEntries = from j in db.WalletJournal
-                                 where j.characterID == charId
+                                 where j.characterID == characterID
                                  group j by new { date = EntityFunctions.TruncateTime(j.date) } into g
                                  orderby g.Key.date ascending
                                  select new { g.Key.date, balance = g.Average(entry => entry.balance) };
 
             var buyEntries = from j in db.WalletJournal
-                             where j.characterID == charId
+                             where j.characterID == characterID
                              where j.amount < 0
                              group j by new { date = EntityFunctions.TruncateTime(j.date) } into g
                              orderby g.Key.date ascending
                              select new { g.Key.date, buys = g.Sum(entry => entry.amount) };
 
             var sellEntries = from j in db.WalletJournal
-                              where j.characterID == charId
+                              where j.characterID == characterID
                               where j.amount > 0
                               group j by new { date = EntityFunctions.TruncateTime(j.date) } into g
                               orderby g.Key.date ascending
@@ -253,48 +295,72 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public void UpdateMarketOrders(string characterID)
+        public void UpdateMarketOrders(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 throw new Exception("User not found in the database!");
 
-            long lCharID = Convert.ToInt64(characterID);
-
             Character character = (from c in db.Characters
                                    where c.userID == user.userID
-                                   where c.characterID == lCharID
+                                   where c.characterID == characterID
                                    select c).First();
 
-            string eveResponseXmlData = eveApi.getMarketOrders(user.keyID.ToString(), user.vCode, characterID);
-            XDocument doc = XDocument.Parse(eveResponseXmlData);
+            string marketOrdersXmlData = eveApi.getMarketOrders(user.keyID.ToString(), user.vCode, characterID.ToString());
+            XDocument marketOrdersXDocument = XDocument.Parse(marketOrdersXmlData);
 
             // delete all market orders in the database as they will be updadet
-            var marketOrders = from m in db.MarketOrders
-                               where m.character.characterID == character.characterID
-                               select m;
-            foreach (MarketOrder entry in marketOrders)
+            var oldMarketOrders = from m in db.MarketOrders
+                                  where m.character.characterID == character.characterID
+                                  select m;
+            foreach (MarketOrder order in oldMarketOrders)
             {
-                db.MarketOrders.Remove(entry);
+                db.MarketOrders.Remove(order);
             }
 
-            foreach (XElement row in doc.Descendants("row"))
+            List<string> itemTypeIDs = new List<string>();
+            foreach (XElement row in marketOrdersXDocument.Descendants("row"))
             {
-                MarketOrder newEntry = MarketOrder.createFromXMLNode(character, row);
-                db.MarketOrders.Add(newEntry);
+                MarketOrder order = MarketOrder.createFromXMLNode(character, row);
+                db.MarketOrders.Add(order);
+                string itemTypeID = order.typeID.ToString();
+                if (!itemTypeIDs.Contains(itemTypeID))
+                {
+                    itemTypeIDs.Add(itemTypeID);
+                }
+            }
+
+            string itemTypesXmlData = eveApi.getTypes(itemTypeIDs);
+            XDocument itemTypesXDocument = XDocument.Parse(itemTypesXmlData);
+            foreach (XElement row in itemTypesXDocument.Descendants("row"))
+            {
+                long itemTypeID = XmlConvert.ToInt64(row.Attribute("typeID").Value);
+                string itemTypeName = row.Attribute("typeName").Value;
+                ItemType itemType = db.ItemTypes.Find(itemTypeID);
+                if (itemType == null)
+                {
+                    itemType = new ItemType();
+                    itemType.typeID = itemTypeID;
+                    db.ItemTypes.Add(itemType);
+                }
+
+                if (itemType.typeName != itemTypeName)
+                {
+                    itemType.typeName = itemTypeName;
+                }
             }
             db.SaveChanges();
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public void UpdateWalletJournal(string characterID)
+        public void UpdateWalletJournal(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 throw new Exception("User not found in the database!");
 
-            Character character = db.Characters.Find(Convert.ToInt64(characterID));
+            Character character = db.Characters.Find(characterID);
             if (character == null)
                 throw new Exception("Character not found in the database!");
 
@@ -304,7 +370,7 @@ namespace MvcMovie.Controllers
             bool repeat = true;
             while (repeat)
             {
-                string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
+                string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID.ToString(), fromID, rowCount);
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
 
                 ProcessResponseWalletJournal(character, doc);
@@ -336,13 +402,13 @@ namespace MvcMovie.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public void UpdateWalletTransactions(string characterID)
+        public void UpdateWalletTransactions(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 throw new Exception("User not found in the database!");
 
-            Character character = db.Characters.Find(Convert.ToInt64(characterID));
+            Character character = db.Characters.Find(characterID);
             if (character == null)
                 throw new Exception("Character not found in the database!");
 
@@ -352,7 +418,7 @@ namespace MvcMovie.Controllers
             bool repeat = true;
             while (repeat)
             {
-                string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID, fromID, rowCount);
+                string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID.ToString(), fromID, rowCount);
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
 
                 ProcessResponseWalletTransactions(character, doc);
@@ -382,22 +448,18 @@ namespace MvcMovie.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetStats(string characterId)
+        public ActionResult GetStats(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user == null)
                 RedirectToAction("Create");
 
-            Character character = db.Characters.Find(Convert.ToInt64(characterId));
-            if (character == null)
-                throw new Exception("Character not found in the database!");
-
             var transactions = from t in db.WalletTransactions
-                               where t.characterID == character.characterID
+                               where t.characterID == characterID
                                select t;
 
             var journalEntries = from j in db.WalletJournal
-                                 where j.characterID == character.characterID
+                                 where j.characterID == characterID
                                  select j;
 
 

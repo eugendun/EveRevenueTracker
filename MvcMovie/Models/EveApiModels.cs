@@ -195,16 +195,16 @@ namespace MvcMovie.Models
     }
 
     // TODO: Think about this if it needed, maybe it is better to save type names directly
-    public class Type
+    public class ItemType
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long typeID { get; set; }
         public string typeName { get; set; }
 
-        public static Type createFromXMLNode(XElement node)
+        public static ItemType createFromXMLNode(XElement node)
         {
-            Type type = new Type();
+            ItemType type = new ItemType();
             type.typeID = XmlConvert.ToInt64(node.Attribute("typeID").Value);
             type.typeName = node.Attribute("typeName").Value;
             return type;
@@ -229,6 +229,7 @@ namespace MvcMovie.Models
         public DbSet<WalletJournalEntry> WalletJournal { get; set; }
         public DbSet<WalletTransactionEntry> WalletTransactions { get; set; }
         public DbSet<MarketOrder> MarketOrders { get; set; }
+        public DbSet<ItemType> ItemTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

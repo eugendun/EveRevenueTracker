@@ -242,6 +242,10 @@
     <Compile Include="Migrations\201309201705582_EveApiMarketOrderModelAdded.Designer.cs">
       <DependentUpon>201309201705582_EveApiMarketOrderModelAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309211401388_EveApiItemTypeModelAdded.cs" />
+    <Compile Include="Migrations\201309211401388_EveApiItemTypeModelAdded.Designer.cs">
+      <DependentUpon>201309211401388_EveApiItemTypeModelAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
     <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -345,6 +349,7 @@
     <Content Include="Scripts\eveapi\charts\BalanceDashboard.js" />
     <Content Include="Scripts\eveapi\charts\Chart.js" />
     <Content Include="Scripts\eveapi\charts\RevenueChart.js" />
+    <Content Include="Scripts\eveapi\charts\Table.js" />
     <Content Include="Scripts\eveapi\charts\WalletChart.js" />
     <Content Include="Scripts\eveapi\domReady.js" />
     <Content Include="Scripts\eveapi\google.js" />
@@ -620,6 +625,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201309201705582_EveApiMarketOrderModelAdded.resx">
       <DependentUpon>201309201705582_EveApiMarketOrderModelAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309211401388_EveApiItemTypeModelAdded.resx">
+      <DependentUpon>201309211401388_EveApiItemTypeModelAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

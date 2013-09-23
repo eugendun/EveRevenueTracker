@@ -45,7 +45,7 @@ define(['eutils'], function () {
         this.getIskFormatter().format(dataTable, 1);
 
         this.chart.draw(dataTable, this.options);
-    }
+    };
 
     return Chart;
 });

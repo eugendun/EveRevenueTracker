@@ -24,6 +24,7 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
         RevenueChart = EveApiCharts.RevenueChart(chartsContainerElement);
         BalanceDashboard = EveApiCharts.BalanceDashboard(chartsContainerElement);
         WalletChart = EveApiCharts.WalletChart(chartsContainerElement);
+        SuggestedOrderTable = EveApiCharts.Table('SuggestedOrderTable', chartsContainerElement, [['string', 'Type Name'], ['number', 'Type ID']]);
 
         function update(charId) {
             RevenueChart.update(charId);
@@ -37,11 +38,6 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
         $('#character_display').load('EveApi/SelectCharacter', function () {
             CharacterManager.attach(update);
         });
-
-        function getDataFromEveServer() {
-            var charId = $("#character_id").val();
-            $.post("/EveApi/UpdateWalletTransactions", { characterID: charId });
-        };
 
         // update tables link
         $("#update_tables").click(function () {
@@ -59,6 +55,14 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
                     });
 
                 $.post("/EveApi/UpdateMarketOrders", { characterID: CharacterManager.getId() });
+
+                $.post("/EveApi/GetProfitableItemsNotInMarketOrder", { characterID: CharacterManager.getId() })
+                    .done(function (data) {
+                        progressbar.css("display", "none");
+                        that.css("display", "block");
+
+                        SuggestedOrderTable.updateDataTable(eval(data));
+                    });
             }
         });
     });
