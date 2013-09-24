@@ -106,15 +106,22 @@ namespace MvcMovie.Controllers
         [HttpPost]
         public ActionResult GetRevenue(long characterID, string station, int number, int days)
         {
-            DateTime untilDate = (from t in db.WalletTransactions
-                                  where t.characterID == characterID
-                                  select t.transactionDateTime).Max().Subtract(TimeSpan.FromDays(days));
-
             var transactions = from t in db.WalletTransactions
                                where t.characterID == characterID
-                               where t.transactionDateTime > untilDate
-                               where (string.IsNullOrEmpty(station) || station == t.stationName)
                                select t;
+
+            if (transactions.Count() <= 0)
+            {
+                return Content("");
+            }
+
+            DateTime untilDate = (from t in transactions
+                                  select t.transactionDateTime).Max().Subtract(TimeSpan.FromDays(days));
+
+            transactions = from t in transactions
+                           where t.transactionDateTime > untilDate
+                           where (string.IsNullOrEmpty(station) || station == t.stationName)
+                           select t;
 
             var sellTransactions = from t in transactions
                                    where t.transactionType == "sell"
