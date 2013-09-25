@@ -24,12 +24,21 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
         RevenueChart = EveApiCharts.RevenueChart(chartsContainerElement);
         BalanceDashboard = EveApiCharts.BalanceDashboard(chartsContainerElement);
         WalletChart = EveApiCharts.WalletChart(chartsContainerElement);
+
         SuggestedOrderTable = EveApiCharts.Table('SuggestedOrderTable', chartsContainerElement, [['string', 'Type Name'], ['number', 'Type ID']]);
+        SuggestedOrderTable.update = function (charId) {
+            $.post("/EveApi/GetProfitableItemsNotInMarketOrder", { characterID: charId })
+                .done(function (data) {
+                    SuggestedOrderTable.updateDataTable(eval(data));
+                });
+        };
+
 
         function update(charId) {
             RevenueChart.update(charId);
             BalanceDashboard.update(charId);
             WalletChart.update(charId);
+            SuggestedOrderTable.update(charId);
 
             // Get statistics
             $('#eve_stats').load("EveApi/GetStats", { characterId: charId });
@@ -47,21 +56,36 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
                 that.css("display", "none");
                 progressbar.css("display", "block");
 
+                var updateList = ["WalletTransactions", "MarketOrders", "WalletJournal"];
+
+                // TODO should be refactored
+                var progressbarHandler = function (listEntry) {
+                    var index = updateList.indexOf(listEntry);
+                    if (index >= 0) {
+                        updateList.splice(index, 1);
+                    }
+
+                    if (updateList.length == 0) {
+                        progressbar.css("display", "none");
+                        that.css("display", "block");
+
+                        update(CharacterManager.getId());
+                    }
+                }
+
                 $.post("/EveApi/UpdateWalletTransactions", { characterID: CharacterManager.getId() })
                     .complete(function () {
-                        update(CharacterManager.getId());
-                        progressbar.css("display", "none");
-                        that.css("display", "block");
+                        progressbarHandler("WalletTransactions");
                     });
 
-                $.post("/EveApi/UpdateMarketOrders", { characterID: CharacterManager.getId() });
+                $.post("/EveApi/UpdateMarketOrders", { characterID: CharacterManager.getId() })
+                    .complete(function () {
+                        progressbarHandler("MarketOrders");
+                    });
 
-                $.post("/EveApi/GetProfitableItemsNotInMarketOrder", { characterID: CharacterManager.getId() })
-                    .done(function (data) {
-                        progressbar.css("display", "none");
-                        that.css("display", "block");
-
-                        SuggestedOrderTable.updateDataTable(eval(data));
+                $.post("/EveApi/UpdateWalletJournal", { characterID: CharacterManager.getId() })
+                    .complete(function () {
+                        progressbarHandler("WalletJournal");
                     });
             }
         });
