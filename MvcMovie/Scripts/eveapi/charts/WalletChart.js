@@ -12,13 +12,12 @@ define(function (require) {
             'title': 'Transactions',
             'legend': { 'position': 'top', 'alignment': 'start' }
         };
+        this.columns = [['string', 'Type Name'], ['number', 'Price']];
     };
     extend(WalletChart, Chart);
 
     WalletChart.prototype.updateDataTable = function (data) {
-        var dataTable = new google.visualization.arrayToDataTable(data);
-        this.getIskFormatter().format(dataTable, 1);
-        this.chart.draw(dataTable, this.options);
+        WalletChart.superclass.updateDataTable.call(this, data);
     };
 
     WalletChart.prototype.update = function (characterId) {

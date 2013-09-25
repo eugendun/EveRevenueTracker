@@ -67,24 +67,27 @@ define(function (require) {
             dataTable.addColumn(this.columns[i][0], this.columns[i][1]);
         };
 
-        // fill the table with data, the first column has to be converted to Date and the
-        // last column is the sum of sell and buy values
-        data.forEach(function (row) {
-            dataTable.addRow([new Date(row[0]), row[1], row[2], row[3], row[2] + row[3]]);
-        });
+        if ($.isArray(data) && data.length > 0) {
+            // fill the table with data, the first column has to be converted to Date and the
+            // last column is the sum of sell and buy values
+            data.forEach(function (row) {
+                dataTable.addRow([new Date(row[0]), row[1], row[2], row[3], row[2] + row[3]]);
+            });
 
-        // format the table columns with the isk formatter
-        this.getIskFormatter().format(dataTable, 1);
-        this.getIskFormatter().format(dataTable, 2);
-        this.getIskFormatter().format(dataTable, 3);
-        this.getIskFormatter().format(dataTable, 4);
+            // format the table columns with the isk formatter
+            this.getIskFormatter().format(dataTable, 1);
+            this.getIskFormatter().format(dataTable, 2);
+            this.getIskFormatter().format(dataTable, 3);
+            this.getIskFormatter().format(dataTable, 4);
 
-        // set the intial range to a week (7 days)
-        var _endRangeDate = new Date(data[data.length - 1][0]),
-            _startRangeDate = new Date(_endRangeDate.getTime() - 86400000 * 7),
-            _state = { 'range': { 'start': _startRangeDate, 'end': _endRangeDate } };
+            // set the intial range to a week (7 days)
+            var _endRangeDate = new Date(data[data.length - 1][0]),
+                _startRangeDate = new Date(_endRangeDate.getTime() - 86400000 * 7),
+                _state = { 'range': { 'start': _startRangeDate, 'end': _endRangeDate } };
 
-        this.control.setState(_state);
+            this.control.setState(_state);
+        }
+
         this.dashboard.draw(dataTable);
     };
 

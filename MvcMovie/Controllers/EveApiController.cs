@@ -59,27 +59,40 @@ namespace MvcMovie.Controllers
             return View(User);
         }
 
+        /// <summary>
+        /// An action to get transactions of a character.
+        /// </summary>
+        /// <param name="characterID">ID of the character.</param>
+        /// <returns>ContentResult that contains two dimensional javastring array as a string</returns>
         [HttpPost]
         public ActionResult GetTransactions(long characterID)
         {
             // TODO: check if the character given by the characterID belongs to the current use!
             var userId = WebSecurity.GetUserId(User.Identity.Name);
 
-            var transactions = (from t in db.WalletTransactions
-                                where t.characterID == characterID
-                                orderby t.transactionDateTime descending
-                                select new { t.price, t.typeName }).Take(10);
-            string content = "[['typeName', 'Price']";
+            var transactions = from t in db.WalletTransactions
+                               where t.characterID == characterID
+                               orderby t.transactionDateTime descending
+                               select new { t.price, t.typeName };
+
+            if (transactions.Count() == 0)
+                return Content("");
+
+            transactions = transactions.Take(10);
 
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
+            string rows = string.Empty;
             foreach (var t in transactions)
             {
-                content += string.Format(",['{0}', {1}]", t.typeName, t.price.ToString(nfi));
+                rows += rows == string.Empty ? string.Empty : ", ";
+                rows += string.Format("[\"{0}\", {1}]",
+                    t.typeName,
+                    t.price.ToString(nfi));
             }
-            content += "]";
+            rows = string.Format("[{0}]", rows);
 
-            return JavaScript(content);
+            return Content(rows);
         }
 
         [HttpPost]
@@ -88,9 +101,14 @@ namespace MvcMovie.Controllers
             // select all station
             // later there should be a the difference between sell stations and buy stations
             // consider transaction for last n days
-            var stations = (from s in db.WalletTransactions
-                            where s.characterID == characterID
-                            select new { station = s.stationName }).Distinct();
+            var stations = from s in db.WalletTransactions
+                           where s.characterID == characterID
+                           select new { station = s.stationName };
+
+            if (stations.Count() <= 0)
+                return Content("");
+
+            stations = stations.Distinct();
 
             string rows = string.Empty;
             foreach (var row in stations)
@@ -308,10 +326,15 @@ namespace MvcMovie.Controllers
             if (user == null)
                 throw new Exception("User not found in the database!");
 
-            Character character = (from c in db.Characters
-                                   where c.userID == user.userID
-                                   where c.characterID == characterID
-                                   select c).First();
+            var characters = from c in db.Characters
+                             where c.userID == user.userID
+                             where c.characterID == characterID
+                             select c;
+
+            if (characters.Count() <= 0)
+                return;
+
+            Character character = characters.First();
 
             string marketOrdersXmlData = eveApi.getMarketOrders(user.keyID.ToString(), user.vCode, characterID.ToString());
             XDocument marketOrdersXDocument = XDocument.Parse(marketOrdersXmlData);
@@ -469,13 +492,20 @@ namespace MvcMovie.Controllers
                                  where j.characterID == characterID
                                  select j;
 
+            if (transactions.Count() > 0)
+            {
+                ViewBag.amountOfTransactions = transactions.Count();
+                ViewBag.oldestTransaction = transactions.Min(t => t.transactionDateTime);
+                ViewBag.lastTransaction = transactions.Max(t => t.transactionDateTime);
+            }
 
-            ViewBag.amountOfTransactions = transactions.Count();
-            ViewBag.oldestTransaction = transactions.Min(t => t.transactionDateTime);
-            ViewBag.lastTransaction = transactions.Max(t => t.transactionDateTime);
-            ViewBag.amountOfJournalEntries = journalEntries.Count();
-            ViewBag.oldestJournalEntry = journalEntries.Min(j => j.date);
-            ViewBag.lastJournalEntry = journalEntries.Max(j => j.date);
+            if (journalEntries.Count() > 0)
+            {
+                ViewBag.amountOfJournalEntries = journalEntries.Count();
+                ViewBag.oldestJournalEntry = journalEntries.Min(j => j.date);
+                ViewBag.lastJournalEntry = journalEntries.Max(j => j.date);
+
+            }
 
             return PartialView("Stats");
         }

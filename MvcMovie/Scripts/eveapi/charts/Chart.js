@@ -41,8 +41,11 @@ define(['eutils'], function () {
         for (var i = 0; i < this.columns.length; i++) {
             dataTable.addColumn(this.columns[i][0], this.columns[i][1]);
         };
-        dataTable.addRows(data);
-        this.getIskFormatter().format(dataTable, 1);
+
+        if ($.isArray(data) && data.length > 0) {
+            dataTable.addRows(data);
+            this.getIskFormatter().format(dataTable, 1);
+        }
 
         this.chart.draw(dataTable, this.options);
     };

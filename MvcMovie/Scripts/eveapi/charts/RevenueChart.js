@@ -32,13 +32,16 @@ define(function (require) {
 
         var totalRevenue = 0,
             totalLoss = 0;
-        data.forEach(function (element) {
-            if (element[1] >= 0) {
-                totalRevenue += element[1];
-            } else {
-                totalLoss += element[1];
-            }
-        });
+
+        if ($.isArray(data) && data.length > 0) {
+            data.forEach(function (element) {
+                if (element[1] >= 0) {
+                    totalRevenue += element[1];
+                } else {
+                    totalLoss += element[1];
+                }
+            });
+        }
 
         this.updateTotalOverview(totalRevenue, totalLoss);
     };
@@ -105,8 +108,14 @@ define(function (require) {
         var id = this.chartContainer.id + '-stationSelect',
             element = document.getElementById(id);
         if (!element) {
-            // add a default selection - no station 
-            stations.unshift('Select...');
+            // add a default selection - no station
+
+            if ($.isArray(stations)) {
+                stations.unshift('Select...');
+            } else {
+                stations = ['Select...'];
+            }
+
             var options = { values: stations, defaultValue: 'Select...' },
                 that = this;
 
