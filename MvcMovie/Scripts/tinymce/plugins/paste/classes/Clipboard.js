@@ -234,6 +234,16 @@ define("tinymce/pasteplugin/Clipboard", [
 			} else {
 				editor.on('init', function() {
 					editor.dom.bind(editor.getBody(), 'paste', function(e) {
+						var doc = editor.getDoc();
+
+						e.preventDefault();
+
+						// Paste as plain text when not using the keyboard
+						if (e.clipboardData || doc.dataTransfer) {
+							processText((e.clipboardData || doc.dataTransfer).getData('Text'));
+							return;
+						}
+
 						e.preventDefault();
 						editor.windowManager.alert('Please use Ctrl+V/Cmd+V keyboard shortcuts to paste contents.');
 					});
@@ -247,6 +257,11 @@ define("tinymce/pasteplugin/Clipboard", [
 
 						var pastebinElm = createPasteBin();
 						var lastRng = editor.selection.getRng();
+
+						// Hack for #6051
+						if (Env.webkit && editor.inline) {
+							pastebinElm.contentEditable = true;
+						}
 
 						editor.selection.select(pastebinElm, true);
 

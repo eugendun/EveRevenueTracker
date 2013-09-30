@@ -140,16 +140,27 @@ tinymce.PluginManager.add('image', function(editor) {
 				style: data.style
 			};
 
-			if (!imgElm) {
-				data.id = '__mcenew';
-				editor.insertContent(dom.createHTML('img', data));
-				imgElm = dom.get('__mcenew');
-				dom.setAttrib(imgElm, 'id', null);
-			} else {
-				dom.setAttribs(imgElm, data);
-			}
+			editor.undoManager.transact(function() {
+				if (!data.src) {
+					if (imgElm) {
+						dom.remove(imgElm);
+						editor.nodeChanged();
+					}
 
-			waitLoad(imgElm);
+					return;
+				}
+
+				if (!imgElm) {
+					data.id = '__mcenew';
+					editor.selection.setContent(dom.createHTML('img', data));
+					imgElm = dom.get('__mcenew');
+					dom.setAttrib(imgElm, 'id', null);
+				} else {
+					dom.setAttribs(imgElm, data);
+				}
+
+				waitLoad(imgElm);
+			});
 		}
 
 		function removePixelSuffix(value) {
@@ -237,6 +248,8 @@ tinymce.PluginManager.add('image', function(editor) {
 			var data = win.toJSON();
 			var css = dom.parseStyle(data.style);
 
+			dom.setAttrib(imgElm, 'style', '');
+
 			delete css.margin;
 			css['margin-top'] = css['margin-bottom'] = addPixelSuffix(data.vspace);
 			css['margin-left'] = css['margin-right'] = addPixelSuffix(data.hspace);
@@ -302,7 +315,7 @@ tinymce.PluginManager.add('image', function(editor) {
 		} else {
 			// Simple default dialog
 			win = editor.windowManager.open({
-				title: 'Edit image',
+				title: 'Insert/edit image',
 				data: data,
 				body: generalFormItems,
 				onSubmit: onSubmitForm
