@@ -350,7 +350,6 @@
     <Content Include="Scripts\eveapi\domReady.js" />
     <Content Include="Scripts\eveapi\google.js" />
     <Content Include="Scripts\eveapi\main.js" />
-    <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\eveapi\EveApiCharts.js" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
