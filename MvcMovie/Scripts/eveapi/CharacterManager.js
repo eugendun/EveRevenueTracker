@@ -6,7 +6,7 @@ require.config({
     }
 });
 
-define('CharacterManager', ['jquery'], function ($) {
+define(['jquery'], function ($) {
     var CharacterManager = function () {
         var _characterId = null,
             _characterName = null,

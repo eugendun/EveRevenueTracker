@@ -35,6 +35,9 @@
 </div>
 
 <script type="text/javascript">
+    require.config({
+        baseUrl: '../Scripts/eveapi'
+    });
     require(['main'], function () {
         //character selection - dialog
         $("#selectable").selectable({

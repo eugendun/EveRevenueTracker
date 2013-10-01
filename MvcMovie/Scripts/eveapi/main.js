@@ -3,13 +3,14 @@
 /// <reference path="EveApiCharts.js" />
 
 require.config({
+    baseUrl: '../Scripts/eveapi',
     paths: {
-        jquery: '../jquery-2.0.3',
-        jqueryui: '../jquery-ui-1.10.3'
+        'jquery': '../jquery-2.0.3',
+        'jqueryui': '../jquery-ui-1.10.3'
     }
 });
 
-require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], function () {
+require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], function ($) {
     // load modules
     EveApiCharts = require('EveApiCharts');
     CharacterManager = require('CharacterManager');

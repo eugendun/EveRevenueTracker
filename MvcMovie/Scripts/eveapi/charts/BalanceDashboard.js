@@ -1,8 +1,12 @@
 ﻿/// <reference path="../../require.js" />
 /// <reference path="Chart.js" />
 
+require.config({
+    baseUrl: '../Scripts/eveapi/charts'
+});
+
 define(function (require) {
-    var Chart = require('./Chart');
+    var Chart = require('Chart');
 
     function BalanceDashboard(chartsContainer, data) {
         BalanceDashboard.superclass.constructor.call(this, 'BalanceDashboard', chartsContainer);

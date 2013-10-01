@@ -1,12 +1,14 @@
 ﻿/// <reference path="../require.js" />
 
+require.config({
+    baseUrl: 'Scripts/eveapi/charts'
+});
+
 define(function (require) {
-    require('../utils/eutils');
-    require('./google');
-    var RevenueChart = require('./charts/RevenueChart');
-    var WalletChart = require('./charts/WalletChart');
-    var BalanceDashboard = require('./charts/BalanceDashboard');
-    var Table = require('./charts/Table');
+    var RevenueChart = require('RevenueChart');
+    var WalletChart = require('WalletChart');
+    var BalanceDashboard = require('BalanceDashboard');
+    var Table = require('Table');
 
     var EveApiCharts = function () { };
     EveApiCharts.prototype = {

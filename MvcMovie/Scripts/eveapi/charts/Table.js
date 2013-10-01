@@ -1,8 +1,11 @@
 ﻿/// <reference path="../../require.js" />
 
+require.config({
+    baseUrl: '../Scripts/eveapi/charts'
+});
+
 define(function (require) {
-    //require('../google');
-    var Chart = require('./Chart');
+    var Chart = require('Chart');
 
     function Table(id, container, columns) {
         Table.superclass.constructor.call(this, id, container);

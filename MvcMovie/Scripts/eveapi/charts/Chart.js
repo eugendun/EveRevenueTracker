@@ -1,12 +1,15 @@
 ﻿/// <reference path="../../require.js" />
 
 require.config({
+    baseUrl: '../Scripts',
     paths: {
-        'eutils': '../../utils/eutils'
+        'eutils': 'utils/eutils',
+        'google': 'eveapi/google'
     }
 });
 
-define(['eutils'], function () {
+define(['eutils', 'google'], function () {
+
     /* Class Chart */
     function Chart(chartId, chartsContainer) {
         // chart container
