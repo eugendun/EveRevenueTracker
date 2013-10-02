@@ -5,12 +5,11 @@
 require.config({
     baseUrl: '../Scripts/eveapi',
     paths: {
-        'jquery': '../jquery-2.0.3',
-        'jqueryui': '../jquery-ui-1.10.3'
+        'jquery': '../jquery-2.0.3'
     }
 });
 
-require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], function ($) {
+require(['jquery', 'domReady', 'EveApiCharts', 'CharacterManager'], function ($) {
     // load modules
     EveApiCharts = require('EveApiCharts');
     CharacterManager = require('CharacterManager');
@@ -45,9 +44,7 @@ require(['jquery', 'jqueryui', 'domReady', 'EveApiCharts', 'CharacterManager'], 
             $('#eve_stats').load("EveApi/GetStats", { characterId: charId });
         };
 
-        $('#character_display').load('EveApi/SelectCharacter', function () {
-            CharacterManager.attach(update);
-        });
+        CharacterManager.attach(update);
 
         // update tables link
         $("#update_tables").click(function () {

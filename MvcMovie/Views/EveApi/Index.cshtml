@@ -21,20 +21,3 @@
 <div id="progressbar" style="display: none;">
     Loading...
 </div>
-
-<script type="text/javascript">
-    require.config({
-        baseUrl: '../Scripts',
-        paths: {
-            jquery: 'jquery-2.0.3'
-        }
-    });
-    require(['jquery'], function () {
-        $('#update_tables').mouseover(function (event) {
-            //$(this).css('background-color', '#f5d943');
-        });
-        $('#update_tables').mouseout(function (event) {
-            //$(this).css('background-color', '#e27575');
-        });
-    });
-</script>
