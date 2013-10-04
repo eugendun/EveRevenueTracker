@@ -353,7 +353,7 @@
     <Content Include="Scripts\eveapi\google.js" />
     <Content Include="Scripts\eveapi\main.js" />
     <Content Include="Scripts\eveapi\EveApiCharts.js" />
-    <Content Include="Scripts\eveapi\build\build.json" />
+    <Content Include="Scripts\eveapi\build\build.js" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />

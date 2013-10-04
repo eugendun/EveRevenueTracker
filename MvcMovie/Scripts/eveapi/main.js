@@ -33,7 +33,6 @@ require(['jquery', 'domReady', 'EveApiCharts', 'CharacterManager'], function ($)
                 });
         };
 
-
         function update(charId) {
             RevenueChart.update(charId);
             BalanceDashboard.update(charId);
