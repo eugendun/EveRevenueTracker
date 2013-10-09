@@ -347,8 +347,10 @@
     <Content Include="Scripts\eveapi\charts\BalanceDashboard.js" />
     <Content Include="Scripts\eveapi\charts\Chart.js" />
     <Content Include="Scripts\eveapi\charts\RevenueChart.js" />
+    <Content Include="Scripts\eveapi\charts\SuggestedOrdersTable.js" />
     <Content Include="Scripts\eveapi\charts\Table.js" />
     <Content Include="Scripts\eveapi\charts\WalletChart.js" />
+    <Content Include="Scripts\eveapi\DataUpdater.js" />
     <Content Include="Scripts\eveapi\domReady.js" />
     <Content Include="Scripts\eveapi\google.js" />
     <Content Include="Scripts\eveapi\main.js" />

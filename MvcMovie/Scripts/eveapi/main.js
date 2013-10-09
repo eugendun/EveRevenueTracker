@@ -9,38 +9,34 @@ require.config({
     }
 });
 
-require(['jquery', 'domReady', 'EveApiCharts', 'CharacterManager'], function ($) {
+require(['jquery', 'domReady', 'EveApiCharts', 'CharacterManager', 'DataUpdater'], function () {
     // load modules
-    EveApiCharts = require('EveApiCharts');
-    CharacterManager = require('CharacterManager');
+    var EveApiCharts = require('EveApiCharts'),
+        CharacterManager = require('CharacterManager'),
+        DataUpdater = require('DataUpdater');
 
     // prepare the page
     $(document).ready(function () {
-        var WalletChart = null,
-            BalanceDashboard = null,
-            RevenueChart = null,
-            chartsContainerElement = document.getElementById('charts_container');
+        var chartsContainerElement = document.getElementById('charts_container'),
+            charts = [];
 
-        RevenueChart = EveApiCharts.RevenueChart(chartsContainerElement);
-        BalanceDashboard = EveApiCharts.BalanceDashboard(chartsContainerElement);
-        WalletChart = EveApiCharts.WalletChart(chartsContainerElement);
+        charts.push(EveApiCharts.RevenueChart(chartsContainerElement));
+        charts.push(EveApiCharts.BalanceDashboard(chartsContainerElement));
+        charts.push(EveApiCharts.WalletChart(chartsContainerElement));
+        charts.push(EveApiCharts.SuggestedOrdersTable(chartsContainerElement));
 
-        SuggestedOrderTable = EveApiCharts.Table('SuggestedOrderTable', chartsContainerElement, [['string', 'Type Name'], ['number', 'Type ID']]);
-        SuggestedOrderTable.update = function (charId) {
-            $.post("/EveApi/GetProfitableItemsNotInMarketOrder", { characterID: charId })
-                .done(function (data) {
-                    SuggestedOrderTable.updateDataTable(eval(data));
-                });
-        };
+        var test = new DataUpdater('body');
+
 
         function update(charId) {
-            RevenueChart.update(charId);
-            BalanceDashboard.update(charId);
-            WalletChart.update(charId);
-            SuggestedOrderTable.update(charId);
+            charts.forEach(function (element) {
+                element.update(charId);
+            });
 
             // Get statistics
             $('#eve_stats').load("EveApi/GetStats", { characterId: charId });
+
+            test.update(charId);
         };
 
         CharacterManager.attach(update);

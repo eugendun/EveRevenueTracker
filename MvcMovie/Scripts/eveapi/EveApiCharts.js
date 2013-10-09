@@ -5,10 +5,12 @@ require.config({
 });
 
 define(function (require) {
-    var RevenueChart = require('RevenueChart');
-    var WalletChart = require('WalletChart');
-    var BalanceDashboard = require('BalanceDashboard');
-    var Table = require('Table');
+    var RevenueChart = require('RevenueChart'),
+        WalletChart = require('WalletChart'),
+        BalanceDashboard = require('BalanceDashboard'),
+        Table = require('Table'),
+        SuggestedOrdersTable = require('SuggestedOrdersTable');
+
 
     var EveApiCharts = function () { };
     EveApiCharts.prototype = {
@@ -23,6 +25,9 @@ define(function (require) {
         },
         Table: function (id, container, columns) {
             return new Table(id, container, columns);
+        },
+        SuggestedOrdersTable: function (chartsContainer) {
+            return new SuggestedOrdersTable(chartsContainer);
         }
     };
     return new EveApiCharts();
