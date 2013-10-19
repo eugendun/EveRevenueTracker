@@ -1,0 +1,22 @@
+﻿	Error Message:
+	A file or folder with the name '@JSense.js' already exists. Please give a unique name to the item you are adding, or delete the existing item first.
+
+	Stack Trace:
+	   at EnvDTE.ProjectItems.AddFromTemplate(String FileName, String Name)
+   at Microsoft.VisualStudio.TemplateWizard.Wizard.EnumContentsAddItem(ProjectItems projectItems, XmlNode contentNode, String projectName, String currentFolder, String currentTargetFolder, String rootName, String templateFolderPath, String destinationRootFolderPath, String userSpecifiedDestItemPath, String projectTypeString, List`1 wizardExtensions, String rootExtension)
+   at Microsoft.VisualStudio.TemplateWizard.Wizard.Execute(Object application, Int32 hwndOwner, Object[]& ContextParams, Object[]& CustomParams, wizardResult& retval)
+   at EnvDTE.ItemOperations.AddNewItem(String Item, String Name)
+   at ThreadSafe.JSense.VS2012.JSenseCommand.CreateMetaBase()
+   at ThreadSafe.JSense.VS2012.JSenseCommand.JSense()
+
+	Error Message:
+	A file or folder with the name '@JSense.js' already exists. Please give a unique name to the item you are adding, or delete the existing item first.
+
+	Stack Trace:
+	   at EnvDTE.ProjectItems.AddFromTemplate(String FileName, String Name)
+   at Microsoft.VisualStudio.TemplateWizard.Wizard.EnumContentsAddItem(ProjectItems projectItems, XmlNode contentNode, String projectName, String currentFolder, String currentTargetFolder, String rootName, String templateFolderPath, String destinationRootFolderPath, String userSpecifiedDestItemPath, String projectTypeString, List`1 wizardExtensions, String rootExtension)
+   at Microsoft.VisualStudio.TemplateWizard.Wizard.Execute(Object application, Int32 hwndOwner, Object[]& ContextParams, Object[]& CustomParams, wizardResult& retval)
+   at EnvDTE.ItemOperations.AddNewItem(String Item, String Name)
+   at ThreadSafe.JSense.VS2012.JSenseCommand.CreateMetaBase()
+   at ThreadSafe.JSense.VS2012.JSenseCommand.JSense()
+

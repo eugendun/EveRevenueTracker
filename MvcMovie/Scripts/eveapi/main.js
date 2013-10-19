@@ -3,9 +3,8 @@
 /// <reference path="EveApiCharts.js" />
 
 require.config({
-    baseUrl: '../Scripts/eveapi',
     paths: {
-        'jquery': '../jquery-2.0.3'
+        jquery: '../jquery-2.0.3'
     }
 });
 

@@ -1,12 +1,5 @@
-﻿/// <reference path="../../require.js" />
-/// <reference path="Chart.js" />
-
-require.config({
-    baseUrl: '../Scripts/eveapi/charts'
-});
-
-define(function (require) {
-    var Chart = require('Chart');
+﻿define(function (require) {
+    var Chart = require('./Chart');
 
     function RevenueChart(chartsContainer) {
         RevenueChart.superclass.constructor.call(this, 'RevenueDashboard', chartsContainer);

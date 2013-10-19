@@ -1,15 +1,17 @@
 ﻿/// <reference path="../require.js" />
 
-require.config({
-    baseUrl: 'Scripts/eveapi/charts'
-});
+//require.config({
+//    paths: {
+//        charts:'/Scripts/eveapi/charts'
+//    }
+//});
 
 define(function (require) {
-    var RevenueChart = require('RevenueChart'),
-        WalletChart = require('WalletChart'),
-        BalanceDashboard = require('BalanceDashboard'),
-        Table = require('Table'),
-        SuggestedOrdersTable = require('SuggestedOrdersTable');
+    var RevenueChart = require('./charts/RevenueChart'),
+        WalletChart = require('./charts/WalletChart'),
+        BalanceDashboard = require('./charts/BalanceDashboard'),
+        Table = require('./charts/Table'),
+        SuggestedOrdersTable = require('./charts/SuggestedOrdersTable');
 
 
     var EveApiCharts = function () { };

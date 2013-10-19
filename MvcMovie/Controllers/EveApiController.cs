@@ -332,7 +332,7 @@ namespace MvcMovie.Controllers
                              select c;
 
             if (characters.Count() <= 0)
-                return;
+                throw new Exception("Character not found in the database!");
 
             Character character = characters.First();
 

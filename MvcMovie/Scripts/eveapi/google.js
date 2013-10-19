@@ -1,9 +1,8 @@
 ﻿require.config({
-    baseurl: '../Scripts',
     paths: {
-        async: 'requirejs-plugin/async',
-        goog: 'requirejs-plugin/goog',
-        propertyParser: 'requirejs-plugin/propertyParser'
+        async: '/Scripts/requirejs-plugin/async',
+        goog: '/Scripts/requirejs-plugin/goog',
+        propertyParser: '/Scripts/requirejs-plugin/propertyParser'
     }
 });
 

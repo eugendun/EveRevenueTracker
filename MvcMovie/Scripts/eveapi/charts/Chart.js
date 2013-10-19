@@ -1,10 +1,7 @@
-﻿/// <reference path="../../require.js" />
-
-require.config({
-    baseUrl: '../Scripts',
+﻿require.config({
     paths: {
-        'eutils': 'utils/eutils',
-        'google': 'eveapi/google'
+        'eutils': '/Scripts/utils/eutils',
+        'google': '/Scripts/eveapi/google'
     }
 });
 

@@ -107,7 +107,7 @@ define(['jquery'], function () {
         this.apiCalls = [
             new ApiCallView(new ApiCall("Wallet Transactions", "/EveApi/UpdateWalletTransactions")),
             new ApiCallView(new ApiCall("Market Orders", "/EveApi/UpdateMarketOrders")),
-            new ApiCallView(new ApiCall("Wallet Journal", "/EveApi/UpdateWalletJournal"))
+            //new ApiCallView(new ApiCall("Wallet Journal", "/EveApi/UpdateWalletJournal"))
         ];
 
         this.apiCalls.forEach(function (object) {
