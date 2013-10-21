@@ -461,13 +461,13 @@ fieldset {
         }
 
 label {
-    /*display: block;
-    font-size: 1.2em;
-    font-weight: 600;*/
-    float: left;
-    margin-right: 5px;
-    color: #5a5858;
-    width: 50px;
+    /*display: block;*/
+    /*font-size: 1.1em;*/
+    /*font-weight: 600;*/
+    /*float: left;*/
+    /*margin-right: 5px;*/
+    /*color: #5a5858;
+    width: 50px;*/
 }
 
     label.checkbox {

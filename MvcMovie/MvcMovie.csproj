@@ -345,6 +345,10 @@
     <Content Include="Scripts\controls\TrackballControls.js" />
     <Content Include="Scripts\eveapi\build\main-build.js" />
     <Content Include="Scripts\eveapi\build\main-config.js" />
+    <Content Include="Scripts\eveapi\character_manager\collections\CharacterCollection.js" />
+    <Content Include="Scripts\eveapi\character_manager\models\CharacterModel.js" />
+    <Content Include="Scripts\eveapi\character_manager\templates\select-template.html" />
+    <Content Include="Scripts\eveapi\character_manager\views\SelectView.js" />
     <Content Include="Scripts\eveapi\charts\Chart.js" />
     <Content Include="Scripts\eveapi\charts\collections\TableCollection.js" />
     <Content Include="Scripts\eveapi\charts\models\BalanceDashboardModel.js" />

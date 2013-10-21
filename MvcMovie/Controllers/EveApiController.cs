@@ -28,6 +28,17 @@ namespace MvcMovie.Controllers
             return View();
         }
 
+        public JsonResult GetCharacters()
+        {
+            var curUserId = WebSecurity.CurrentUserId;
+
+            var characters = from c in db.Characters
+                             where c.userID == WebSecurity.CurrentUserId
+                             select new { c.characterID, c.characterName };
+
+            return Json(characters, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SelectCharacter()
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);

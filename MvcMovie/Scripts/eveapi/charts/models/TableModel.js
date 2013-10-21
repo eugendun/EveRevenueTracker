@@ -23,7 +23,6 @@ define(['eveapicall', 'backbone', 'google'], function (EveApiCall) {
 
             this.on('success', this.success);
             this.on('fail', this.fail);
-            this.on('all', function (eventName) { console.log(eventName); });
         },
 
         getNewDataTable: function () {
@@ -54,6 +53,7 @@ define(['eveapicall', 'backbone', 'google'], function (EveApiCall) {
         },
 
         success: function (data) {
+            debugger;
             this.updateDataTable(eval(data));
         },
 

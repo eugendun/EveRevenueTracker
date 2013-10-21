@@ -11,7 +11,6 @@
         initialize: function () {
             this.on('success', this.success);
             this.on('fail', this.fail);
-            this.on('change:status', function () { console.log("status of " + this.get('name') + " changed: " + this.get('status')) });
         },
 
         update: function (charId) {

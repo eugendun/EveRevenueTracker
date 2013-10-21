@@ -67,28 +67,30 @@ define(['GoogleChartView', 'backbone'], function (GoogleChartView) {
 
         render: function () {
             var dataTable = this.model.get('dataTable'),
-                rowCount = dataTable.getNumberOfRows(),
-                endRangeDate = dataTable.getValue(rowCount - 1, 0),
-                startRangeDate,
-                state;
+                rowCount = dataTable.getNumberOfRows();
 
-            // set the start point for the range filter 7 days ago
-            // if row count is less then 7 set the start point to
-            // the first row
-            if (rowCount > 7) {
-                startRangeDate = new Date(endRangeDate.getTime() - 86400000 * 7);
-            } else {
-                startRangeDate = dataTable.getValue(0, 0);
+            if (rowCount > 0) {
+                var endRangeDate = dataTable.getValue(rowCount - 1, 0),
+                    startRangeDate,
+                    state;
+
+                // set the start point for the range filter 7 days ago
+                // if row count is less then 7 set the start point to
+                // the first row
+                if (rowCount > 7)
+                    startRangeDate = new Date(endRangeDate.getTime() - 86400000 * 7);
+                else
+                    startRangeDate = dataTable.getValue(0, 0);
+
+                state = {
+                    range: {
+                        start: startRangeDate,
+                        end: endRangeDate
+                    }
+                };
+
+                this.control.setState(state);
             }
-
-            state = {
-                range: {
-                    start: startRangeDate,
-                    end: endRangeDate
-                }
-            };
-
-            this.control.setState(state);
             return GoogleChartView.prototype.render.apply(this);
         }
     });

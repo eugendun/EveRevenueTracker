@@ -1,4 +1,10 @@
-﻿define(['text!templates/UpdateCallTemplate.html', 'backbone'], function (templateFile) {
+﻿require.config({
+    paths: {
+        templates: '/Scripts/eveapi/updater/templates'
+    }
+});
+
+define(['text!templates/UpdateCallTemplate.html', 'backbone'], function (templateFile) {
     _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
 
     var UpdateCallView = Backbone.View.extend({
