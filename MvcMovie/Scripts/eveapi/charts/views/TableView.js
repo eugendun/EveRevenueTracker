@@ -13,8 +13,7 @@ define([
 ], function (GoogleChartView) {
     var TableView = GoogleChartView.extend({
         createChart: function () {
-            var chart = new google.visualization.Table(this.el);
-            return chart;
+            return new google.visualization.Table(this.el);
         }
     });
     return TableView;

@@ -1,0 +1,28 @@
+﻿<!-- div container for chart controls -->
+<div id="revenueControl" class="chart_control">
+    <!-- station select -->
+    <label for="revenueStationSelector">Station:</label>
+    <select id="revenueStationSelector">
+        <option value="">select...</option>
+    </select>
+    <!-- number select -->
+    <label for="revenueNumberSelector">Number:</label>
+    <input id="revenueNumberSelector" type="text" value="<%= number %>" />
+    <!-- days select -->
+    <label for="revenueDaysSelector">Days:</label>
+    <input id="revenueDaysSelector" type="text" value="<%= days %>" />
+</div>
+<div id="revenueOverview">
+    <fieldset>
+        <legend>Overview</legend>
+        <!-- total revenue -->
+        <label for="revenueTotalRevenue">Total revenue:</label>
+        <div id="revenueTotalRevenue"><%= totalRevenue %></div>
+        <!-- total loss -->
+        <label for="revenueTotalLoss">Total loss:</label>
+        <div id="revenueTotalLoss"><%= totalLoss %></div>
+        <!-- total -->
+        <label for="revenueTotal">Total:</label>
+        <div id="revenueTotal"><%= total %></div>
+    </fieldset>
+</div>

@@ -1,19 +1,25 @@
 ﻿/// <reference path="../../../backbone.js" />
 
 define(['backbone', 'google'], function () {
-    _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
-
     var GoogleChart = Backbone.View.extend({
         tagName: 'div',
-        className: 'chart-wrap',
-        //compiledTemplate: _.template('todo'),
+        className: 'chart',
+
+        events: {
+            'change:dataTable': 'render'
+        },
 
         initialize: function (params) {
-            $(params.element).append(this.$el);
             this.model = params.model;
             this.chart = this.createChart();
+            this.iskFormatter = new google.visualization.TableNumberFormat({
+                decimalSymbol: '.',
+                groupingSymbol: ',',
+                negativeColor: 'red',
+                suffix: ' ISK'
+            });
 
-            this.model.on('change:dataTable', this.render, this);
+            this.listenTo(this.model, 'change:dataTable', this.render);
         },
 
         createChart: function () {

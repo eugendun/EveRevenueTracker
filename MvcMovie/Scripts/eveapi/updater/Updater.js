@@ -1,16 +1,12 @@
 ﻿require.config({
-    baseUrl: 'Scripts/eveapi',
     paths: {
-        collections: 'updater/collections',
-        models: 'updater/models',
-        views: 'updater/views',
         templates: 'updater/templates'
     }
 });
 
 define([
-    'collections/UpdateCallCollection',
-    'views/UpdateCallCollectionView'
+    'updater/collections/UpdateCallCollection',
+    'updater/views/UpdateCallCollectionView'
 ], function (UpdateCallCollection, UpdateCallCollectionView) {
     var Updater = Backbone.Model.extend({
         initialize: function (el) {

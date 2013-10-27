@@ -53,13 +53,24 @@ define(['eveapicall', 'backbone', 'google'], function (EveApiCall) {
         },
 
         success: function (data) {
-            debugger;
-            this.updateDataTable(eval(data));
+            var dataArray;
+
+            try {
+                dataArray = eval(data);
+                if (!_.isArray(dataArray))
+                    throw Error("Response data is not in a array format!");
+            } catch (e) {
+                dataArray = [];
+                console.error(e.toString());
+            }
+
+            this.updateDataTable(dataArray);
         },
 
         // TODO
         fail: function (data) {
             this.updateDataTable([]);
+            console.error("Data load fails!");
         },
 
         updateDataTable: function (data) {

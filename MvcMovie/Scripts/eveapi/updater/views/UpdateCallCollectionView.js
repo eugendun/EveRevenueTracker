@@ -1,4 +1,10 @@
-﻿define(['views/UpdateCallModelView', 'backbone'], function (UpdateCallView) {
+﻿require.config({
+    paths: {
+        UpdateCallModelView: '/Scripts/eveapi/updater/views/UpdateCallModelView'
+    }
+});
+
+define(['UpdateCallModelView', 'backbone'], function (UpdateCallView) {
     var UpdateCallCollectionView = Backbone.View.extend({
         tagName: 'div',
         className: 'updateCallCollection-wrap',

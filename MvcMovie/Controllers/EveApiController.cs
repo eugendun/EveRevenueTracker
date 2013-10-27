@@ -232,6 +232,11 @@ namespace MvcMovie.Controllers
             return Content(rows);
         }
 
+        public ContentResult ServerStatus()
+        {
+            return Content(eveApi.getServerStatus());
+        }
+
         [HttpPost]
         public ActionResult GetBalance(long characterID)
         {

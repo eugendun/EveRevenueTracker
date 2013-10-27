@@ -1,4 +1,10 @@
-﻿define(['models/UpdateCallModel', 'backbone'], function (UpdateCallModel) {
+﻿require.config({
+    paths: {
+        UpdateCallModel: '/Scripts/eveapi/updater/models/UpdateCallModel'
+    }
+});
+
+define(['UpdateCallModel', 'backbone'], function (UpdateCallModel) {
     var UpdateCallCollection = Backbone.Collection.extend({
         model: UpdateCallModel,
 

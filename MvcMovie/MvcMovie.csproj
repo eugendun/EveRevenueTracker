@@ -352,11 +352,15 @@
     <Content Include="Scripts\eveapi\charts\Chart.js" />
     <Content Include="Scripts\eveapi\charts\collections\TableCollection.js" />
     <Content Include="Scripts\eveapi\charts\models\BalanceDashboardModel.js" />
+    <Content Include="Scripts\eveapi\charts\models\RevenueChartModel.js" />
     <Content Include="Scripts\eveapi\charts\models\TableModel.js" />
     <Content Include="Scripts\eveapi\charts\models\WalletChartModel.js" />
     <Content Include="Scripts\eveapi\charts\RevenueChart.js" />
+    <Content Include="Scripts\eveapi\charts\templates\RevenueChartTemplate.html" />
     <Content Include="Scripts\eveapi\charts\views\BalanceDashboardView.js" />
     <Content Include="Scripts\eveapi\charts\views\GoogleChartView.js" />
+    <Content Include="Scripts\eveapi\charts\views\RevenueChartView.js" />
+    <Content Include="Scripts\eveapi\charts\views\TableCollectionView.js" />
     <Content Include="Scripts\eveapi\charts\views\TableView.js" />
     <Content Include="Scripts\eveapi\charts\views\WalletChartView.js" />
     <Content Include="Scripts\eveapi\DataUpdater.js" />

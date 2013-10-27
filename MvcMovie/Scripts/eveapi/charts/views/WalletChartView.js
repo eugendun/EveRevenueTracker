@@ -13,6 +13,7 @@ define(['GoogleChartView', 'backbone'], function (GoogleChartView) {
                 'title': 'Transactions',
                 'legend': { 'position': 'top', 'alignment': 'start' }
             };
+
             GoogleChartView.prototype.initialize.apply(this, [params]);
         },
 
