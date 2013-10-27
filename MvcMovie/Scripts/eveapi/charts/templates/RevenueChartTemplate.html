@@ -4,6 +4,9 @@
     <label for="revenueStationSelector">Station:</label>
     <select id="revenueStationSelector">
         <option value="">select...</option>
+        <% _(stations).each(function(station){ %>
+            <option><%= station.station %></option>
+        <% }); %>
     </select>
     <!-- number select -->
     <label for="revenueNumberSelector">Number:</label>

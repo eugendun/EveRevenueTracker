@@ -61,7 +61,6 @@ define(['eveapicall', 'backbone', 'google'], function (EveApiCall) {
                     throw Error("Response data is not in a array format!");
             } catch (e) {
                 dataArray = [];
-                console.error(e.toString());
             }
 
             this.updateDataTable(dataArray);

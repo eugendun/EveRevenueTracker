@@ -37,17 +37,22 @@ define([
         },
 
         render: function () {
+            GoogleChartView.prototype.render.apply(this);
+            this.renderControls();
+            return this;
+        },
+
+        renderControls: function () {
             var formattedModel = {
                 number: this.model.get('number'),
                 days: this.model.get('days'),
                 totalRevenue: this.iskFormatter.formatValue(this.model.get('totalRevenue')),
                 totalLoss: this.iskFormatter.formatValue(this.model.get('totalLoss')),
-                total: this.iskFormatter.formatValue(this.model.get('total'))
+                total: this.iskFormatter.formatValue(this.model.get('total')),
+                stations: this.model.get('stations')
             };
 
             this.$controlContainer.html(this.compiledTemplate(formattedModel));
-            this.chart.draw(this.model.get('dataTable'), this.chartOptions);
-            return this;
         },
 
         onChangeDays: function (event) {

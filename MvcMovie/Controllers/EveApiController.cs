@@ -106,8 +106,8 @@ namespace MvcMovie.Controllers
             return Content(rows);
         }
 
-        [HttpPost]
-        public ActionResult GetTransactionStations(long characterID)
+        [HttpGet]
+        public JsonResult GetTransactionStations(long characterID)
         {
             // select all station
             // later there should be a the difference between sell stations and buy stations
@@ -116,20 +116,10 @@ namespace MvcMovie.Controllers
                            where s.characterID == characterID
                            select new { station = s.stationName };
 
-            if (stations.Count() <= 0)
-                return Content("");
+            if (stations.Count() > 0)
+                stations = stations.Distinct();
 
-            stations = stations.Distinct();
-
-            string rows = string.Empty;
-            foreach (var row in stations)
-            {
-                rows += rows == string.Empty ? string.Empty : ", ";
-                rows += string.Format("['{0}']", row.station);
-            }
-            rows = string.Format("[{0}]", rows);
-
-            return Content(rows);
+            return Json(stations, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

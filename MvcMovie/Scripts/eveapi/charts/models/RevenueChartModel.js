@@ -17,6 +17,7 @@ define([
         defaults: {
             characterId: undefined,
             station: '',
+            stations: [],
             number: 10,
             days: 14,
             total: 0,
@@ -58,6 +59,13 @@ define([
                     fail: function (data) {
                         that.trigger('fail', data);
                     }
+                });
+
+            $.getJSON(
+                'EveApi/GetTransactionStations',
+                { characterid: this.get('characterId') },
+                function (data, textStatus, jqXHR) {
+                    that.set({ stations: data })
                 });
         },
 
