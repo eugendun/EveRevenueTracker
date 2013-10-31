@@ -3,19 +3,19 @@
 require.config({
     paths: {
         CharacterCollection: '/Scripts/eveapi/character_manager/collections/CharacterCollection',
-        Template: '/Scripts/eveapi/character_manager/templates/select-template.html'
+        SelectTemplate: '/Scripts/eveapi/character_manager/templates/select-template.html'
     }
 });
 
 define([
     'CharacterCollection',
-    'text!Template',
+    'text!SelectTemplate',
     'backbone'
-], function (CharacterCollection, Template) {
+], function (CharacterCollection, SelectTemplate) {
     var SelectView = Backbone.View.extend({
         collection: CharacterCollection,
-        compiled_template: _.template(Template),
-
+        compiled_template: _.template(SelectTemplate),
+        
         events: {
             'change #character-selector': 'onSelect'
         },
