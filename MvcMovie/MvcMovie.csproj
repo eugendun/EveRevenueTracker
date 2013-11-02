@@ -225,6 +225,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\RequireJsExtension.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Migrations\201307111302490_ArticleDBInit.cs" />
     <Compile Include="Migrations\201307111302490_ArticleDBInit.Designer.cs">
@@ -340,32 +341,77 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\backgroundEveScreensgot0.png" />
+    <Content Include="Public\js\config.js" />
+    <Content Include="Public\js\Views\EveApi\charts\collections\TableCollection.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\TableCollectionView.js" />
+    <Content Include="Public\js\Views\EveApi\Index.js" />
+    <Content Include="Public\release\build.txt" />
+    <Content Include="Public\release\config.js" />
+    <Content Include="Public\release\Views\EveApi\character_manager\collections\CharacterCollection.js" />
+    <Content Include="Public\release\Views\EveApi\character_manager\models\CharacterModel.js" />
+    <Content Include="Public\release\Views\EveApi\character_manager\templates\select-template.html" />
+    <Content Include="Public\release\Views\EveApi\character_manager\views\SelectView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\Chart.js" />
+    <Content Include="Public\release\Views\EveApi\charts\collections\ChartCollection.js" />
+    <Content Include="Public\release\Views\EveApi\charts\collections\TableCollection.js" />
+    <Content Include="Public\release\Views\EveApi\charts\models\BalanceDashboardModel.js" />
+    <Content Include="Public\release\Views\EveApi\charts\models\RevenueChartModel.js" />
+    <Content Include="Public\release\Views\EveApi\charts\models\SuggestedTableModel.js" />
+    <Content Include="Public\release\Views\EveApi\charts\models\TableModel.js" />
+    <Content Include="Public\release\Views\EveApi\charts\models\WalletChartModel.js" />
+    <Content Include="Public\release\Views\EveApi\charts\RevenueChart.js" />
+    <Content Include="Public\release\Views\EveApi\charts\templates\RevenueChartTemplate.html" />
+    <Content Include="Public\release\Views\EveApi\charts\views\BalanceDashboardView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\ChartCollectionView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\GoogleChartView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\RevenueChartView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\SuggestedTableView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\TableCollectionView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\TableView.js" />
+    <Content Include="Public\release\Views\EveApi\charts\views\WalletChartView.js" />
+    <Content Include="Public\release\Views\EveApi\Index.js" />
+    <Content Include="Public\release\Views\EveApi\updater\collections\UpdateCallCollection.js" />
+    <Content Include="Public\release\Views\EveApi\updater\EveApiCall.js" />
+    <Content Include="Public\release\Views\EveApi\updater\EveApiCallTest.js" />
+    <Content Include="Public\release\Views\EveApi\updater\models\UpdateCallModel.js" />
+    <Content Include="Public\release\Views\EveApi\updater\templates\UpdateCallTemplate.html" />
+    <Content Include="Public\release\Views\EveApi\updater\Updater.js" />
+    <Content Include="Public\release\Views\EveApi\updater\views\UpdateCallCollectionView.js" />
+    <Content Include="Public\release\Views\EveApi\updater\views\UpdateCallModelView.js" />
+    <Content Include="Public\_build\build.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>build.tt</DependentUpon>
+    </Content>
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
     <Content Include="Scripts\controls\TrackballControls.js" />
-    <Content Include="Scripts\eveapi\build\main-config.js" />
-    <Content Include="Scripts\eveapi\character_manager\collections\CharacterCollection.js" />
-    <Content Include="Scripts\eveapi\character_manager\models\CharacterModel.js" />
-    <Content Include="Scripts\eveapi\character_manager\templates\select-template.html" />
-    <Content Include="Scripts\eveapi\character_manager\views\SelectView.js" />
-    <Content Include="Scripts\eveapi\charts\collections\ChartCollection.js" />
-    <Content Include="Scripts\eveapi\charts\models\BalanceDashboardModel.js" />
-    <Content Include="Scripts\eveapi\charts\models\RevenueChartModel.js" />
-    <Content Include="Scripts\eveapi\charts\models\SuggestedTableModel.js" />
-    <Content Include="Scripts\eveapi\charts\models\TableModel.js" />
-    <Content Include="Scripts\eveapi\charts\models\WalletChartModel.js" />
-    <Content Include="Scripts\eveapi\charts\templates\RevenueChartTemplate.html" />
-    <Content Include="Scripts\eveapi\charts\views\BalanceDashboardView.js" />
-    <Content Include="Scripts\eveapi\charts\views\GoogleChartView.js" />
-    <Content Include="Scripts\eveapi\charts\views\RevenueChartView.js" />
-    <Content Include="Scripts\eveapi\charts\views\ChartCollectionView.js" />
-    <Content Include="Scripts\eveapi\charts\views\SuggestedTableView.js" />
-    <Content Include="Scripts\eveapi\charts\views\TableView.js" />
-    <Content Include="Scripts\eveapi\charts\views\WalletChartView.js" />
+    <Content Include="Public\js\Views\EveApi\character_manager\collections\CharacterCollection.js" />
+    <Content Include="Public\js\Views\EveApi\character_manager\models\CharacterModel.js" />
+    <Content Include="Public\js\Views\EveApi\character_manager\templates\select-template.html" />
+    <Content Include="Public\js\Views\EveApi\character_manager\views\SelectView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\collections\ChartCollection.js" />
+    <Content Include="Public\js\Views\EveApi\charts\models\BalanceDashboardModel.js" />
+    <Content Include="Public\js\Views\EveApi\charts\models\RevenueChartModel.js" />
+    <Content Include="Public\js\Views\EveApi\charts\models\SuggestedTableModel.js" />
+    <Content Include="Public\js\Views\EveApi\charts\models\TableModel.js" />
+    <Content Include="Public\js\Views\EveApi\charts\models\WalletChartModel.js" />
+    <Content Include="Public\js\Views\EveApi\charts\templates\RevenueChartTemplate.html" />
+    <Content Include="Public\js\Views\EveApi\charts\views\BalanceDashboardView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\GoogleChartView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\RevenueChartView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\ChartCollectionView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\SuggestedTableView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\TableView.js" />
+    <Content Include="Public\js\Views\EveApi\charts\views\WalletChartView.js" />
     <Content Include="Scripts\domReady.js" />
-    <Content Include="Scripts\eveapi\google.js" />
-    <Content Include="Scripts\eveapi\build\build.js" />
+    <Content Include="Scripts\helper\google.js" />
     <Content Include="%40JSense.log" />
+    <Content Include="Scripts\backbone.min.map" />
+    <Content Include="Public\_build\build.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>build.js</LastGenOutput>
+    </Content>
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -564,15 +610,14 @@
     <Content Include="Scripts\tinymce\themes\modern\theme.min.js" />
     <Content Include="Scripts\tinymce\tinymce.js" />
     <Content Include="Scripts\tinymce\tinymce.min.js" />
-    <Content Include="Scripts\eveapi\updater\collections\UpdateCallCollection.js" />
-    <Content Include="Scripts\eveapi\updater\EveApiCallTest.js" />
-    <Content Include="Scripts\eveapi\updater\EveApiCall.js" />
-    <Content Include="Scripts\eveapi\updater\models\UpdateCallModel.js" />
-    <Content Include="Scripts\eveapi\updater\templates\UpdateCallTemplate.html" />
-    <Content Include="Scripts\eveapi\todoMain.js" />
-    <Content Include="Scripts\eveapi\updater\Updater.js" />
-    <Content Include="Scripts\eveapi\updater\views\UpdateCallCollectionView.js" />
-    <Content Include="Scripts\eveapi\updater\views\UpdateCallModelView.js" />
+    <Content Include="Public\js\Views\EveApi\updater\collections\UpdateCallCollection.js" />
+    <Content Include="Public\js\Views\EveApi\updater\EveApiCallTest.js" />
+    <Content Include="Public\js\Views\EveApi\updater\EveApiCall.js" />
+    <Content Include="Public\js\Views\EveApi\updater\models\UpdateCallModel.js" />
+    <Content Include="Public\js\Views\EveApi\updater\templates\UpdateCallTemplate.html" />
+    <Content Include="Public\js\Views\EveApi\updater\Updater.js" />
+    <Content Include="Public\js\Views\EveApi\updater\views\UpdateCallCollectionView.js" />
+    <Content Include="Public\js\Views\EveApi\updater\views\UpdateCallModelView.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\utils\eutils.js" />
@@ -662,6 +707,9 @@
       <DependentUpon>201309211401388_EveApiItemTypeModelAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -699,7 +747,8 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>
+  </Target>-->
   <Target Name="AfterBuild">
-  </Target> -->
+    <Exec Command="node &quot;$(ProjectDir)\Scripts\r.js&quot; -o &quot;$(ProjectDir)\Public\_build\build.js&quot;" />
+  </Target>
 </Project>
