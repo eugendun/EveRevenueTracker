@@ -69,18 +69,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.1.13153\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.1.3\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.Owin.1.1.3\lib\net45\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.1.1.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -90,9 +78,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Data.OData.5.6.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.1.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
@@ -100,15 +85,9 @@
     <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.30506.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="MvcFileUploader">
-      <HintPath>..\packages\MvcFileUploader.1.3.2\lib\40\MvcFileUploader.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -212,25 +191,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ArticleController.cs" />
-    <Compile Include="Controllers\CharacterController.cs" />
     <Compile Include="Controllers\EveApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ModelViewerController.cs" />
-    <Compile Include="Controllers\MvcUploaderTestController.cs" />
-    <Compile Include="Controllers\ReactionTestController.cs" />
-    <Compile Include="Controllers\SocialGameController.cs" />
     <Compile Include="Controllers\EveApi.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\RequireJsExtension.cs" />
-    <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Migrations\201307111302490_ArticleDBInit.cs" />
-    <Compile Include="Migrations\201307111302490_ArticleDBInit.Designer.cs">
-      <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201307211933585_EveApiInit.cs" />
     <Compile Include="Migrations\201307211933585_EveApiInit.Designer.cs">
       <DependentUpon>201307211933585_EveApiInit.cs</DependentUpon>
@@ -243,38 +211,13 @@
     <Compile Include="Migrations\201309211401388_EveApiItemTypeModelAdded.Designer.cs">
       <DependentUpon>201309211401388_EveApiItemTypeModelAdded.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\ArticleDBContextConfiguration.cs" />
     <Compile Include="Migrations\EveApiContextConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\ArticleModel.cs" />
-    <Compile Include="Models\DataTimeFormat.cs" />
     <Compile Include="Models\EveApiModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\images\Profilfoto.JPG" />
-    <Content Include="Content\mvcfileupload\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\mvcfileupload\images\glyphicons-halflings.png" />
-    <Content Include="Content\mvcfileupload\images\loading.gif" />
-    <Content Include="Content\mvcfileupload\images\progressbar.gif" />
-    <Content Include="Content\mvcfileupload\jquery.fileupload-bui.css" />
-    <Content Include="Content\mvcfileupload\jquery.fileupload-jui.css" />
-    <Content Include="Content\mvcfileupload\vendor\bootstrap.min.css" />
-    <Content Include="Content\mvcfileupload\vendor\images\animated-overlay.gif" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\mvcfileupload\vendor\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\mvcfileupload\vendor\jquery-ui.min.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -337,7 +280,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Content\uploads\readme.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\backgroundEveScreensgot0.png" />
@@ -417,8 +359,6 @@
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
-    <Content Include="Scripts\jquery.signalR-1.1.3.js" />
-    <Content Include="Scripts\jquery.signalR-1.1.3.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
@@ -434,14 +374,6 @@
     <Content Include="Scripts\mvcfileupload\modelViewer\chat.js" />
     <Content Include="Scripts\mvcfileupload\modelViewer\modelViewer.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\mvcfileupload\jquery.fileupload-jui.js" />
-    <Content Include="Scripts\mvcfileupload\jquery.fileupload-ui.js" />
-    <Content Include="Scripts\mvcfileupload\mvcfileupload.js" />
-    <Content Include="Scripts\mvcfileupload\tmpl.min.js" />
-    <Content Include="Scripts\mvcfileupload\vendor\bootstrap.min.js" />
-    <Content Include="Scripts\mvcfileupload\vendor\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\mvcfileupload\vendor\jquery-ui-1.10.2.js" />
-    <Content Include="Scripts\mvcfileupload\vendor\jquery.ui.widget.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\requirejs-plugin\async.js" />
@@ -661,23 +593,11 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\ModelViewer\Index.cshtml" />
-    <Content Include="Views\Home\Chat.cshtml" />
-    <Content Include="Views\Article\Index.cshtml" />
-    <Content Include="Unity\Web.unity3d" />
-    <Content Include="Views\SocialGame\Index.cshtml" />
-    <Content Include="Views\ReactionTest\Index.cshtml" />
     <Content Include="Views\EveApi\IndexApiKey.cshtml" />
-    <Content Include="Views\Character\Details.cshtml" />
-    <Content Include="Views\Character\Delete.cshtml" />
     <Content Include="Views\EveApi\Create.cshtml" />
     <Content Include="Views\EveApi\Index.cshtml" />
     <Content Include="Views\EveApi\SelectCharacter.cshtml" />
     <Content Include="Views\EveApi\Stats.cshtml" />
-    <Content Include="Views\Shared\_MvcFileUploaderLayout_jui.cshtml" />
-    <Content Include="Views\Shared\_MvcFileUploaderLayout.cshtml" />
-    <Content Include="Views\Shared\_MvcFileUpload.cshtml" />
-    <Content Include="Views\MvcUploaderTest\Demo.cshtml" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\readme.md" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon-small.woff" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon-small.ttf" />
@@ -694,9 +614,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201307111302490_ArticleDBInit.resx">
-      <DependentUpon>201307111302490_ArticleDBInit.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201307211933585_EveApiInit.resx">
       <DependentUpon>201307211933585_EveApiInit.cs</DependentUpon>
     </EmbeddedResource>

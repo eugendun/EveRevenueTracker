@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.SignalR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,13 +17,6 @@ namespace MvcMovie
     {
         protected void Application_Start()
         {
-            // Hub configuration
-            var hubConfiguration = new HubConfiguration();
-            hubConfiguration.EnableCrossDomain = false;
-            hubConfiguration.EnableDetailedErrors = true;
-            hubConfiguration.EnableJavaScriptProxies = true;
-            RouteTable.Routes.MapHubs("/signalr", hubConfiguration);
-
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
