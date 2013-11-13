@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Linq;
 using System.Data.Objects;
 using System.Globalization;
 using System.Linq;
@@ -318,6 +317,11 @@ namespace MvcMovie.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Updates market orders of a user. To be consistent all records hast to be deleted from the database, then
+        /// all records returned by the call to the CCP Api will be saved in the database.
+        /// </summary>
+        /// <param name="characterID"></param>
         [HttpPost]
         public void UpdateMarketOrders(long characterID)
         {
@@ -325,15 +329,9 @@ namespace MvcMovie.Controllers
             if (user == null)
                 throw new Exception("User not found in the database!");
 
-            var characters = from c in db.Characters
-                             where c.userID == user.userID
-                             where c.characterID == characterID
-                             select c;
-
-            if (characters.Count() <= 0)
+            Character character = db.Characters.Find(characterID);
+            if (character == null)
                 throw new Exception("Character not found in the database!");
-
-            Character character = characters.First();
 
             string marketOrdersXmlData = eveApi.getMarketOrders(user.keyID.ToString(), user.vCode, characterID.ToString());
             XDocument marketOrdersXDocument = XDocument.Parse(marketOrdersXmlData);
@@ -347,8 +345,6 @@ namespace MvcMovie.Controllers
                 db.MarketOrders.Remove(order);
             }
 
-
-            
             List<string> itemTypeIDs = new List<string>();
             foreach (XElement row in marketOrdersXDocument.Descendants("row"))
             {
@@ -361,26 +357,35 @@ namespace MvcMovie.Controllers
                 }
             }
 
-            string itemTypesXmlData = eveApi.getTypes(itemTypeIDs);
-            XDocument itemTypesXDocument = XDocument.Parse(itemTypesXmlData);
-            foreach (XElement row in itemTypesXDocument.Descendants("row"))
+            // Get type names of new items if the item list is not empty
+            // and store them into the database.
+            if (itemTypeIDs.Count() > 0)
             {
-                long itemTypeID = XmlConvert.ToInt64(row.Attribute("typeID").Value);
-                string itemTypeName = row.Attribute("typeName").Value;
-                ItemType itemType = db.ItemTypes.Find(itemTypeID);
-                if (itemType == null)
+                // Get all types given by ids in an XML document.
+                XDocument itemTypesXDocument = XDocument.Parse(eveApi.getTypes(itemTypeIDs));
+                foreach (XElement row in itemTypesXDocument.Descendants("row"))
                 {
-                    itemType = new ItemType();
-                    itemType.typeID = itemTypeID;
-                    db.ItemTypes.Add(itemType);
-                }
+                    long itemTypeID = XmlConvert.ToInt64(row.Attribute("typeID").Value);
+                    string itemTypeName = row.Attribute("typeName").Value;
+                    
+                    // If item is not in the database, create new one and store it.
+                    ItemType itemType = db.ItemTypes.Find(itemTypeID);
+                    if (itemType == null)
+                    {
+                        itemType = new ItemType();
+                        itemType.typeID = itemTypeID;
+                        db.ItemTypes.Add(itemType);
+                    }
 
-                if (itemType.typeName != itemTypeName)
-                {
-                    itemType.typeName = itemTypeName;
+                    // If item is already in the database and it's type name is changed
+                    // change the type name of the item.
+                    if (itemType.typeName != itemTypeName)
+                    {
+                        itemType.typeName = itemTypeName;
+                    }
                 }
+                db.SaveChanges(); 
             }
-            db.SaveChanges();
         }
 
         [HttpPost]
