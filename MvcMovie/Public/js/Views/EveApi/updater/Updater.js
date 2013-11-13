@@ -8,6 +8,10 @@ define([
         initialize: function (el) {
             this.upCalls = new UpdateCallCollection();
             this.upCallsView = new UpdateCallCollectionView({ element: el, collection: this.upCalls });
+
+            this.upCalls.add({ name: 'Wallet Transactions', url: '/EveApi/UpdateWalletTransactions' });
+            this.upCalls.add({ name: 'Market Orders', url: '/EveApi/UpdateMarketOrders' });
+            this.upCalls.add({ name: 'Wallet Journal', url: '/EveApi/UpdateWalletJournal' });
         },
 
         getUpdateCalls: function () {

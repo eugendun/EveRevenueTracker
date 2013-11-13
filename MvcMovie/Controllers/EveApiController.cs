@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
 using System.Data.Objects;
 using System.Globalization;
 using System.Linq;
@@ -25,31 +26,23 @@ namespace MvcMovie.Controllers
 
         public ActionResult Index()
         {
+            var characters = from c in db.Characters
+                             where c.userID == WebSecurity.CurrentUserId
+                             select c;
+
+            if (characters.Count() == 0)
+                return RedirectToAction("Create");
+
             return View();
         }
 
         public JsonResult GetCharacters()
         {
-            var curUserId = WebSecurity.CurrentUserId;
-
             var characters = from c in db.Characters
                              where c.userID == WebSecurity.CurrentUserId
                              select new { c.characterID, c.characterName };
 
             return Json(characters, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult SelectCharacter()
-        {
-            User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
-                return RedirectToAction("Create");
-
-            var characters = from m in db.Characters
-                             where m.userID == user.userID
-                             select m;
-
-            return PartialView(characters);
         }
 
         public ActionResult Create()
@@ -354,6 +347,8 @@ namespace MvcMovie.Controllers
                 db.MarketOrders.Remove(order);
             }
 
+
+            
             List<string> itemTypeIDs = new List<string>();
             foreach (XElement row in marketOrdersXDocument.Descendants("row"))
             {
@@ -481,39 +476,6 @@ namespace MvcMovie.Controllers
                 }
             }
             db.SaveChanges();
-        }
-
-        [HttpPost]
-        public ActionResult GetStats(long characterID)
-        {
-            User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
-                RedirectToAction("Create");
-
-            var transactions = from t in db.WalletTransactions
-                               where t.characterID == characterID
-                               select t;
-
-            var journalEntries = from j in db.WalletJournal
-                                 where j.characterID == characterID
-                                 select j;
-
-            if (transactions.Count() > 0)
-            {
-                ViewBag.amountOfTransactions = transactions.Count();
-                ViewBag.oldestTransaction = transactions.Min(t => t.transactionDateTime);
-                ViewBag.lastTransaction = transactions.Max(t => t.transactionDateTime);
-            }
-
-            if (journalEntries.Count() > 0)
-            {
-                ViewBag.amountOfJournalEntries = journalEntries.Count();
-                ViewBag.oldestJournalEntry = journalEntries.Min(j => j.date);
-                ViewBag.lastJournalEntry = journalEntries.Max(j => j.date);
-
-            }
-
-            return PartialView("Stats");
         }
 
         public ActionResult ErrorList()

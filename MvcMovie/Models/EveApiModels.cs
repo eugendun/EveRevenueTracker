@@ -11,6 +11,32 @@ using System.Xml.Linq;
 
 namespace MvcMovie.Models
 {
+    public class EveApiContext : DbContext
+    {
+        public EveApiContext()
+            : base("EveApiConnection")
+        {
+        }
+
+        public DbSet<Character> Characters { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Error> Errors { get; set; }
+        public DbSet<RefType> RefTypes { get; set; }
+        public DbSet<WalletJournalEntry> WalletJournal { get; set; }
+        public DbSet<WalletTransactionEntry> WalletTransactions { get; set; }
+        public DbSet<MarketOrder> MarketOrders { get; set; }
+        public DbSet<ItemType> ItemTypes { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //modelBuilder.Entity<WalletTransactionEntry>()
+            //    .HasRequired(p => p.WalletJournalEntry)
+            //    .WithMany()
+            //    .HasForeignKey(u => u.journalTransactionID).WillCascadeOnDelete(false);
+        }
+    }
+
     public class User
     {
         [Key]
@@ -218,26 +244,5 @@ namespace MvcMovie.Models
         public long errorCode { get; set; }
 
         public string errorText { get; set; }
-    }
-
-    public class EveApiContext : DbContext
-    {
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Error> Errors { get; set; }
-        public DbSet<RefType> RefTypes { get; set; }
-        public DbSet<WalletJournalEntry> WalletJournal { get; set; }
-        public DbSet<WalletTransactionEntry> WalletTransactions { get; set; }
-        public DbSet<MarketOrder> MarketOrders { get; set; }
-        public DbSet<ItemType> ItemTypes { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            //modelBuilder.Entity<WalletTransactionEntry>()
-            //    .HasRequired(p => p.WalletJournalEntry)
-            //    .WithMany()
-            //    .HasForeignKey(u => u.journalTransactionID).WillCascadeOnDelete(false);
-        }
     }
 }

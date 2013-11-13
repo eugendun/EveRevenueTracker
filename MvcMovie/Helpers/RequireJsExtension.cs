@@ -18,6 +18,9 @@ namespace MvcMovie.Helpers
             string virtFilePath = Path.Combine(jsLocation, module + ".js");
             string filePath = helper.ViewContext.HttpContext.Server.MapPath(virtFilePath);
 
+            if (!File.Exists(filePath))
+                return new MvcHtmlString(string.Empty);
+
             var builder = new StringBuilder();
             if (File.Exists(filePath))
             {
@@ -27,7 +30,7 @@ namespace MvcMovie.Helpers
             }
 
             var scriptRequireJsTag = new TagBuilder("script");
-            scriptRequireJsTag.MergeAttributes(new RouteValueDictionary(new { type = "text/javascript", src = "Scripts/require.js" }));
+            scriptRequireJsTag.MergeAttributes(new RouteValueDictionary(new { type = "text/javascript", src = "/Scripts/require.js" }));
 
             var scriptConfigTag = new TagBuilder("script");
             scriptConfigTag.MergeAttributes(new RouteValueDictionary(new { type = "text/javascript" }));

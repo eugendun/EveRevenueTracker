@@ -40,6 +40,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>false</IncludeIisSettings>
+    <PublishDatabaseSettings>&lt;Objects xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;&lt;ObjectGroup Name="UsersConnection-Deployment" Order="1"&gt;&lt;Destination Path="Data Source=&amp;quot%3b81.169.178.229\SQLEXPRESS, 14330&amp;quot%3b%3bPersist Security Info=True%3bUser ID=Eugen%3bPassword=a0030&amp;lt%3b00164.4" /&gt;&lt;Object Type="DbFullSql"&gt;&lt;PreSource Path="Data Source=%28LocalDb%29\v11.0%3bInitial Catalog=Users%3bIntegrated Security=True%3bMultipleActiveResultSets=True" ScriptSchema="True" ScriptData="True" CopyAllFullTextCatalogs="False" DriDefaults="True" /&gt;&lt;Source Path="obj\Release\AutoScripts\UsersConnection-Deployment_SchemaAndData.sql" Transacted="True" /&gt;&lt;/Object&gt;&lt;/ObjectGroup&gt;&lt;ObjectGroup Name="EveApiConnection-Deployment" Order="2"&gt;&lt;Destination Path="Data Source=&amp;quot%3b81.169.178.229\SQLEXPRESS, 14330&amp;quot%3b%3bPersist Security Info=True%3bUser ID=Eugen%3bPassword=a0030&amp;lt%3b00164.4" /&gt;&lt;Object Type="DbFullSql"&gt;&lt;PreSource Path="Data Source=%28LocalDb%29\v11.0%3bInitial Catalog=EveApi%3bIntegrated Security=True" ScriptSchema="True" ScriptData="True" CopyAllFullTextCatalogs="False" DriDefaults="True" /&gt;&lt;Source Path="obj\Release\AutoScripts\EveApiConnection-Deployment_SchemaAndData.sql" Transacted="True" /&gt;&lt;/Object&gt;&lt;/ObjectGroup&gt;&lt;/Objects&gt;</PublishDatabaseSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">
@@ -92,6 +94,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.15\lib\net45\System.Net.Http.Extensions.dll</HintPath>
@@ -283,6 +286,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\backgroundEveScreensgot0.png" />
+    <Content Include="Properties\PublishProfiles\Default Settings.pubxml.user" />
     <Content Include="Public\js\config.js" />
     <Content Include="Public\js\Views\EveApi\charts\collections\TableCollection.js" />
     <Content Include="Public\js\Views\EveApi\charts\views\TableCollectionView.js" />
@@ -293,7 +297,6 @@
     <Content Include="Public\release\Views\EveApi\character_manager\models\CharacterModel.js" />
     <Content Include="Public\release\Views\EveApi\character_manager\templates\select-template.html" />
     <Content Include="Public\release\Views\EveApi\character_manager\views\SelectView.js" />
-    <Content Include="Public\release\Views\EveApi\charts\Chart.js" />
     <Content Include="Public\release\Views\EveApi\charts\collections\ChartCollection.js" />
     <Content Include="Public\release\Views\EveApi\charts\collections\TableCollection.js" />
     <Content Include="Public\release\Views\EveApi\charts\models\BalanceDashboardModel.js" />
@@ -301,7 +304,6 @@
     <Content Include="Public\release\Views\EveApi\charts\models\SuggestedTableModel.js" />
     <Content Include="Public\release\Views\EveApi\charts\models\TableModel.js" />
     <Content Include="Public\release\Views\EveApi\charts\models\WalletChartModel.js" />
-    <Content Include="Public\release\Views\EveApi\charts\RevenueChart.js" />
     <Content Include="Public\release\Views\EveApi\charts\templates\RevenueChartTemplate.html" />
     <Content Include="Public\release\Views\EveApi\charts\views\BalanceDashboardView.js" />
     <Content Include="Public\release\Views\EveApi\charts\views\ChartCollectionView.js" />
@@ -354,6 +356,8 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>build.js</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -593,11 +597,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\EveApi\IndexApiKey.cshtml" />
     <Content Include="Views\EveApi\Create.cshtml" />
     <Content Include="Views\EveApi\Index.cshtml" />
-    <Content Include="Views\EveApi\SelectCharacter.cshtml" />
-    <Content Include="Views\EveApi\Stats.cshtml" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\readme.md" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon-small.woff" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\icomoon-small.ttf" />
