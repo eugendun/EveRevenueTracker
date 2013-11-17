@@ -29,7 +29,7 @@ namespace MvcMovie.Controllers
                              where c.userID == WebSecurity.CurrentUserId
                              select c;
 
-            if (characters.Count() == 0)
+            if(characters.Count() == 0)
                 return RedirectToAction("Create");
 
             return View();
@@ -53,8 +53,7 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(User user)
         {
-            if (ModelState.IsValid)
-            {
+            if(ModelState.IsValid) {
                 db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -78,7 +77,7 @@ namespace MvcMovie.Controllers
                                orderby t.transactionDateTime descending
                                select new { t.price, t.typeName };
 
-            if (transactions.Count() == 0)
+            if(transactions.Count() == 0)
                 return Content("");
 
             transactions = transactions.Take(10);
@@ -86,8 +85,7 @@ namespace MvcMovie.Controllers
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
             string rows = string.Empty;
-            foreach (var t in transactions)
-            {
+            foreach(var t in transactions) {
                 rows += rows == string.Empty ? string.Empty : ", ";
                 rows += string.Format("[\"{0}\", {1}]",
                     t.typeName,
@@ -108,7 +106,7 @@ namespace MvcMovie.Controllers
                            where s.characterID == characterID
                            select new { station = s.stationName };
 
-            if (stations.Count() > 0)
+            if(stations.Count() > 0)
                 stations = stations.Distinct();
 
             return Json(stations, JsonRequestBehavior.AllowGet);
@@ -121,8 +119,7 @@ namespace MvcMovie.Controllers
                                where t.characterID == characterID
                                select t;
 
-            if (transactions.Count() <= 0)
-            {
+            if(transactions.Count() <= 0) {
                 return Content("");
             }
 
@@ -154,8 +151,7 @@ namespace MvcMovie.Controllers
             string rows = string.Empty;
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            foreach (var row in revenue.Take(number == 0 ? 20 : number))
-            {
+            foreach(var row in revenue.Take(number == 0 ? 20 : number)) {
                 rows += string.Format("{0}[\"{1}\", {2}]",
                     rows == string.Empty ? string.Empty : ", ",
                     row.typeName, row.revenue.ToString(nfi));
@@ -202,8 +198,7 @@ namespace MvcMovie.Controllers
             string rows = string.Empty;
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            foreach (var item in profitItemsNotInOrder)
-            {
+            foreach(var item in profitItemsNotInOrder) {
                 rows += string.Format("{0}[\"{1}\", {2}]",
                     rows == string.Empty ? string.Empty : ", ",
                     item.typeName,
@@ -223,7 +218,7 @@ namespace MvcMovie.Controllers
         public ActionResult GetBalance(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
+            if(user == null)
                 throw new Exception("User not found in the database!");
 
             var balanceEntries = from j in db.WalletJournal
@@ -256,8 +251,7 @@ namespace MvcMovie.Controllers
             string rows = string.Empty;
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
-            foreach (var entry in joinedEntries)
-            {
+            foreach(var entry in joinedEntries) {
                 string dateString = entry.date.HasValue ? entry.date.ToString() : string.Empty;
                 rows += string.Format("{0}['{1}', {2}, {3}, {4}]",
                     rows == string.Empty ? string.Empty : ", ",     // first row should not contains ','
@@ -281,29 +275,24 @@ namespace MvcMovie.Controllers
         public ActionResult UpdateCharacters()
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
+            if(user == null)
                 return RedirectToAction("Create");
 
             string charactersXmlData = eveApi.getCharacters(user.keyID.ToString(), user.vCode);
             XDocument doc = XDocument.Parse(charactersXmlData);
-            foreach (XElement row in doc.Descendants("row"))
-            {
+            foreach(XElement row in doc.Descendants("row")) {
                 long characterID = Convert.ToInt64(row.Attribute("characterID").Value);
                 string characterName = row.Attribute("name").Value;
                 long corporationID = Convert.ToInt64(row.Attribute("corporationID").Value);
                 string corporationName = row.Attribute("corporationName").Value;
 
                 Character character = db.Characters.Find(characterID);
-                if (character != null)
-                {
+                if(character != null) {
                     character.characterName = characterName;
                     character.corparationID = corporationID;
                     character.corparationName = corporationName;
-                }
-                else
-                {
-                    db.Characters.Add(new Character
-                    {
+                } else {
+                    db.Characters.Add(new Character {
                         characterID = characterID,
                         characterName = characterName,
                         corparationID = corporationID,
@@ -318,19 +307,20 @@ namespace MvcMovie.Controllers
         }
 
         /// <summary>
-        /// Updates market orders of a user. To be consistent all records hast to be deleted from the database, then
+        /// Updates market orders for a character given by id. 
+        /// To be consistent all records hast to be deleted from the database, then
         /// all records returned by the call to the CCP Api will be saved in the database.
         /// </summary>
-        /// <param name="characterID"></param>
+        /// <param name="characterID">character id</param>
         [HttpPost]
         public void UpdateMarketOrders(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
+            if(user == null)
                 throw new Exception("User not found in the database!");
 
             Character character = db.Characters.Find(characterID);
-            if (character == null)
+            if(character == null)
                 throw new Exception("Character not found in the database!");
 
             string marketOrdersXmlData = eveApi.getMarketOrders(user.keyID.ToString(), user.vCode, characterID.ToString());
@@ -340,38 +330,33 @@ namespace MvcMovie.Controllers
             var oldMarketOrders = from m in db.MarketOrders
                                   where m.character.characterID == character.characterID
                                   select m;
-            foreach (MarketOrder order in oldMarketOrders)
-            {
+            foreach(MarketOrder order in oldMarketOrders) {
                 db.MarketOrders.Remove(order);
             }
 
+            // Extract items from the xml document.
             List<string> itemTypeIDs = new List<string>();
-            foreach (XElement row in marketOrdersXDocument.Descendants("row"))
-            {
+            foreach(XElement row in marketOrdersXDocument.Descendants("row")) {
                 MarketOrder order = MarketOrder.createFromXMLNode(character, row);
                 db.MarketOrders.Add(order);
                 string itemTypeID = order.typeID.ToString();
-                if (!itemTypeIDs.Contains(itemTypeID))
-                {
+                if(!itemTypeIDs.Contains(itemTypeID)) {
                     itemTypeIDs.Add(itemTypeID);
                 }
             }
 
             // Get type names of new items if the item list is not empty
             // and store them into the database.
-            if (itemTypeIDs.Count() > 0)
-            {
+            if(itemTypeIDs.Count() > 0) {
                 // Get all types given by ids in an XML document.
                 XDocument itemTypesXDocument = XDocument.Parse(eveApi.getTypes(itemTypeIDs));
-                foreach (XElement row in itemTypesXDocument.Descendants("row"))
-                {
+                foreach(XElement row in itemTypesXDocument.Descendants("row")) {
                     long itemTypeID = XmlConvert.ToInt64(row.Attribute("typeID").Value);
                     string itemTypeName = row.Attribute("typeName").Value;
-                    
+
                     // If item is not in the database, create new one and store it.
                     ItemType itemType = db.ItemTypes.Find(itemTypeID);
-                    if (itemType == null)
-                    {
+                    if(itemType == null) {
                         itemType = new ItemType();
                         itemType.typeID = itemTypeID;
                         db.ItemTypes.Add(itemType);
@@ -379,56 +364,61 @@ namespace MvcMovie.Controllers
 
                     // If item is already in the database and it's type name is changed
                     // change the type name of the item.
-                    if (itemType.typeName != itemTypeName)
-                    {
+                    if(itemType.typeName != itemTypeName) {
                         itemType.typeName = itemTypeName;
                     }
                 }
-                db.SaveChanges(); 
+                db.SaveChanges();
             }
         }
 
+        /// <summary>
+        /// Update the wallet journal entries for a character given by id.
+        /// </summary>
+        /// <param name="characterID">character id</param>
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public void UpdateWalletJournal(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
+            if(user == null)
                 throw new Exception("User not found in the database!");
 
             Character character = db.Characters.Find(characterID);
-            if (character == null)
+            if(character == null)
                 throw new Exception("Character not found in the database!");
 
             string fromID = "";
-            string rowCount = "200";
+            string rowCount = "2560";
 
             bool repeat = true;
-            while (repeat)
-            {
+            while(repeat) {
                 string eveResponseXmlData = eveApi.getWalletJournal(user.keyID.ToString(), user.vCode, characterID.ToString(), fromID, rowCount);
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
 
                 ProcessResponseWalletJournal(character, doc);
 
                 repeat = doc.Descendants("row").Count() == Convert.ToInt32(rowCount);
-                if (repeat)
-                {
+                if(repeat) {
                     fromID = Convert.ToString((from t in doc.Descendants("row")
                                                select Convert.ToInt64(t.Attribute("refID").Value)).Min());
                 }
             }
         }
 
+        /// <summary>
+        /// Iterate through the response xml data, extract information from each rows and 
+        /// store the result data to the database.
+        /// </summary>
+        /// <param name="character">Character instance</param>
+        /// <param name="response">response as XDocument</param>
         private void ProcessResponseWalletJournal(Character character, XDocument response)
         {
-            foreach (XElement row in response.Descendants("row"))
-            {
+            foreach(XElement row in response.Descendants("row")) {
                 long refID = XmlConvert.ToInt64(row.Attribute("refID").Value);
 
                 WalletJournalEntry entry = db.WalletJournal.Find(refID);
-                if (entry == null)
-                {
+                if(entry == null) {
                     entry = WalletJournalEntry.createFromXmlNode(character, row);
                     db.WalletJournal.Add(entry);
                 }
@@ -441,27 +431,25 @@ namespace MvcMovie.Controllers
         public void UpdateWalletTransactions(long characterID)
         {
             User user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user == null)
+            if(user == null)
                 throw new Exception("User not found in the database!");
 
             Character character = db.Characters.Find(characterID);
-            if (character == null)
+            if(character == null)
                 throw new Exception("Character not found in the database!");
 
             string fromID = "";         // begin from today on
             string rowCount = "200";    // default row count
 
             bool repeat = true;
-            while (repeat)
-            {
+            while(repeat) {
                 string eveResponseXmlData = eveApi.getWalletTransactions(user.keyID.ToString(), user.vCode, characterID.ToString(), fromID, rowCount);
                 XDocument doc = XDocument.Parse(eveResponseXmlData);
 
                 ProcessResponseWalletTransactions(character, doc);
 
                 repeat = doc.Descendants("row").Count() == Convert.ToInt32(rowCount);
-                if (repeat)
-                {
+                if(repeat) {
                     fromID = Convert.ToString((from t in doc.Descendants("row")
                                                select Convert.ToInt64(t.Attribute("transactionID").Value)).Min());
                 }
@@ -470,12 +458,10 @@ namespace MvcMovie.Controllers
 
         private void ProcessResponseWalletTransactions(Character character, XDocument response)
         {
-            foreach (XElement row in response.Descendants("row"))
-            {
+            foreach(XElement row in response.Descendants("row")) {
                 long transactionID = Convert.ToInt64(row.Attribute("transactionID").Value);
                 WalletTransactionEntry entry = db.WalletTransactions.Find(transactionID);
-                if (entry == null)
-                {
+                if(entry == null) {
                     entry = WalletTransactionEntry.createFromXMLNode(character, row);
                     db.WalletTransactions.Add(entry);
                 }
@@ -487,12 +473,11 @@ namespace MvcMovie.Controllers
         {
             string errorListXml = eveApi.getErrorList();
             XDocument doc = XDocument.Parse(errorListXml);
-            foreach (XElement row in doc.Descendants("row"))
-            {
+            foreach(XElement row in doc.Descendants("row")) {
                 int errorCode = Convert.ToInt32(row.Attribute("errorCode").Value);
                 string errorText = row.Attribute("errorText").Value;
                 Error error = db.Errors.Find(errorCode);
-                if (error != null)
+                if(error != null)
                     error.errorText = errorText;
                 else
                     db.Errors.Add(new Error { errorCode = errorCode, errorText = errorText });
