@@ -5,6 +5,7 @@ define([
     'text!EveApi/charts/templates/RevenueChartTemplate.html'
 ], function (GoogleChartView, RevenueChartTemplate) {
     var RevenueChartView = GoogleChartView.extend({
+        chartName: 'Revenue Overview',
         compiledTemplate: _.template(RevenueChartTemplate),
 
         events: {
@@ -14,10 +15,12 @@ define([
         },
 
         initialize: function (params) {
+            // tag container for chart
             this.chartContainer = document.createElement('div');
             this.chartContainer.id = 'revenueChart';
             this.$el.append(this.chartContainer);
 
+            // tag container for control elements
             this.$controlContainer = $('<div>');
             this.$el.append(this.$controlContainer);
 
@@ -29,12 +32,16 @@ define([
         },
 
         render: function () {
-            GoogleChartView.prototype.render.apply(this);
+            var dataTable = this.model.get('dataTable');
+            this.iskFormatter.format(dataTable, 1);
+
             this.renderControls();
-            return this;
+
+            return GoogleChartView.prototype.render.apply(this);
         },
 
         renderControls: function () {
+            // format all control information and put them together in an object
             var formattedModel = {
                 number: this.model.get('number'),
                 days: this.model.get('days'),
@@ -44,6 +51,7 @@ define([
                 stations: this.model.get('stations')
             };
 
+            // render control elements using the template
             this.$controlContainer.html(this.compiledTemplate(formattedModel));
         },
 

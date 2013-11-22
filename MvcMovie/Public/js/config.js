@@ -4,6 +4,7 @@ require.config({
     baseUrl: '/Public/js',
     paths: {
         jquery: '../../Scripts/jquery-2.0.3',
+        jqueryui: '../../Scripts/jquery-ui-1.10.3',
         underscore: '../../Scripts/underscore',
         backbone: '../../Scripts/backbone',
         text: '../../Scripts/text',

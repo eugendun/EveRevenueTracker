@@ -3,7 +3,7 @@
 define([
     'EveApi/charts/models/TableModel'
 ], function (TableModel) {
-    var TableCollection = Backbone.Collection.extend({
+    var ChartCollection = Backbone.Collection.extend({
         model: TableModel,
 
         update: function (charId) {
@@ -13,5 +13,5 @@ define([
         }
     });
 
-    return TableCollection;
+    return ChartCollection;
 });

@@ -22,7 +22,7 @@ define([
             this.set({ dataTable: this.getNewDataTable() }, { silent: true });
 
             if (!_.isUndefined(params.data) && !_.isEmpty(params.data)) {
-                this.setData(data);
+                this.setData(params.data);
             }
 
             this.on('success', this.success);

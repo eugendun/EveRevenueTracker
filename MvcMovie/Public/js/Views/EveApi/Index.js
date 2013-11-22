@@ -3,11 +3,11 @@
 require([
     'EveApi/character_manager/collections/CharacterCollection',
     'EveApi/character_manager/views/SelectView',
-    'EveApi/charts/views/TableCollectionView',
+    'EveApi/charts/views/ChartCollectionView',
     'EveApi/updater/Updater',
     'jquery',
     'domReady'
-], function (CharacterCollection, SelectView, TableCollectionView, Updater, $, domReady) {
+], function (CharacterCollection, SelectView, ChartCollectionView, Updater, $, domReady) {
     domReady(function () {
         // get html container for charts
         var $chartsContainer = $('#charts_container');
@@ -16,11 +16,11 @@ require([
         var characterSelectionView = new SelectView();
         $chartsContainer.prepend(characterSelectionView.el);
 
-        var tableCollectionView = new TableCollectionView();
-        $chartsContainer.append(tableCollectionView.el);
-        tableCollectionView.listenTo(characterSelectionView, 'characterSelected', tableCollectionView.onCharacterSelected);
+        var chartCollectionView = new ChartCollectionView();
+        $chartsContainer.append(chartCollectionView.el);
+        chartCollectionView.listenTo(characterSelectionView, 'characterSelected', chartCollectionView.onCharacterSelected);
 
-        var ud = new Updater();
-        ud.listenTo(characterSelectionView, 'characterSelected', ud.update);
+        //var ud = new Updater();
+        //ud.listenTo(characterSelectionView, 'characterSelected', ud.update);
     });
 });

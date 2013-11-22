@@ -95,7 +95,7 @@ h5, h6 {
 ----------------------------------------------------------*/
 .content-wrapper {
     margin: 0 auto;
-    max-width: 960px;
+    max-width: 80%;
 }
 
 #body {
@@ -128,27 +128,6 @@ footer {
     font-size: .8em;
     height: 100px;
     color: gray;
-}
-
-/* chart container
-----------------------------------------------------------*/
-.charts_container {
-    width: 960px;
-    height: 800px;
-    overflow: auto;
-}
-
-/* chart
-----------------------------------------------------------*/
-.chart {
-    margin-bottom: 5px;
-    margin-top: 5px;
-    width: 950px;
-}
-
-.chart-control {
-    background-color: white;
-    padding: 5px;
 }
 
 /* custom scrollbar 
@@ -807,4 +786,8 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+}
+
+.chart {
+    width: 100%;
 }

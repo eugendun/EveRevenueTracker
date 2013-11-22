@@ -4,6 +4,8 @@ define([
     'EveApi/charts/views/GoogleChartView'
 ], function (GoogleChartView) {
     var BalanceDashboardView = GoogleChartView.extend({
+        chartName: 'Balance',
+
         initialize: function (params) {
             // div container for chart
             this.chartContainer = document.createElement('div');
@@ -19,6 +21,7 @@ define([
         },
 
         createChart: function () {
+            // create google control wrapper
             this.control = new google.visualization.ControlWrapper({
                 controlType: 'ChartRangeFilter',
                 containerId: this.rangeFilterContainer.id,
@@ -38,6 +41,7 @@ define([
                 }
             });
 
+            // create google chart wrapper
             var chart = new google.visualization.ChartWrapper({
                 chartType: 'LineChart',
                 containerId: this.chartContainer.id,
@@ -56,6 +60,7 @@ define([
                 }
             });
 
+            // create google dashboar and bind google controller and google chart 
             var dashboard = new google.visualization.Dashboard(this.el);
             dashboard.bind(this.control, chart);
             return dashboard;
@@ -65,6 +70,13 @@ define([
             var dataTable = this.model.get('dataTable'),
                 rowCount = dataTable.getNumberOfRows();
 
+            // format the data table
+            this.iskFormatter.format(dataTable, 1);
+            this.iskFormatter.format(dataTable, 2);
+            this.iskFormatter.format(dataTable, 3);
+            this.iskFormatter.format(dataTable, 4);
+
+            // set state of the range controller by calculating start and end date
             if (rowCount > 0) {
                 var endRangeDate = dataTable.getValue(rowCount - 1, 0),
                     startRangeDate,
@@ -87,6 +99,7 @@ define([
 
                 this.control.setState(state);
             }
+
             return GoogleChartView.prototype.render.apply(this);
         }
     });

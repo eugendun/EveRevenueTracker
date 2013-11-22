@@ -4,7 +4,7 @@ define([
     'text!EveApi/updater/templates/UpdateCallTemplate.html',
     'backbone'
 ], function (templateFile) {
-    _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
+    //_.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
 
     var UpdateCallView = Backbone.View.extend({
         tagName: 'div',

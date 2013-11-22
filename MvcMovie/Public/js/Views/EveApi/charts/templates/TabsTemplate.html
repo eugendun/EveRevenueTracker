@@ -1,0 +1,10 @@
+﻿<div id="tabs">
+    <ul>
+        <% _chartViews.each(function(chartView){ %>
+        <li><a href="#<%= chartView.model.cid %>"><%= chartView.chartName %></a></li>
+        <% }); %>
+    </ul>
+    <% _chartViews.each(function(chartView){ %>
+    <div id="<%= chartView.model.cid %>"></div>
+    <% }); %>
+</div>

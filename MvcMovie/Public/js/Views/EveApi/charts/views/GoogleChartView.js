@@ -7,6 +7,9 @@ define([
     var GoogleChart = Backbone.View.extend({
         tagName: 'div',
         className: 'chart',
+        chartName: 'Google Chart',
+
+        chartOptions: {},
 
         events: {
             'change:dataTable': 'render'

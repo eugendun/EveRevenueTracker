@@ -17,5 +17,6 @@ define([
             this.fetch({ reset: true });
         }
     });
+
     return CharacterCollection;
 });

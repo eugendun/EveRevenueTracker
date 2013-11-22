@@ -15,5 +15,6 @@ define(['backbone'], function (Backbone) {
                 return "character name must be a not empty string";
         }
     });
+
     return CharacterModel;
 });
