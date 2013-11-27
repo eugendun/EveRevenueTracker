@@ -18,7 +18,7 @@ define([
         initialize: function (params) {
             this.model = params.model;
             this.chart = this.createChart();
-            this.iskFormatter = new google.visualization.TableNumberFormat({
+            this.iskFormatter = new google.visualization.NumberFormat({
                 decimalSymbol: '.',
                 groupingSymbol: ',',
                 negativeColor: 'red',
