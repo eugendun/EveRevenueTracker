@@ -8,11 +8,11 @@ require.config({
         underscore: '../../Scripts/underscore',
         backbone: '../../Scripts/backbone',
         text: '../../Scripts/text',
-        async: '../../Scripts/requirejs-plugin/async',
-        goog: '../../Scripts/requirejs-plugin/goog',
-        propertyParser: '../../Scripts/requirejs-plugin/propertyParser',
-        google: '../../Scripts/helper/google',
-        domReady: '../../Scripts/domReady',
+        async: 'requirejs-plugin/async',
+        goog: 'requirejs-plugin/goog',
+        propertyParser: 'requirejs-plugin/propertyParser',
+        google: 'helper/google',
+        domReady: 'domReady',
         EveApi: 'Views/EveApi'
     },
     shim: {
