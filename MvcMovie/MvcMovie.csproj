@@ -296,7 +296,6 @@
     <Content Include="Public\release\Views\EveApi\character_manager\templates\select-template.html" />
     <Content Include="Public\release\Views\EveApi\character_manager\views\SelectView.js" />
     <Content Include="Public\release\Views\EveApi\charts\collections\ChartCollection.js" />
-    <Content Include="Public\release\Views\EveApi\charts\collections\TableCollection.js" />
     <Content Include="Public\release\Views\EveApi\charts\models\BalanceDashboardModel.js" />
     <Content Include="Public\release\Views\EveApi\charts\models\RevenueChartModel.js" />
     <Content Include="Public\release\Views\EveApi\charts\models\SuggestedTableModel.js" />
@@ -308,7 +307,6 @@
     <Content Include="Public\release\Views\EveApi\charts\views\GoogleChartView.js" />
     <Content Include="Public\release\Views\EveApi\charts\views\RevenueChartView.js" />
     <Content Include="Public\release\Views\EveApi\charts\views\SuggestedTableView.js" />
-    <Content Include="Public\release\Views\EveApi\charts\views\TableCollectionView.js" />
     <Content Include="Public\release\Views\EveApi\charts\views\TableView.js" />
     <Content Include="Public\release\Views\EveApi\charts\views\WalletChartView.js" />
     <Content Include="Public\release\Views\EveApi\Index.js" />

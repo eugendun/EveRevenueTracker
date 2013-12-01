@@ -20,7 +20,7 @@ require([
         $chartsContainer.append(chartCollectionView.el);
         chartCollectionView.listenTo(characterSelectionView, 'characterSelected', chartCollectionView.onCharacterSelected);
 
-        //var ud = new Updater();
-        //ud.listenTo(characterSelectionView, 'characterSelected', ud.update);
+        var ud = new Updater();
+        ud.listenTo(characterSelectionView, 'characterSelected', ud.update);
     });
 });
