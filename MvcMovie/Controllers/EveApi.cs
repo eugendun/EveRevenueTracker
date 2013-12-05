@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-namespace MvcMovie.Controllers
+namespace EveRevenueTracker.Controllers
 {
     /// <summary>
     /// This class provides wrap methods of the Eve-Api to simplify the communication.

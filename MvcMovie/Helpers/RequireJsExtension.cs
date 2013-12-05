@@ -4,7 +4,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace MvcMovie.Helpers
+namespace EveRevenueTracker.Helpers
 {
     public static class RequireJsExtension
     {

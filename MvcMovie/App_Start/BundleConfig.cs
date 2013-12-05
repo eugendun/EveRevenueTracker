@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace MvcMovie
+namespace EveRevenueTracker
 {
     public class BundleConfig
     {

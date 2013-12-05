@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
-using MvcMovie.Models;
+using EveRevenueTracker.Models;
 
-namespace MvcMovie
+namespace EveRevenueTracker
 {
     public static class AuthConfig
     {

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace MvcMovie
+namespace EveRevenueTracker
 {
     public class FilterConfig
     {

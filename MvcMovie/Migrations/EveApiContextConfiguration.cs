@@ -1,4 +1,4 @@
-﻿using MvcMovie.Models;
+﻿using EveRevenueTracker.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,18 +6,18 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
-namespace MvcMovie.Migrations
+namespace EveRevenueTracker.Migrations
 {
-    internal sealed class EveApiContextConfiguration : DbMigrationsConfiguration<MvcMovie.Models.EveApiContext>
+    internal sealed class EveApiContextConfiguration : DbMigrationsConfiguration<EveRevenueTracker.Models.EveApiContext>
     {
         public EveApiContextConfiguration()
         {
             AutomaticMigrationsEnabled = false;
             //AutomaticMigrationDataLossAllowed = false;
-            MigrationsNamespace = "MvcMovie.Models.EveApiMigrationspace";
+            MigrationsNamespace = "EveRevenueTracker.Models.EveApiMigrationspace";
         }
 
-        protected override void Seed(MvcMovie.Models.EveApiContext context)
+        protected override void Seed(EveRevenueTracker.Models.EveApiContext context)
         {
             var users = new List<User>
             {

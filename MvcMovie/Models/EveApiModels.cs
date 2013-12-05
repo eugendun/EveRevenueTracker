@@ -9,7 +9,7 @@ using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace MvcMovie.Models
+namespace EveRevenueTracker.Models
 {
     public class EveApiContext : DbContext
     {

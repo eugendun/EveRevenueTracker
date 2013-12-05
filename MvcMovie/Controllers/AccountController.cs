@@ -8,10 +8,10 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using MvcMovie.Filters;
-using MvcMovie.Models;
+using EveRevenueTracker.Filters;
+using EveRevenueTracker.Models;
 
-namespace MvcMovie.Controllers
+namespace EveRevenueTracker.Controllers
 {
     [Authorize]
     [InitializeSimpleMembership]

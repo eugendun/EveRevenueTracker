@@ -1,4 +1,4 @@
-namespace MvcMovie.Models.EveApiMigrationspace
+namespace EveRevenueTracker.Models.EveApiMigrationspace
 {
     using System;
     using System.Data.Entity.Migrations;

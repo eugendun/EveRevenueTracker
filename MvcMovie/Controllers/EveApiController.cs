@@ -1,5 +1,5 @@
-﻿using MvcMovie.Filters;
-using MvcMovie.Models;
+﻿using EveRevenueTracker.Filters;
+using EveRevenueTracker.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Xml;
 using System.Xml.Linq;
 using WebMatrix.WebData;
 
-namespace MvcMovie.Controllers
+namespace EveRevenueTracker.Controllers
 {
     [Authorize]
     [InitializeSimpleMembership]

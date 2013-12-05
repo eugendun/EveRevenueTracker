@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
 
-namespace MvcMovie.Models
+namespace EveRevenueTracker.Models
 {
     public class UsersContext : DbContext
     {
