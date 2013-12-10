@@ -54,7 +54,7 @@ namespace EveRevenueTracker.Controllers
         {
             WebSecurity.Logout();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "EveApi");
         }
 
         //
@@ -81,7 +81,7 @@ namespace EveRevenueTracker.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     WebSecurity.Login(model.UserName, model.Password);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "EveApi");
                 }
                 catch (MembershipCreateUserException e)
                 {
@@ -338,7 +338,7 @@ namespace EveRevenueTracker.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "EveApi");
             }
         }
 
