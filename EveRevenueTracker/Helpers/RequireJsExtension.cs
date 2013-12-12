@@ -12,7 +12,7 @@ namespace EveRevenueTracker.Helpers
         {
             string jsLocation = "/Public/release/";
 #if DEBUG
-            jsLocation = "Public/js/";
+            jsLocation = "/Public/js/";
 #endif
 
             string virtFilePath = Path.Combine(jsLocation, module + ".js");
