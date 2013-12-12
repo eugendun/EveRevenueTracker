@@ -5,6 +5,10 @@ require.config({
     paths: {
         jquery: '../../Scripts/jquery-2.0.3',
         jqueryui: '../../Scripts/jquery-ui-1.10.3',
+        jqueryUnobtrusiveAjax: '../../Scripts/jquery.unobtrusive-ajax',
+        jqueryValidate: '../../Scripts/jquery.validate',
+        jqueryValidateUnobtrusive: '../../Scripts/jquery.validate.unobtrusive',
+        jqueryVal: 'helper/jqueryVal',
         underscore: '../../Scripts/underscore',
         backbone: '../../Scripts/backbone',
         text: '../../Scripts/text',
@@ -28,6 +32,15 @@ require.config({
         },
         jqueryui: {
             deps: ['jquery']
+        },
+        jqueryUnobtrusiveAjax: {
+            deps: ['jquery']
+        },
+        jqueryValidate: {
+            deps: ['jquery']
+        },
+        jqueryValidateUnobtrusive: {
+            deps: ['jquery', 'jqueryUnobtrusiveAjax']
         }
     }
 });

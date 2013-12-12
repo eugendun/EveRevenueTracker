@@ -1,1 +1,1 @@
-require(["jquery"],function(){console.log("loginjs jquery loaded!")});
+require(["jqueryVal"],function(){console.log("loginjs loaded!")});
