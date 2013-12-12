@@ -25,6 +25,9 @@ require.config({
         },
         jquery: {
             exports: '$'
+        },
+        jqueryui: {
+            deps: ['jquery']
         }
     }
 });
