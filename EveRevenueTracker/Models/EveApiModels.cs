@@ -43,7 +43,12 @@ namespace EveRevenueTracker.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long userID { get; set; }
 
+        [Required]
+        [Display(Name = "Key ID")]
         public long keyID { get; set; }
+
+        [Required]
+        [Display(Name = "Verification Code")]
         public string vCode { get; set; }
     }
 
@@ -115,11 +120,11 @@ namespace EveRevenueTracker.Models
             entry.reason = node.Attribute("reason").Value;
 
             long taxReceiverID;
-            if (long.TryParse(node.Attribute("taxReceiverID").Value, out taxReceiverID))
+            if(long.TryParse(node.Attribute("taxReceiverID").Value, out taxReceiverID))
                 entry.taxReceiverID = taxReceiverID;
 
             decimal taxAmount;
-            if (decimal.TryParse(node.Attribute("taxAmount").Value, out taxAmount))
+            if(decimal.TryParse(node.Attribute("taxAmount").Value, out taxAmount))
                 entry.taxAmount = taxAmount;
             return entry;
         }
@@ -170,7 +175,7 @@ namespace EveRevenueTracker.Models
             entry.transactionFor = node.Attribute("transactionFor").Value;
 
             long journalTransactionID;
-            if (long.TryParse(node.Attribute("journalTransactionID").Value, out journalTransactionID))
+            if(long.TryParse(node.Attribute("journalTransactionID").Value, out journalTransactionID))
                 entry.journalTransactionID = journalTransactionID;
             return entry;
         }
