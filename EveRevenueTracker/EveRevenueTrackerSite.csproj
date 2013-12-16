@@ -286,7 +286,10 @@
     <Content Include="Properties\PublishProfiles\Default Settings.pubxml.user" />
     <Content Include="Public\js\config.js" />
     <Content Include="Public\js\helper\jqueryVal.js" />
+    <Content Include="Public\js\Views\Account\ExternalLoginConfirmation.js" />
     <Content Include="Public\js\Views\Account\Login.js" />
+    <Content Include="Public\js\Views\Account\Manage.js" />
+    <Content Include="Public\js\Views\Account\Register.js" />
     <Content Include="Public\js\Views\EveApi\charts\templates\TabsTemplate.html" />
     <Content Include="Public\js\Views\EveApi\Index.js" />
     <Content Include="Public\release\build.txt" />
