@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/charts/views/TableView',
     'EveApi/charts/models/SuggestedTableModel'
 ], function (TableView, SuggestedTableModel) {

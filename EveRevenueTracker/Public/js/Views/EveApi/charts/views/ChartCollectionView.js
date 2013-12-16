@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/charts/collections/ChartCollection',
     'text!EveApi/charts/templates/TabsTemplate.html',
     'jqueryui',

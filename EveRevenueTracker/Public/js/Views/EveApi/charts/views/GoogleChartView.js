@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'backbone',
     'google'
 ], function (Backbone) {

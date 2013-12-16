@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/character_manager/models/CharacterModel',
     'EveApi/updater/EveApiCall'
 ], function (CharacterModel, EveApiCall) {

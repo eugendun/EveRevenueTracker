@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/updater/EveApiCall',
     'backbone'
 ], function (EveApiCall, Backbone) {

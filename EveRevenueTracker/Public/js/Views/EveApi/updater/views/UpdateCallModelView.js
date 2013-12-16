@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'text!EveApi/updater/templates/UpdateCallTemplate.html',
     'backbone'
 ], function (templateFile) {

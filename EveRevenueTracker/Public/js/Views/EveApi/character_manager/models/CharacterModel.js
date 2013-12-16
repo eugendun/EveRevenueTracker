@@ -1,7 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-/// <reference path="~/Scripts/underscore.js" />
-
-define(['backbone'], function (Backbone) {
+﻿define(['backbone'], function (Backbone) {
     var CharacterModel = Backbone.Model.extend({
         defaults: {
             characterID: null,

@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/updater/views/UpdateCallModelView'
 ], function (UpdateCallView) {
     var UpdateCallCollectionView = Backbone.View.extend({

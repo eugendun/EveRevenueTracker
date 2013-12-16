@@ -1,6 +1,4 @@
-﻿/// <reference path="../require.js" />
-
-define(function () {
+﻿define(function () {
 
     /**
         Ensure that the constructor attribute is set correctly on the superclass

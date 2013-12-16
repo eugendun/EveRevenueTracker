@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scsripts/backbone.js" />
-
-require.config({
+﻿require.config({
     paths: {
         CharacterCollection: '/Scripts/eveapi/character_manager/collections/CharacterCollection',
         SelectTemplate: '/Scripts/eveapi/character_manager/templates/select-template.html'

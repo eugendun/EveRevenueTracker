@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/charts/models/TableModel'
 ], function (TableModel) {
     var BalanceDashboardModel = TableModel.extend({

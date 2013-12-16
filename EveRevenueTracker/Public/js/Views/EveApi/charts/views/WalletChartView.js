@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/charts/views/GoogleChartView'
 ], function (GoogleChartView) {
     var WalletChartView = GoogleChartView.extend({

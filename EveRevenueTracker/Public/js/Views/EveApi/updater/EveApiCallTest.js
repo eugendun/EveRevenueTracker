@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/underscore.js" />
-
-define([
+﻿define([
     'underscore'
 ], function (_) {
     var EveApiCall = function () { };

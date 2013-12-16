@@ -1,6 +1,4 @@
-﻿/// <reference path="../../Scripts/require.js" />
-
-require.config({
+﻿require.config({
     baseUrl: '/Public/js',
     paths: {
         jquery: '../../Scripts/jquery-2.0.3',

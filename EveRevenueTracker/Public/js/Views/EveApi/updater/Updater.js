@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/updater/collections/UpdateCallCollection',
     'EveApi/updater/views/UpdateCallCollectionView'
 ], function (UpdateCallCollection, UpdateCallCollectionView) {

@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/jquery-2.0.3.js" />
-
-define([
+﻿define([
     'jquery'
 ], function ($) {
     var EveApiCall = function () {

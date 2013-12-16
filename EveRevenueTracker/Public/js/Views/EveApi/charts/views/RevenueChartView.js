@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Scripts/backbone.js" />
-
-define([
+﻿define([
     'EveApi/charts/views/GoogleChartView',
     'text!EveApi/charts/templates/RevenueChartTemplate.html'
 ], function (GoogleChartView, RevenueChartTemplate) {

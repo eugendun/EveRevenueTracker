@@ -1,6 +1,4 @@
-﻿/// <reference path="../../../../Scripts/domReady.js" />
-
-require([
+﻿require([
     'EveApi/character_manager/collections/CharacterCollection',
     'EveApi/character_manager/views/SelectView',
     'EveApi/charts/views/ChartCollectionView',
