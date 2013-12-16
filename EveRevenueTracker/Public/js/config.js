@@ -16,7 +16,8 @@ require.config({
         goog: 'requirejs-plugin/goog',
         propertyParser: 'requirejs-plugin/propertyParser',
         google: 'helper/google',
-        domReady: 'domReady',
+        domReady: 'helper/domReady',
+        modernizr: '../../Scripts/modernizr-2.6.2',
         EveApi: 'Views/EveApi'
     },
     shim: {

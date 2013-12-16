@@ -18,6 +18,7 @@
         }
     },
     modules: [
+                { name: 'shared'},
         <# foreach(string path in GetViewFiles()){ #>
         { name: '<#= GetRequireJSName(path) #>'},
         <# } #>

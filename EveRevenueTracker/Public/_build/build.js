@@ -10,6 +10,11 @@
         }
     },
     modules: [
+                { name: 'shared'},
+                { name: 'views/Account/ExternalLoginConfirmation'},
+                { name: 'views/Account/Login'},
+                { name: 'views/Account/Manage'},
+                { name: 'views/Account/Register'},
                 { name: 'views/EveApi/Index'},
                 { name: 'views/EveApi/character_manager/collections/CharacterCollection'},
                 { name: 'views/EveApi/character_manager/models/CharacterModel'},

@@ -18,13 +18,13 @@ namespace EveRevenueTracker.Helpers
             string virtFilePath = Path.Combine(jsLocation, module + ".js");
             string filePath = helper.ViewContext.HttpContext.Server.MapPath(virtFilePath);
 
-            if (!File.Exists(filePath))
+            if(!File.Exists(filePath))
                 return new MvcHtmlString(string.Empty);
 
             var builder = new StringBuilder();
-            if (File.Exists(filePath))
-            {
+            if(File.Exists(filePath)) {
                 builder.AppendLine("require(['" + jsLocation + config + "'], function() {");
+                builder.AppendLine("require(['shared']);");
                 builder.AppendLine("    require(['" + module + "']);");
                 builder.AppendLine("});");
             }
