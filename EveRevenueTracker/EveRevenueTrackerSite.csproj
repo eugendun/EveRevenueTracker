@@ -285,7 +285,9 @@
     <Content Include="Images\backgroundEveScreensgot0.png" />
     <Content Include="Properties\PublishProfiles\Default Settings.pubxml.user" />
     <Content Include="Public\js\config.js" />
+    <Content Include="Public\js\helper\domReady.js" />
     <Content Include="Public\js\helper\jqueryVal.js" />
+    <Content Include="Public\js\shared.js" />
     <Content Include="Public\js\Views\Account\ExternalLoginConfirmation.js" />
     <Content Include="Public\js\Views\Account\Login.js" />
     <Content Include="Public\js\Views\Account\Manage.js" />
@@ -347,7 +349,6 @@
     <Content Include="Public\js\Views\EveApi\charts\views\SuggestedTableView.js" />
     <Content Include="Public\js\Views\EveApi\charts\views\TableView.js" />
     <Content Include="Public\js\Views\EveApi\charts\views\WalletChartView.js" />
-    <Content Include="Public\js\domReady.js" />
     <Content Include="Public\js\helper\google.js" />
     <Content Include="%40JSense.log" />
     <Content Include="Scripts\backbone.min.map" />
